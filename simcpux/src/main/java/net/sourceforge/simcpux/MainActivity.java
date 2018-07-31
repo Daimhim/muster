@@ -81,6 +81,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_al_pay:
                 //支付宝
                 AlPayParameter lAlPayParameter = new AlPayParameter();
+
+//                keyValues.put("app_id", app_id);
+//
+//                keyValues.put("biz_content", "{\"timeout_express\":\"30m\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"total_amount\":\"0.01\",\"subject\":\"1\",\"body\":\"我是测试数据\",\"out_trade_no\":\"" + getOutTradeNo() +  "\"}");
+//
+//                keyValues.put("charset", "utf-8");
+//
+//                keyValues.put("method", "alipay.trade.app.pay");
+//
+//                keyValues.put("sign_type", rsa2 ? "RSA2" : "RSA");
+//
+//                keyValues.put("timestamp", "2016-07-29 16:55:53");
+//
+//                keyValues.put("version", "1.0");
 //                lAlPayParameter.setSignInfo(obj.getString("signInfo"));
                 PaymentRequest lPaymentRequest = new PaymentRequest(lAlPayParameter);
                 lPaymentRequest.setPayType(PaymentConst.AL_PAY);
