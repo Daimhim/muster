@@ -1,1 +1,1 @@
-include ':app', ':ipcdemo'
+include ':app', ':ipcdemo', ':simcpux'
