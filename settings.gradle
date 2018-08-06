@@ -1,1 +1,4 @@
-include ':app', ':ipcdemo', ':simcpux'
+//include ':app'
+//include ':ipcdemo'
+//include ':simcpux'
+include ':mvpplugin'
