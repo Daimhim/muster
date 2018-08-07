@@ -15,4 +15,8 @@ import android.support.v7.app.AppCompatActivity;
  */
 public abstract class BaseActivity extends AppCompatActivity implements IView{
     public abstract void test1(int asd);
+    @java.lang.Override
+    public void show(String asd, String a){
+
+    }
 }

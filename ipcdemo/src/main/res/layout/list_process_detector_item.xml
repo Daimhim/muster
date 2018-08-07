@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	
+	<ImageView
+		android:id="@+id/iv_ico"
+		android:src="@mipmap/ic_launcher"
+		android:layout_marginTop="12dp"
+		android:layout_marginLeft="12dp"
+		android:layout_marginBottom="12dp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		android:layout_width="80dp"
+		android:layout_height="80dp" />
+	<TextView
+		android:id="@+id/tv_app_name"
+		android:textSize="14sp"
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginTop="12dp"
+		app:layout_constraintRight_toLeftOf="@+id/tv_user_app"
+		android:layout_marginLeft="10dp"
+		android:text="天天有用"
+		app:layout_constraintLeft_toRightOf="@+id/iv_ico"
+		android:textColor="#333333"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content" />
+	<TextView
+		android:id="@+id/tv_user_app"
+		android:text="用户"
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginTop="12dp"
+		android:layout_marginRight="12dp"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	<TextView
+		android:id="@+id/tv_packagename"
+		android:text="org.daimhim.ipcdemo"
+		app:layout_constraintTop_toBottomOf="@+id/tv_app_name"
+		app:layout_constraintBottom_toTopOf="@+id/tv_memory_size"
+		android:layout_marginLeft="10dp"
+		app:layout_constraintLeft_toRightOf="@+id/iv_ico"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	<TextView
+		android:id="@+id/tv_memory_size"
+		android:text="12mb"
+		app:layout_constraintTop_toBottomOf="@+id/tv_packagename"
+		app:layout_constraintBottom_toTopOf="@+id/tv_process_name"
+		app:layout_constraintLeft_toRightOf="@+id/iv_ico"
+		android:layout_marginLeft="10dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	<TextView
+		android:id="@+id/tv_process_name"
+		android:text="org.daimhim.ipcdemo:1"
+		app:layout_constraintTop_toBottomOf="@+id/tv_memory_size"
+		android:layout_marginLeft="10dp"
+		app:layout_constraintBottom_toBottomOf="@+id/iv_ico"
+		app:layout_constraintLeft_toRightOf="@+id/iv_ico"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+</android.support.constraint.ConstraintLayout>
