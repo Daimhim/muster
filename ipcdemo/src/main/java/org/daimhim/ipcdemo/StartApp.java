@@ -1,6 +1,7 @@
 package org.daimhim.ipcdemo;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class StartApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ProcessDetector.getInstance().init(this);
+        Log.d("StartAppStartApp",IPCHelp.getCurProcessName(this));
+        if ("org.daimhim.ipcdemo".equals(IPCHelp.getCurProcessName(this))){
+            ProcessDetector.getInstance().init(this);
+        }else if ("org.daimhim.ipcdemo:remote".equals(IPCHelp.getCurProcessName(this))){
+
+        }else if ("org.daimhim.ipcdemo.remote".equals(IPCHelp.getCurProcessName(this))){
+
+        }
     }
 }

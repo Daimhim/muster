@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable;
  * @author：Daimhim
  */
 class TaskInfo {
-    private int MemorySize;
+    private long MemorySize;
     private Drawable Icon;
     private String AppName;
     private String PackageName;
@@ -33,11 +33,11 @@ class TaskInfo {
                 '}';
     }
 
-    public int getMemorySize() {
+    public long getMemorySize() {
         return MemorySize;
     }
 
-    public void setMemorySize(int pMemorySize) {
+    public void setMemorySize(long pMemorySize) {
         MemorySize = pMemorySize;
     }
 

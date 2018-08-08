@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.v4.util.SimpleArrayMap;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,17 +47,19 @@ public class ProcessDetector {
     public void init(Context pContext){
         mContext = pContext;
         WindowManager lSystemService = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        final View lInflate = LayoutInflater.from(mContext).inflate(R.layout.list_process_detector, null, false);
+        View lInflate = LayoutInflater.from(mContext).inflate(R.layout.list_process_detector, null, false);
         mListView = new ProcessDetectorAdapter();
         ListView lViewById = (ListView) lInflate.findViewById(R.id.lv_list);
         lViewById.setAdapter(mListView);
-        lViewById.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lInflate.findViewById(R.id.tv_Refresh).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                getInstance().onRefresh(IPCHelp.getProcessInfo(mContext));
-                return false;
+            public void onClick(View v) {
+                List<TaskInfo> lProcessInfo = IPCHelp.getTaskInfoAll(mContext,true);
+                System.out.println(lProcessInfo);
+                getInstance().onRefresh(lProcessInfo);
             }
         });
+
         WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
         if (Build.VERSION.SDK_INT >= 24) { /*android7.0不能用TYPE_TOAST*/
             wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
@@ -75,7 +78,7 @@ public class ProcessDetector {
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
         wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         //调整悬浮窗显示的停靠位置为左侧置顶
-        wmParams.gravity = Gravity.END | Gravity.TOP;
+        wmParams.gravity = Gravity.RIGHT | Gravity.TOP;
 
         DisplayMetrics dm = new DisplayMetrics();
         //取得窗口属性
