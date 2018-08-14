@@ -3,6 +3,8 @@
 	package="org.daimhim.ipcdemo">
 	<!-- 悬浮窗必加权限 -->
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,7 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".MainActivity">
+		<activity android:name=".ipcfiledemo.SendFileActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +24,9 @@
 			android:process=":remote"/>
 		<activity android:name=".MainActivity3"
 			android:process="org.daimhim.ipcdemo.remote"/>
+
+		<activity android:name=".ipcfiledemo.ReceiveFileActivity"
+			android:process=":remote2"/>
 	</application>
 
 </manifest>

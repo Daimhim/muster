@@ -3,8 +3,6 @@ package org.daimhim.ipcdemo;
 import android.app.Application;
 import android.util.Log;
 
-import java.util.List;
-
 /**
  * 项目名称：org.daimhim.ipcdemo
  * 项目版本：muster
@@ -17,9 +15,14 @@ import java.util.List;
  * @author：Daimhim
  */
 public class StartApp extends Application {
+    private static StartApp startApp;
+    public static StartApp getInstance() {
+        return startApp;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        startApp = this;
         Log.d("StartAppStartApp",IPCHelp.getCurProcessName(this));
         if ("org.daimhim.ipcdemo".equals(IPCHelp.getCurProcessName(this))){
             ProcessDetector.getInstance().init(this);

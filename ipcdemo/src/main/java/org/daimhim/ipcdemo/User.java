@@ -3,6 +3,8 @@ package org.daimhim.ipcdemo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * 项目名称：org.daimhim.ipcdemo
  * 项目版本：muster
@@ -14,7 +16,7 @@ import android.os.Parcelable;
  *
  * @author：Daimhim
  */
-public class User implements Parcelable {
+public class User implements Parcelable ,Serializable{
     private String userId;
     private String userName;
     private String userSex;
