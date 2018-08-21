@@ -74,6 +74,7 @@ public class BannerAdapter extends RecyclerViewEmpty<BannerAdapter.BannerViewHol
         public BannerViewHolder(View itemView) {
             super(itemView);
             this.mBBanner = (Banner) itemView.findViewById(R.id.b_banner);
+//            mBBanner.
             mBBanner.setImageLoader(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, Object path, ImageView imageView) {
