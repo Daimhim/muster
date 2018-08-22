@@ -27,10 +27,10 @@ import java.util.List;
  *
  * @author：Daimhim
  */
-public class BannerAdapter extends RecyclerViewEmpty<BannerAdapter.BannerViewHolder>implements RecyclerContract.SimpleContract<List<String>,String> {
+public class BannerDemoAdapter extends RecyclerViewEmpty<BannerDemoAdapter.BannerViewHolder>implements RecyclerContract.SimpleContract<List<String>,String> {
     private Context mContext;
     private List<String> mList;
-    public BannerAdapter(Context pContext) {
+    public BannerDemoAdapter(Context pContext) {
         mContext = pContext;
         mList = new ArrayList<>();
     }
@@ -74,7 +74,7 @@ public class BannerAdapter extends RecyclerViewEmpty<BannerAdapter.BannerViewHol
         public BannerViewHolder(View itemView) {
             super(itemView);
             this.mBBanner = (Banner) itemView.findViewById(R.id.b_banner);
-//            mBBanner.
+//            mBBanner.\
             mBBanner.setImageLoader(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, Object path, ImageView imageView) {

@@ -76,7 +76,7 @@ public class ImgAdapter extends RecyclerViewEmpty<ImgAdapter.ImgViewHolder> impl
         ImageView mIvImg;
         public ImgViewHolder(View itemView) {
             super(itemView);
-            this.mIvImg = (ImageView) itemView.findViewById(R.id.iv_img);
+            mIvImg = (ImageView) itemView.findViewById(R.id.iv_img);
         }
 
         @Override
