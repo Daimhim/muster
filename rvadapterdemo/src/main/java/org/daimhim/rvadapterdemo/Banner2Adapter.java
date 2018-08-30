@@ -79,10 +79,10 @@ public class Banner2Adapter extends RecyclerViewEmpty<Banner2Adapter.Banner2View
             mBBanner.setImageLoader(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, Object path, ImageView imageView) {
+
                     Glide.with(context).load(path).into(imageView);
                 }
-            });
-            mBBanner.isAutoPlay(true);
+            }).isAutoPlay(true);
         }
 
     }

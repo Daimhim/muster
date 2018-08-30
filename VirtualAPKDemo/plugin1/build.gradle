@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.didi.virtualapk.plugin'
+apply plugin: 'com.didi.virtualapk.plugin'
 android {
     compileSdkVersion 27
 
@@ -7,29 +7,28 @@ android {
 
     defaultConfig {
         applicationId "org.daimhim.plugin1"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
-
+    signingConfigs {
+        release {
+            storeFile file("../keystore/test.keystore")
+            storePassword "test123456"
+            keyAlias "test"
+            keyPassword "test123456"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
-//// 插件配置信息,放在文件最下面
-//virtualApk {
-//    packageId = 0x6f             // 插件资源id，避免资源id冲突
-//    targetHost='../host/app'     // 宿主工程的路径
-//    applyHostMapping = false      // 插件编译时是否启用应用宿主的apply mapping
-//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,5 +39,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-//    implementation 'com.didi.virtualapk:core:0.9.7-dev'
+    implementation 'com.didi.virtualapk:core:0.9.6'
+}
+// 插件配置信息,放在文件最下面
+virtualApk {
+    packageId = 0x6f             // 插件资源id，避免资源id冲突
+    targetHost='H:\\AndroidProject2\\muster\\VirtualAPKDemo\\hostdemo'     // 宿主工程的路径
+    applyHostMapping = false      // 插件编译时是否启用应用宿主的apply mapping
 }

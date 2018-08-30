@@ -3,8 +3,6 @@ apply plugin: 'com.didi.virtualapk.host'
 android {
     compileSdkVersion 27
 
-
-
     defaultConfig {
         applicationId "org.daimhim.hostdemo"
         minSdkVersion 16
@@ -13,16 +11,24 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
-
+    signingConfigs {
+        release {
+            storeFile file("../keystore/test.keystore")
+            storePassword "test123456"
+            keyAlias "test"
+            keyPassword "test123456"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -34,7 +40,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'org.daimhim.errorcollection:errorcollection:1.0.3'
+    implementation 'org.daimhim.widget:banner:1.0.4'
 
-
-    implementation 'com.didi.virtualapk:core:0.9.7-dev'
+    implementation 'com.didi.virtualapk:core:0.9.6'
 }
