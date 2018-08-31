@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "org.daimhim.homepage"
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
 
@@ -17,10 +17,32 @@ android {
         vectorDrawables.useSupportLibrary = true
 
     }
-
+    signingConfigs {
+        release {
+            storeFile file('daimhim.jks')
+            storePassword 'ad12580.'
+            keyAlias 'daimhim-android'
+            keyPassword 'ad12580.'
+            v1SigningEnabled true
+            v2SigningEnabled false
+        }
+        debug {
+            storeFile file('daimhim.jks')
+            storePassword 'ad12580.'
+            keyAlias 'daimhim-android'
+            keyPassword 'ad12580.'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,4 +60,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    implementation 'com.amap.api:3dmap:latest.integration'
+    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:search:latest.integration'
 }
