@@ -25,10 +25,24 @@ android {
 }
 
 dependencies {
+    def work_version = "1.0.0-alpha08"
+    def paging_version = "1.0.0"
+
+    def lifecycle_version = "1.1.1"
+    // alternatively - just ViewModel
+    implementation "android.arch.lifecycle:viewmodel:$lifecycle_version" // use -ktx for Kotlin
+    // alternatively - just LiveData
+    implementation "android.arch.lifecycle:livedata:$lifecycle_version"
+    implementation "android.arch.paging:runtime:$paging_version"
+
+    //optional - Firebase JobDispatcher support
+    implementation "android.arch.work:work-firebase:$work_version"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
