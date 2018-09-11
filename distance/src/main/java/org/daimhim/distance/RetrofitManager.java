@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import io.reactivex.annotations.NonNull;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -33,7 +32,7 @@ public class RetrofitManager {
     private RetrofitManager() {
 
     }
-    private void init(Config pConfig){
+    public void init(Config pConfig){
         mConfig = pConfig;
         getRetrofit();
     }

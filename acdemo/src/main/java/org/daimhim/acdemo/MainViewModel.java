@@ -2,6 +2,8 @@ package org.daimhim.acdemo;
 
 import android.arch.lifecycle.ViewModel;
 
+import org.daimhim.distance.RetrofitManager;
+
 /**
  * 项目名称：org.daimhim.acdemo
  * 项目版本：muster
@@ -14,4 +16,5 @@ import android.arch.lifecycle.ViewModel;
  * @author：Administrator
  */
 public class MainViewModel extends ViewModel {
+//    RetrofitManager
 }
