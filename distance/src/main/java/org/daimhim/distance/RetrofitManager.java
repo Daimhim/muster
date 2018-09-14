@@ -1,7 +1,6 @@
 package org.daimhim.distance;
 
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +31,8 @@ public class RetrofitManager {
     private RetrofitManager() {
 
     }
-    public void init(Config pConfig){
+
+    public void init(Config pConfig) {
         mConfig = pConfig;
         getRetrofit();
     }
@@ -51,7 +51,7 @@ public class RetrofitManager {
     /**
      * 获取retrofit对象
      */
-    private Retrofit getRetrofit() {
+    public Retrofit getRetrofit() {
         if (null == mRetrofit) {
             HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
             logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -91,6 +91,7 @@ public class RetrofitManager {
         }
         return mRetrofit;
     }
+
     /**
      * 设缓存有效期为两天
      */
@@ -127,7 +128,7 @@ public class RetrofitManager {
         }
     };
 
-    public static class Config{
+    public static class Config {
         private String cacheFile;
         private String BASE_DOMAIN;
         //读超时长，单位：毫秒
@@ -166,7 +167,8 @@ public class RetrofitManager {
         public void setNetConnectedListener(NetConnectedListener pNetConnectedListener) {
             mNetConnectedListener = pNetConnectedListener;
         }
-        public void addInterceptor(Interceptor pInterceptor){
+
+        public void addInterceptor(Interceptor pInterceptor) {
             mInterceptor.add(pInterceptor);
         }
     }
