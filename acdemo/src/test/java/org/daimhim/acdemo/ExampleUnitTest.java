@@ -13,7 +13,10 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import retrofit2.Response;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static org.junit.Assert.*;
 
@@ -32,6 +35,23 @@ public class ExampleUnitTest {
             @Override
             public boolean isNetConnected() {
                 return true;
+            }
+        });
+        lConfig.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request proxylRequest;
+                Request lRequest = chain.request();
+                switch (lRequest.method()){
+                    case "GET":
+                        break;
+                    case "POST":
+                        break;
+                    case "PUT":
+                        break;
+                }
+                HttpUrl lUrl = lRequest.url();
+                return chain.proceed(lRequest);
             }
         });
         RetrofitManager.getInstance().init(lConfig);
