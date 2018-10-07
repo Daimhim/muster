@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':databridge', ':lifelonglearning'
 //include ':ipcdemo'
 //include ':simcpux'
 //include ':mvpplugin'
