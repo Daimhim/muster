@@ -42,5 +42,5 @@ dependencies {
     implementation 'org.daimhim.errorcollection:errorcollection:1.0.3'
     implementation 'org.daimhim.widget:banner:1.0.4'
 
-    implementation 'com.didi.virtualapk:core:0.9.6'
+    implementation 'com.didi.virtualapk:core:0.9.8'
 }

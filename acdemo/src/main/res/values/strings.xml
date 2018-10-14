@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ACdemo</string>
+    <string name="withdrawal_amount">提&#160;现&#160;&#160;金&#160;额：</string>
+    <string name="withdrawal_fee">提现手续费：</string>
+    <string name="total_withdrawal">合&#12288;&#12288;&#12288;计：</string>
 </resources>
