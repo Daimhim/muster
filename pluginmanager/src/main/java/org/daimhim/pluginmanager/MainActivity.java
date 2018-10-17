@@ -3,6 +3,7 @@ package org.daimhim.pluginmanager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+        lFragmentTransaction
+                .replace(R.id.content_main, new ApplicationFragment());
+        lFragmentTransaction.commit();
     }
 
     @Override
@@ -68,6 +75,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
+                    .beginTransaction();
+            lFragmentTransaction
+                    .replace(R.id.content_main, new ApplicationFragment());
+            lFragmentTransaction.commit();
             return true;
         }
 
