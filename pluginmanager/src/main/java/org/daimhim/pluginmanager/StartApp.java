@@ -6,10 +6,6 @@ import org.daimhim.distance.NetConnectedListener;
 import org.daimhim.distance.RetrofitManager;
 import org.daimhim.pluginmanager.utils.NetWorkUtils;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.Response;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -27,7 +23,7 @@ public class StartApp extends Application {
     public void onCreate() {
         super.onCreate();
         RetrofitManager.Config lConfig = new RetrofitManager.Config();
-        lConfig.setBASE_DOMAIN("http:");
+        lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);
         lConfig.setCacheFile(getCacheDir().getAbsolutePath());
         lConfig.setNetConnectedListener(new NetConnectedListener() {
             @Override

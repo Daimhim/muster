@@ -1,6 +1,13 @@
 package org.daimhim.pluginmanager;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+
+import org.daimhim.pluginmanager.model.ApplicationBean;
+
+import java.util.List;
+
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -14,5 +21,18 @@ import android.arch.lifecycle.ViewModel;
  * @author：Administrator
  */
 public class ApplicationViewModel extends ViewModel {
+    private MutableLiveData<List<ApplicationBean>> mApplicationBeanMutableLiveData;
+
+    public LiveData<List<ApplicationBean>> getApplicationList(){
+        if (null == mApplicationBeanMutableLiveData) {
+            mApplicationBeanMutableLiveData = new MutableLiveData<>();
+            loadApplicationList();
+        }
+        return mApplicationBeanMutableLiveData;
+    }
+
+    private void loadApplicationList() {
+
+    }
 
 }

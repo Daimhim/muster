@@ -1,5 +1,7 @@
-package org.daimhim.pluginmanager;
+package org.daimhim.pluginmanager.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.daimhim.pluginmanager.ApplicationViewModel;
+import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.model.ApplicationBean;
+
+import java.util.List;
+
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -34,8 +43,13 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        ApplicationViewModel lApplicationViewModel = ViewModelProviders.of(this).get(ApplicationViewModel.class);
+        lApplicationViewModel.getApplicationList().observe(this, new Observer<List<ApplicationBean>>() {
+            @Override
+            public void onChanged(@Nullable List<ApplicationBean> pApplicationBeans) {
 
-
+            }
+        });
     }
 
     private void initView(@NonNull View view) {

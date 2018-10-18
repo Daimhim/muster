@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.daimhim.pluginmanager">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission."/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".StartApp"
+        tools:replace="android:appComponentFactory"
+        android:appComponentFactory="@string/action_settings"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
