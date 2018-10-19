@@ -4,9 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import org.daimhim.distance.RetrofitManager;
 import org.daimhim.pluginmanager.model.ApplicationBean;
+import org.daimhim.pluginmanager.model.request.Application;
 
 import java.util.List;
+
 
 
 /**
@@ -22,17 +25,19 @@ import java.util.List;
  */
 public class ApplicationViewModel extends ViewModel {
     private MutableLiveData<List<ApplicationBean>> mApplicationBeanMutableLiveData;
+    private Application mApplication = RetrofitManager.getInstance().getRetrofit().create(Application.class);
 
     public LiveData<List<ApplicationBean>> getApplicationList(){
         if (null == mApplicationBeanMutableLiveData) {
             mApplicationBeanMutableLiveData = new MutableLiveData<>();
             loadApplicationList();
+
         }
         return mApplicationBeanMutableLiveData;
     }
 
-    private void loadApplicationList() {
-
+    public void loadApplicationList() {
+//        mApplication.getAappList();
     }
 
 }

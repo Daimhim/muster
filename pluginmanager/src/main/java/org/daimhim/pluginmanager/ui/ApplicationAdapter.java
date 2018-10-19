@@ -27,10 +27,10 @@ import java.util.List;
  */
 public class ApplicationAdapter extends RecyclerViewEmpty<ApplicationAdapter.AppViewHolder>
         implements RecyclerContract.SimpleContract<List<ApplicationBean>,ApplicationBean> {
-    private PagedList<ApplicationBean> mApplicationBeans;
+    private List<ApplicationBean> mApplicationBeans;
 
     public ApplicationAdapter() {
-//        mApplicationBeans = new PagedList<>();
+        mApplicationBeans = new ArrayList<>();
     }
 
     @Override

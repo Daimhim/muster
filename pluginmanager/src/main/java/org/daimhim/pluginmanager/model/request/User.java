@@ -1,6 +1,11 @@
 package org.daimhim.pluginmanager.model.request;
 
+import org.daimhim.pluginmanager.model.UserBean;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
+
+import io.reactivex.Observable;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
@@ -15,13 +20,14 @@ import retrofit2.http.POST;
  * @author：Administrator
  */
 public interface User {
+    @FormUrlEncoded
     @POST("user/registered/")
-    void userRegistered(
+    Observable<JavaResponse> userRegistered(
             @Field("userName") String userName,
             @Field("passWord") String passWord);
-
+    @FormUrlEncoded
     @POST("user/login/")
-    void userLogin(
+    Observable<JavaResponse<UserBean>> userLogin(
             @Field("userName") String userName,
             @Field("passWord") String passWord);
 }

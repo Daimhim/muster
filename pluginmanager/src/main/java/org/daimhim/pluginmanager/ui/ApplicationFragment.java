@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.util.List;
 public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     RecyclerView mRlRecyclerView;
     SwipeRefreshLayout mSrlSwipeRefreshLayout;
+    private ApplicationAdapter mApplicationAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
         lApplicationViewModel.getApplicationList().observe(this, new Observer<List<ApplicationBean>>() {
             @Override
             public void onChanged(@Nullable List<ApplicationBean> pApplicationBeans) {
-
+                mApplicationAdapter.onRefresh(pApplicationBeans);
             }
         });
     }
@@ -60,6 +62,6 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-
+        ViewModelProviders.of(this).get(ApplicationViewModel.class).loadApplicationList();
     }
 }
