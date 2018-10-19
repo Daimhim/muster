@@ -129,8 +129,8 @@ public class RetrofitManager {
     };
 
     public static class Config {
-        private String cacheFile;
-        private String BASE_DOMAIN;
+        private String cacheFile = System.getProperty("user.dir");
+        private String BASE_DOMAIN = "127.0.0.1";
         //读超时长，单位：毫秒
         private int READ_TIME_OUT = 3000;
         //连接时长，单位：毫秒
@@ -170,6 +170,19 @@ public class RetrofitManager {
 
         public void addInterceptor(Interceptor pInterceptor) {
             mInterceptor.add(pInterceptor);
+        }
+
+        @Override
+        public String toString() {
+            return "Config{" +
+                    "cacheFile='" + cacheFile + '\'' +
+                    ", BASE_DOMAIN='" + BASE_DOMAIN + '\'' +
+                    ", READ_TIME_OUT=" + READ_TIME_OUT +
+                    ", CONNECT_TIME_OUT=" + CONNECT_TIME_OUT +
+                    ", WRITE_TIME_OUT=" + WRITE_TIME_OUT +
+                    ", mNetConnectedListener=" + mNetConnectedListener +
+                    ", mInterceptor=" + mInterceptor +
+                    '}';
         }
     }
 }
