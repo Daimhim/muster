@@ -2,7 +2,9 @@ package org.daimhim.pluginmanager.ui.user;
 
 
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.pluginmanager.model.UserBean;
 import org.daimhim.pluginmanager.model.request.User;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -26,7 +28,27 @@ public class UserPresenter {
     }
 
     public void userLogin(String userName, String userPassWord){
-        mUser.userLogin(userName,userPassWord);
+        mUser.userLogin(userName,userPassWord).subscribe(new Observer<JavaResponse<UserBean>>() {
+            @Override
+            public void onSubscribe(Disposable disposable) {
+
+            }
+
+            @Override
+            public void onNext(JavaResponse<UserBean> userBeanJavaResponse) {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     public void userRegister(String userName,String userPassWord){
