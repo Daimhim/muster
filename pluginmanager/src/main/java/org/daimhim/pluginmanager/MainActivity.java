@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.daimhim.pluginmanager.ui.ApplicationFragment;
+import org.daimhim.pluginmanager.ui.user.UserLoginFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
         lFragmentTransaction
-                .replace(R.id.content_main, new ApplicationFragment());
+                .replace(R.id.content_main, new UserLoginFragment());
         lFragmentTransaction.commit();
     }
 
