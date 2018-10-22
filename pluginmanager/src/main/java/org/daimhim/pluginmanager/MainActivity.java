@@ -3,6 +3,7 @@ package org.daimhim.pluginmanager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,7 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.daimhim.pluginmanager.ui.ApplicationFragment;
+import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
+import org.daimhim.pluginmanager.ui.user.UserLoginFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,7 +49,15 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
         lFragmentTransaction
-                .replace(R.id.content_main, new ApplicationFragment());
+                .replace(R.id.content_main, new UserLoginFragment());
+        lFragmentTransaction.commit();
+    }
+
+    public void replaceFragment(Fragment pFragment){
+        FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
+                .beginTransaction();
+        lFragmentTransaction
+                .replace(R.id.content_main, pFragment);
         lFragmentTransaction.commit();
     }
 

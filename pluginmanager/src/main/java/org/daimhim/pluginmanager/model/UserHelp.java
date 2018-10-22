@@ -1,8 +1,6 @@
 package org.daimhim.pluginmanager.model;
 
-import org.daimhim.distance.RetrofitManager;
-
-import retrofit2.Retrofit;
+import org.daimhim.pluginmanager.model.bean.UserBean;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model

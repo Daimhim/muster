@@ -1,11 +1,12 @@
-package org.daimhim.pluginmanager;
+package org.daimhim.pluginmanager.ui.app;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import org.daimhim.distance.RetrofitManager;
-import org.daimhim.pluginmanager.model.ApplicationBean;
+import org.daimhim.pluginmanager.model.UserHelp;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class ApplicationViewModel extends ViewModel {
     }
 
     public void loadApplicationList() {
-//        mApplication.getAappList();
+        mApplication.getAappList(UserHelp.getInstance().getUserId());
+
     }
 
 }

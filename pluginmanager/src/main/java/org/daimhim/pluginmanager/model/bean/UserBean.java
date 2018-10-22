@@ -1,4 +1,4 @@
-package org.daimhim.pluginmanager.model;
+package org.daimhim.pluginmanager.model.bean;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model
