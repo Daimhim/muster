@@ -86,7 +86,7 @@ public class RetrofitManager {
                     .client(lBuilder.build())
                     .baseUrl(mConfig.BASE_DOMAIN)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                     .build();
         }
         return mRetrofit;

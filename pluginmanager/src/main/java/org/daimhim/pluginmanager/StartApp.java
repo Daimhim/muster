@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.daimhim.distance.NetConnectedListener;
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.pluginmanager.utils.CacheFileUtils;
 import org.daimhim.pluginmanager.utils.NetWorkUtils;
 
 
@@ -22,6 +23,7 @@ public class StartApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CacheFileUtils.getInstance().initCacheFile(this);
         RetrofitManager.Config lConfig = new RetrofitManager.Config();
         lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);
         lConfig.setCacheFile(getCacheDir().getAbsolutePath());

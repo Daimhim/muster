@@ -1,4 +1,4 @@
-package org.daimhim.pluginmanager;
+package org.daimhim.pluginmanager.ui.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.ui.app.AddAppFragment;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
 import org.daimhim.pluginmanager.ui.user.UserLoginFragment;
 
@@ -32,8 +34,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Fragment lFragmentById = getSupportFragmentManager().findFragmentById(R.id.content_main);
+                if (lFragmentById instanceof ApplicationFragment){
+                    superimposedFragment(new AddAppFragment());
+                }
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -53,6 +59,14 @@ public class MainActivity extends AppCompatActivity
         lFragmentTransaction.commit();
     }
 
+    public void superimposedFragment(Fragment pFragment){
+        FragmentTransaction lFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        lFragmentTransaction.add(R.id.content_main,pFragment);
+        lFragmentTransaction.show(pFragment);
+        lFragmentTransaction.addToBackStack(null);
+        lFragmentTransaction.commit();
+    }
+
     public void replaceFragment(Fragment pFragment){
         FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
@@ -69,6 +83,10 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void backFragment(){
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -115,7 +133,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

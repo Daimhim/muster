@@ -1,8 +1,7 @@
-package org.daimhim.pluginmanager;
+package org.daimhim.pluginmanager.ui.main;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -25,6 +24,12 @@ public class MainUtils {
             } catch (InstantiationException pE) {
                 pE.printStackTrace();
             }
+        }
+    }
+
+    public static void backFragment(Context pContext){
+        if (pContext instanceof MainActivity) {
+            ((MainActivity) pContext).backFragment();
         }
     }
 }

@@ -50,6 +50,7 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
                     @Override
                     public void onChanged(@Nullable List<ApplicationBean> pApplicationBeans) {
                         mApplicationAdapter.onRefresh(pApplicationBeans);
+                        mSrlSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -58,6 +59,8 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
         mRlRecyclerView = view.findViewById(R.id.rl_recycler_view);
         mSrlSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_SwipeRefreshLayout);
         mSrlSwipeRefreshLayout.setOnRefreshListener(this);
+        mApplicationAdapter = new ApplicationAdapter();
+        mRlRecyclerView.setAdapter(mApplicationAdapter);
     }
 
     @Override

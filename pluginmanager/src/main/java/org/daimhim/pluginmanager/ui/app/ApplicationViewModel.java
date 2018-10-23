@@ -8,9 +8,20 @@ import org.daimhim.distance.RetrofitManager;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
+import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 
 /**
@@ -38,8 +49,53 @@ public class ApplicationViewModel extends ViewModel {
     }
 
     public void loadApplicationList() {
-        mApplication.getAappList(UserHelp.getInstance().getUserId());
+        mApplication.getAappList(UserHelp.getInstance().getUserId())
+                .subscribe(new Observer<JavaResponse<ApplicationBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JavaResponse<ApplicationBean> pApplicationBeanJavaResponse) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
+    public void upLoadApk(String url){
+        mApplication.downLoad(url)
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody pResponseBody) {
+                        CacheFileUtils lInstance = CacheFileUtils.getInstance();
+//                        lInstance.getDiskCacheDir(CacheFileUtils.CACHE_FILE_DIR)
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 }

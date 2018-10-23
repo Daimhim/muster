@@ -1,7 +1,17 @@
 package org.daimhim.pluginmanager.model.request;
 
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
+
+import io.reactivex.Observable;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Field;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model.request
@@ -40,16 +50,18 @@ public interface Application {
             @Field("appId") String appId
     );
 
-    @POST("apk/get/app/list/")
-    void getAappList(
-            @Field("userId") String userId
+    @GET("apk/get/app/list/")
+    Observable<JavaResponse<ApplicationBean>> getAappList(
+            @Query("userId") String userId
     );
 
-    @POST("apk/get/app")
+    @GET("apk/get/app")
     void getApp(
-            @Field("userId") String userId,
-            @Field("appName") String appName,
-            @Field("appUrl") String appUrl,
-            @Field("appLogo") String appLogo,
-            @Field("packageName") String packageName);
+            @Path("userId") String userId,
+            @Path("appName") String appName,
+            @Path("appUrl") String appUrl,
+            @Path("appLogo") String appLogo,
+            @Path("packageName") String packageName);
+    @GET
+    Observable<ResponseBody> downLoad(@Url String url);
 }

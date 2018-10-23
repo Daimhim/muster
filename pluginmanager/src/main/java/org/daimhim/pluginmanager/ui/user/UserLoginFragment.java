@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.daimhim.pluginmanager.MainUtils;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
 

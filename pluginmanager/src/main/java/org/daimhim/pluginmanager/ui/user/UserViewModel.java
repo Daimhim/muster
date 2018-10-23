@@ -41,8 +41,6 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<Integer> userLogin(String userName, String userPassWord) {
         mUser.userLogin(userName, userPassWord)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JavaResponse<UserBean>>() {
                     @Override
                     public void onSubscribe(Disposable pDisposable) {
@@ -52,9 +50,9 @@ public class UserViewModel extends ViewModel {
                     @Override
                     public void onNext(JavaResponse<UserBean> pJavaResponse) {
                         if (StringUtils.equals(pJavaResponse.getError_code(), "0")) {
-                            mIntegerMutableLiveData.setValue(FAILURE);
+                            mIntegerMutableLiveData.postValue(FAILURE);
                         } else {
-                            mIntegerMutableLiveData.setValue(SUCCESS);
+                            mIntegerMutableLiveData.postValue(SUCCESS);
                             UserBean lResult = pJavaResponse.getResult();
                             UserHelp.getInstance().upUserInfo(lResult);
                         }
@@ -63,7 +61,8 @@ public class UserViewModel extends ViewModel {
 
                     @Override
                     public void onError(Throwable pThrowable) {
-                        mIntegerMutableLiveData.setValue(FAILURE);
+                        pThrowable.printStackTrace();
+                        mIntegerMutableLiveData.postValue(FAILURE);
                     }
 
                     @Override
@@ -76,8 +75,6 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<Integer> userRegister(String userName, String userPassWord) {
         mUser.userRegistered(userName, userPassWord)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JavaResponse>() {
                     @Override
                     public void onSubscribe(Disposable pDisposable) {
@@ -87,16 +84,17 @@ public class UserViewModel extends ViewModel {
                     @Override
                     public void onNext(JavaResponse pJavaResponse) {
                         if (StringUtils.equals(pJavaResponse.getError_code(), "0")) {
-                            mIntegerMutableLiveData.setValue(FAILURE);
+                            mIntegerMutableLiveData.postValue(FAILURE);
                         } else {
-                            mIntegerMutableLiveData.setValue(SUCCESS);
+                            mIntegerMutableLiveData.postValue(SUCCESS);
                         }
 
                     }
 
                     @Override
                     public void onError(Throwable pThrowable) {
-                        mIntegerMutableLiveData.setValue(FAILURE);
+                        pThrowable.printStackTrace();
+                        mIntegerMutableLiveData.postValue(FAILURE);
                     }
 
                     @Override
