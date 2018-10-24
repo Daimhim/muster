@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -88,7 +89,7 @@ public class AddAppFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.bt_upload_apk, R.id.bt_download_apk, R.id.bt_select_apk, R.id.iv_logo, R.id.bt_create_pm, R.id.bt_cancel_pm})
+    @OnClick({R.id.bt_upload_apk, R.id.bt_download_apk, R.id.bt_select_apk, R.id.iv_logo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_upload_apk:
@@ -110,7 +111,11 @@ public class AddAppFragment extends Fragment {
                                     appInfo.publicSourceDir = lResult.getPath();
                                     lBean.setApp_name(lPackageManager.getApplicationLabel(appInfo).toString());// 得到应用名
                                     lBean.setPackage_name(appInfo.packageName);
-                                    lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
+                                    if (Build.VERSION.SDK_INT >= 28) {
+                                        lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
+                                    }else {
+                                        lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.versionCode));
+                                    }
                                     lBean.setVersion_name(lPackageArchiveInfo.versionName);
                                     Drawable lDrawable = appInfo.loadIcon(lPackageManager);
                                     CacheFileUtils lInstance = CacheFileUtils.getInstance();
@@ -153,11 +158,10 @@ public class AddAppFragment extends Fragment {
                 break;
             case R.id.iv_logo:
                 break;
-            case R.id.bt_create_pm:
-                break;
-            case R.id.bt_cancel_pm:
-                MainUtils.backFragment(getContext());
-                break;
         }
+    }
+
+    public void addApp(){
+
     }
 }

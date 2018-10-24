@@ -2,6 +2,8 @@ package org.daimhim.pluginmanager.ui.main;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -18,6 +20,7 @@ public class MainUtils {
     public static void startFragment(Context pContext, Class pFragment) {
         if (pContext instanceof MainActivity) {
             try {
+                hideKeyboard(pContext);
                 ((MainActivity) pContext).replaceFragment((Fragment) pFragment.newInstance());
             } catch (IllegalAccessException pE) {
                 pE.printStackTrace();
@@ -29,7 +32,16 @@ public class MainUtils {
 
     public static void backFragment(Context pContext){
         if (pContext instanceof MainActivity) {
+            hideKeyboard(pContext);
             ((MainActivity) pContext).backFragment();
+        }
+    }
+
+    public static void hideKeyboard(Context context){
+        if (context instanceof AppCompatActivity) {
+            ((InputMethodManager) ((MainActivity) context).getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(((MainActivity) context).getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }

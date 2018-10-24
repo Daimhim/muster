@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.daimhim.pluginmanager.model.bean.UserBean;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
@@ -21,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.functions.Consumer;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.user
@@ -76,14 +79,13 @@ public class UserLoginFragment extends Fragment {
                     return;
                 }
                 mUserViewModel.userLogin(etUsernamePm.getText().toString(),etPasswordPm.getText().toString())
-                        .observe(this, new Observer<Integer>() {
+                        .subscribe(new Consumer<JavaResponse<UserBean>>() {
                             @Override
-                            public void onChanged(@Nullable Integer pInteger) {
-                                if (pInteger!=null && pInteger == 1) {
-                                    Snackbar.make(etUsernamePm,"registration success",Snackbar.LENGTH_SHORT).show();
-                                    MainUtils.startFragment(getContext(), ApplicationFragment.class);
+                            public void accept(JavaResponse<UserBean> userBeanJavaResponse) throws Exception {
+                                if (TextUtils.equals(userBeanJavaResponse.getError_code(),"0")){
+                                    Snackbar.make(etUsernamePm,userBeanJavaResponse.getError_msg(),Snackbar.LENGTH_SHORT).show();
                                 }else {
-                                    Snackbar.make(etUsernamePm,"registration failed",Snackbar.LENGTH_SHORT).show();
+                                    MainUtils.startFragment(getContext(), ApplicationFragment.class);
                                 }
                             }
                         });

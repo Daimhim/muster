@@ -11,6 +11,7 @@ import org.daimhim.pluginmanager.model.request.User;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.StringUtils;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -39,38 +40,8 @@ public class UserViewModel extends ViewModel {
         mUser = RetrofitManager.getInstance().getRetrofit().create(User.class);
     }
 
-    public LiveData<Integer> userLogin(String userName, String userPassWord) {
-        mUser.userLogin(userName, userPassWord)
-                .subscribe(new Observer<JavaResponse<UserBean>>() {
-                    @Override
-                    public void onSubscribe(Disposable pDisposable) {
-
-                    }
-
-                    @Override
-                    public void onNext(JavaResponse<UserBean> pJavaResponse) {
-                        if (StringUtils.equals(pJavaResponse.getError_code(), "0")) {
-                            mIntegerMutableLiveData.postValue(FAILURE);
-                        } else {
-                            mIntegerMutableLiveData.postValue(SUCCESS);
-                            UserBean lResult = pJavaResponse.getResult();
-                            UserHelp.getInstance().upUserInfo(lResult);
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable pThrowable) {
-                        pThrowable.printStackTrace();
-                        mIntegerMutableLiveData.postValue(FAILURE);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-        return mIntegerMutableLiveData;
+    public Observable<JavaResponse<UserBean>> userLogin(String userName, String userPassWord) {
+        return mUser.userLogin(userName, userPassWord);
     }
 
     public LiveData<Integer> userRegister(String userName, String userPassWord) {

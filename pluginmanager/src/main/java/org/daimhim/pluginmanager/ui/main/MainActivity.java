@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity
                 Fragment lFragmentById = getSupportFragmentManager().findFragmentById(R.id.content_main);
                 if (lFragmentById instanceof ApplicationFragment){
                     superimposedFragment(new AddAppFragment());
+                }else if (lFragmentById instanceof AddAppFragment){
+                    ((AddAppFragment)lFragmentById).addApp();
                 }
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();

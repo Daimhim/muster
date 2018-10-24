@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel;
 import android.net.Uri;
 
 import org.daimhim.distance.RetrofitManager;
-import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
@@ -14,21 +13,13 @@ import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLStreamHandlerFactory;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import retrofit2.http.Url;
 
 
 /**
