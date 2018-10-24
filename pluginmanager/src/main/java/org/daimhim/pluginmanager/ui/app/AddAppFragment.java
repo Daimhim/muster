@@ -1,6 +1,11 @@
 package org.daimhim.pluginmanager.ui.app;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,13 +18,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.daimhim.helpful.util.HFileUtil;
+import org.daimhim.helpful.util.HImageUtil;
 import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.app
@@ -48,6 +63,11 @@ public class AddAppFragment extends Fragment {
     Unbinder unbinder;
     private ApplicationViewModel mApplicationViewModel;
 
+    public void upUI(ApplicationBean pApplicationBean){
+        etAppNamePm.setText(pApplicationBean.getApp_name());
+        etPackageNamePm.setText(pApplicationBean.getPackage_name());
+        etAppVersionCodePm.setText(pApplicationBean.getVersion_code());
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,7 +96,56 @@ public class AddAppFragment extends Fragment {
                     Snackbar.make(view,"url can not be empty",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                mApplicationViewModel.upLoadApk(etAppDownloadLinkPm.getText().toString());
+                mApplicationViewModel.upLoadApk(etAppDownloadLinkPm.getText().toString())
+                        .map(new Function<JavaResponse<Uri>, ApplicationBean>() {
+                            @Override
+                            public ApplicationBean apply(JavaResponse<Uri> pUriJavaResponse) throws Exception {
+                                ApplicationBean lBean = new ApplicationBean();
+                                Uri lResult = pUriJavaResponse.getResult();
+                                PackageManager lPackageManager = getContext().getPackageManager();
+                                PackageInfo lPackageArchiveInfo = lPackageManager.getPackageArchiveInfo(lResult.getPath(), PackageManager.GET_ACTIVITIES);
+                                if (lPackageArchiveInfo != null){
+                                    ApplicationInfo appInfo = lPackageArchiveInfo.applicationInfo;
+                                    appInfo.sourceDir = lResult.getPath();
+                                    appInfo.publicSourceDir = lResult.getPath();
+                                    lBean.setApp_name(lPackageManager.getApplicationLabel(appInfo).toString());// 得到应用名
+                                    lBean.setPackage_name(appInfo.packageName);
+                                    lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
+                                    lBean.setVersion_name(lPackageArchiveInfo.versionName);
+                                    Drawable lDrawable = appInfo.loadIcon(lPackageManager);
+                                    CacheFileUtils lInstance = CacheFileUtils.getInstance();
+                                    Uri lPng = lInstance.saveBitmap(HImageUtil.drawableToBitmap(lDrawable),
+                                            lInstance.getDiskCacheDir(CacheFileUtils.CACHE_IMAGE_DIR).getPath(),
+                                            lInstance.generateRandomFilename("png"));
+                                    lBean.setApp_logo(lPng.getPath());
+                                }
+                                return lBean;
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ApplicationBean>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(ApplicationBean pApplicationBean) {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+
                 break;
             case R.id.bt_download_apk:
                 break;

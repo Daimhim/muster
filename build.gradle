@@ -24,6 +24,9 @@ allprojects {
         maven { url 'https://dl.bintray.com/daimhim/widget/'}
         maven { url 'https://oss.jfrog.org/libs-snapshot' }
         maven { url 'http://113.140.6.106:9081/nexus/content/repositories/android/' }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 

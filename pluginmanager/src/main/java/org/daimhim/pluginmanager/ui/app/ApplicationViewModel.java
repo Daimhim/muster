@@ -3,8 +3,10 @@ package org.daimhim.pluginmanager.ui.app;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.net.Uri;
 
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
@@ -15,13 +17,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLStreamHandlerFactory;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
+import retrofit2.http.Url;
 
 
 /**
@@ -39,7 +46,7 @@ public class ApplicationViewModel extends ViewModel {
     private MutableLiveData<List<ApplicationBean>> mApplicationBeanMutableLiveData;
     private Application mApplication = RetrofitManager.getInstance().getRetrofit().create(Application.class);
 
-    public LiveData<List<ApplicationBean>> getApplicationList(){
+    public LiveData<List<ApplicationBean>> getApplicationList() {
         if (null == mApplicationBeanMutableLiveData) {
             mApplicationBeanMutableLiveData = new MutableLiveData<>();
             loadApplicationList();
@@ -73,28 +80,24 @@ public class ApplicationViewModel extends ViewModel {
                 });
 
     }
-    public void upLoadApk(String url){
-        mApplication.downLoad(url)
-                .subscribe(new Observer<ResponseBody>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
 
-                    }
-
+    public Observable<JavaResponse<Uri>> upLoadApk(String url) {
+        return mApplication.downLoad(url)
+                .map(new Function<ResponseBody, Uri>() {
                     @Override
-                    public void onNext(ResponseBody pResponseBody) {
+                    public Uri apply(ResponseBody pResponseBody) throws Exception {
                         CacheFileUtils lInstance = CacheFileUtils.getInstance();
-//                        lInstance.getDiskCacheDir(CacheFileUtils.CACHE_FILE_DIR)
+                        File lApk = lInstance.saveFile(pResponseBody.byteStream(), pResponseBody.contentLength(),
+                                lInstance.getDiskCacheDir(CacheFileUtils.CACHE_FILE_DIR).getAbsolutePath(), lInstance.generateRandomFilename("apk"));
+                        return Uri.fromFile(lApk);
                     }
-
+                })
+                .map(new Function<Uri, JavaResponse<Uri>>() {
                     @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public JavaResponse<Uri> apply(Uri pUri) throws Exception {
+                        JavaResponse<Uri> lUriJavaResponse = new JavaResponse<>();
+                        lUriJavaResponse.setResult(pUri);
+                        return lUriJavaResponse;
                     }
                 });
     }

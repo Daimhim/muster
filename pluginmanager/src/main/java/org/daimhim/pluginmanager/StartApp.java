@@ -4,6 +4,9 @@ import android.app.Application;
 
 import org.daimhim.distance.NetConnectedListener;
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.helpful.util.HAppUtil;
+import org.daimhim.helpful.util.HFileUtil;
+import org.daimhim.helpful.util.HImageUtil;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 import org.daimhim.pluginmanager.utils.NetWorkUtils;
 
@@ -34,5 +37,11 @@ public class StartApp extends Application {
             }
         });
         RetrofitManager.getInstance().init(lConfig);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HFileUtil.initFileDir(getBaseContext());
+            }
+        }).start();
     }
 }

@@ -1,11 +1,19 @@
 package org.daimhim.pluginmanager.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.DrawableUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
+
+import org.daimhim.pluginmanager.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,7 +28,9 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.utils
@@ -50,6 +60,10 @@ public class CacheFileUtils {
     private String GET_FILES_DIR_ABSOLUTE_PATH = "";
     //context.getPackageName()
     private String GET_PACKAGE_NAME = "";
+    //Environment.getExternalStorageDirectory().getPath()
+    private String ENVIRONMENT_GET_EXTERNAL_STORAGE_DIRECTORY_PATH = "";
+    //Environment.MEDIA_MOUNTED
+    private String ENVIRONMENT_MEDIA_MOUNTED = "";
 
     private CacheFileUtils() {
 
@@ -86,7 +100,7 @@ public class CacheFileUtils {
             if (!cacheDirFile.exists()) {
                 cacheDirFile.mkdirs();
             }
-        }else {
+        } else {
             cacheDirFile = new File(cachePath + uniqueName);
             if (!cacheDirFile.exists()) {
                 cacheDirFile.mkdirs();
@@ -103,7 +117,7 @@ public class CacheFileUtils {
     public File getExternalCacheDir() {
         // 这个sd卡中文件路径下的内容会随着，程序卸载或者设置中清除缓存后一起清空
         final String cacheDir = "/Android/data/" + GET_PACKAGE_NAME + "/cache/";
-        return new File(Environment.getExternalStorageDirectory().getPath() + cacheDir);
+        return new File(ENVIRONMENT_GET_EXTERNAL_STORAGE_DIRECTORY_PATH + cacheDir);
     }
 
     /**
@@ -161,7 +175,7 @@ public class CacheFileUtils {
      */
     public boolean checkSDCard() {
         final String status = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(status)) {
+        if (ENVIRONMENT_MEDIA_MOUNTED.equals(status)) {
             return true;
         }
         return false;
@@ -203,10 +217,12 @@ public class CacheFileUtils {
      */
     public void initCacheFile(Context context) {
         LogUtils.e("initCacheFile");
-        GET_EXTERNAL_CACHE_DIR_PATH =  getExternalCacheDir().getPath();
+        GET_EXTERNAL_CACHE_DIR_PATH = getExternalCacheDir().getPath();
         GET_CACHE_DIR_PATH = context.getCacheDir().getPath();
         GET_FILES_DIR_ABSOLUTE_PATH = context.getFilesDir().getAbsolutePath();
         GET_PACKAGE_NAME = context.getPackageName();
+        ENVIRONMENT_GET_EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath();
+        ENVIRONMENT_MEDIA_MOUNTED = Environment.MEDIA_MOUNTED;
         final String cacheDir = getDiskCacheDir().getAbsolutePath();
 
         final String imageDirPath = cacheDir + CACHE_IMAGE_DIR;
@@ -310,15 +326,16 @@ public class CacheFileUtils {
 
     /**
      * 保存文件
-     *
+     * @param content
+     * @param fileName
      * @param isAppend
      * @return
      */
-    public boolean writeStringToFile(String content, String fileName, boolean isAppend) {
+    public Uri writeStringToFile(String content, String fileName, boolean isAppend) {
         return writeStringToFile(content, "", fileName, isAppend);
     }
 
-    public boolean writeStringToFile(String content,
+    public Uri writeStringToFile(String content,
                                      String directoryPath, String fileName, boolean isAppend) {
         if (!TextUtils.isEmpty(content)) {
             if (!TextUtils.isEmpty(directoryPath)) {// 是否需要创建新的目录
@@ -362,9 +379,9 @@ public class CacheFileUtils {
                     o.printStackTrace();
                 }
             }
-            return bFlag;
+            return Uri.fromFile(file);
         }
-        return false;
+        return null;
     }
 
     /**
@@ -862,13 +879,14 @@ public class CacheFileUtils {
 
     /**
      * 将文件写入本地
+     *
      * @param responseBody 请求结果全体
-     * @param destFileDir 目标文件夹
+     * @param destFileDir  目标文件夹
      * @param destFileName 目标文件名
      * @return 写入完成的文件
      * @throws IOException IO异常
      */
-    public File saveFile(InputStream is,long total, String destFileDir, String destFileName) throws IOException {
+    public File saveFile(InputStream is, long total, String destFileDir, String destFileName) throws IOException {
         byte[] buf = new byte[2048];
         int len = 0;
         FileOutputStream fos = null;
@@ -901,6 +919,66 @@ public class CacheFileUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     *
+     * @param pBitmap
+     * @param filePath
+     * @param fileName
+     * @return
+     */
+    public Uri saveBitmap(Bitmap pBitmap,String filePath,String fileName){
+        byte[] buf = new byte[2048];
+        if (!TextUtils.isEmpty(filePath)){
+            File folder = new File(filePath);
+            if(!folder.exists()){
+                folder.mkdir();
+            }
+            File file = new File(folder.getPath() + fileName);
+            if(file.exists()){
+                file.delete();
+            }
+            FileOutputStream out = null;
+            try {
+                if(!file.exists()){
+                    file.createNewFile();//重点在这里
+                }
+                out = new FileOutputStream(file);
+                pBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                return Uri.fromFile(file);
+            } catch (FileNotFoundException pE) {
+                pE.printStackTrace();
+            } catch (IOException pE) {
+                pE.printStackTrace();
+            } finally {
+                try {
+                    if (null!=out) {
+                        out.close();
+                    }
+                } catch (IOException pE) {
+                    pE.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * 生成随机文件名
+     **/
+    public String generateRandomFilename(String suffix) {
+        String RandomFilename = "";
+        Random rand = new Random();//生成随机数  
+        int random = rand.nextInt();
+        Calendar calCurrent = Calendar.getInstance();
+        int intDay = calCurrent.get(Calendar.DATE);
+        int intMonth = calCurrent.get(Calendar.MONTH) + 1;
+        int intYear = calCurrent.get(Calendar.YEAR);
+        String now = String.valueOf(intYear) + "_" + String.valueOf(intMonth) + "_" + String.valueOf(intDay) + "_";
+        LogUtils.d("生成于今日的文件名前缀为：" + now);
+        RandomFilename = now + String.valueOf(random > 0 ? random : (-1) * random) + "." + (TextUtils.isEmpty(suffix)?"":suffix);
+        return RandomFilename;
     }
 
     static class LogUtils {
