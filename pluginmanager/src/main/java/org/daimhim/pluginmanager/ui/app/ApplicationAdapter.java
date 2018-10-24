@@ -1,13 +1,11 @@
-package org.daimhim.pluginmanager.ui;
+package org.daimhim.pluginmanager.ui.app;
 
-import android.arch.paging.PagedList;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.daimhim.pluginmanager.R;
-import org.daimhim.pluginmanager.model.ApplicationBean;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 

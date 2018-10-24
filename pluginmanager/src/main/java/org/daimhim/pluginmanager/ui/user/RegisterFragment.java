@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.R;
-import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,15 +24,15 @@ import butterknife.Unbinder;
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.user
  * 项目版本：muster
- * 创建时间：2018/10/19 09:41  星期五
+ * 创建时间：2018/10/22 10:13  星期一
  * 创建人：Administrator
- * 修改时间：2018/10/19 09:41  星期五
+ * 修改时间：2018/10/22 10:13  星期一
  * 类描述：Administrator 太懒了，什么都没有留下
  * 修改备注：Administrator 太懒了，什么都没有留下
  *
  * @author：Administrator
  */
-public class UserLoginFragment extends Fragment {
+public class RegisterFragment extends Fragment {
 
     @BindView(R.id.et_username_pm)
     TextInputEditText etUsernamePm;
@@ -45,7 +44,7 @@ public class UserLoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -55,7 +54,6 @@ public class UserLoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     }
-
 
     @Override
     public void onDestroyView() {
@@ -75,13 +73,13 @@ public class UserLoginFragment extends Fragment {
                     Snackbar.make(view,"Password can not be empty",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                mUserViewModel.userLogin(etUsernamePm.getText().toString(),etPasswordPm.getText().toString())
+                mUserViewModel.userRegister(etUsernamePm.getText().toString(),etPasswordPm.getText().toString())
                         .observe(this, new Observer<Integer>() {
                             @Override
                             public void onChanged(@Nullable Integer pInteger) {
                                 if (pInteger!=null && pInteger == 1) {
                                     Snackbar.make(etUsernamePm,"registration success",Snackbar.LENGTH_SHORT).show();
-                                    MainUtils.startFragment(getContext(), ApplicationFragment.class);
+                                    MainUtils.startFragment(getContext(),UserLoginFragment.class);
                                 }else {
                                     Snackbar.make(etUsernamePm,"registration failed",Snackbar.LENGTH_SHORT).show();
                                 }
@@ -89,7 +87,7 @@ public class UserLoginFragment extends Fragment {
                         });
                 break;
             case R.id.bt_cancel_pm:
-                MainUtils.startFragment(getContext(),RegisterFragment.class);
+                MainUtils.startFragment(getContext(),UserLoginFragment.class);
                 break;
         }
     }

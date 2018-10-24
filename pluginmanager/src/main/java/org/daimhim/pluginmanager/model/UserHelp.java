@@ -1,8 +1,6 @@
 package org.daimhim.pluginmanager.model;
 
-import org.daimhim.distance.RetrofitManager;
-
-import retrofit2.Retrofit;
+import org.daimhim.pluginmanager.model.bean.UserBean;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model
@@ -19,12 +17,14 @@ public class UserHelp {
 
     private final UserBean mUserBean;
 
-    private UserHelp(){
+    private UserHelp() {
         mUserBean = new UserBean();
     }
-    public static UserHelp getInstance(){
+
+    public static UserHelp getInstance() {
         return SingletonHolder.sInstance;
     }
+
     private static class SingletonHolder {
         private static final UserHelp sInstance = new UserHelp();
     }
@@ -33,7 +33,7 @@ public class UserHelp {
         return mUserBean;
     }
 
-    public void upUserInfo(UserBean pUserBean){
+    public void upUserInfo(UserBean pUserBean) {
         mUserBean.setUser_id(pUserBean.getUser_id());
         mUserBean.setAccount_number(pUserBean.getAccount_number());
         mUserBean.setCrateTime(pUserBean.getCrateTime());
@@ -44,7 +44,7 @@ public class UserHelp {
         mUserBean.setUser_phone(pUserBean.getUser_phone());
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return mUserBean.getUser_id();
     }
 }

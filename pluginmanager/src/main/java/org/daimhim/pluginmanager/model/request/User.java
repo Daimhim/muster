@@ -1,6 +1,6 @@
 package org.daimhim.pluginmanager.model.request;
 
-import org.daimhim.pluginmanager.model.UserBean;
+import org.daimhim.pluginmanager.model.bean.UserBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import io.reactivex.Observable;

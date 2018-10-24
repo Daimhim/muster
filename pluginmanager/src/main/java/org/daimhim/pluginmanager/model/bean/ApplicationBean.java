@@ -1,4 +1,4 @@
-package org.daimhim.pluginmanager.model;
+package org.daimhim.pluginmanager.model.bean;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model
@@ -20,6 +20,8 @@ public class ApplicationBean {
     private String app_url;
     private String app_logo;
     private String package_name;
+    private String version_name;
+    private String version_code;
 
     @Override
     public String toString() {
@@ -32,7 +34,25 @@ public class ApplicationBean {
                 ", app_url='" + app_url + '\'' +
                 ", app_logo='" + app_logo + '\'' +
                 ", package_name='" + package_name + '\'' +
+                ", version_name='" + version_name + '\'' +
+                ", version_code='" + version_code + '\'' +
                 '}';
+    }
+
+    public String getVersion_name() {
+        return version_name;
+    }
+
+    public void setVersion_name(String pVersion_name) {
+        version_name = pVersion_name;
+    }
+
+    public String getVersion_code() {
+        return version_code;
+    }
+
+    public void setVersion_code(String pVersion_code) {
+        version_code = pVersion_code;
     }
 
     public String getUpTime() {
