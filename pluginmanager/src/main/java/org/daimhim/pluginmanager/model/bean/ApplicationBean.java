@@ -12,9 +12,6 @@ package org.daimhim.pluginmanager.model.bean;
  * @author：Administrator
  */
 public class ApplicationBean {
-    private String upTime;
-    private String crateTime;
-    private String user_id;
     private String app_id;
     private String app_name;
     private String app_url;
@@ -22,61 +19,38 @@ public class ApplicationBean {
     private String package_name;
     private String version_name;
     private String version_code;
+    private String min_sdk_version ;
+    private String target_sdk_version ;
 
     @Override
     public String toString() {
         return "ApplicationBean{" +
-                "upTime='" + upTime + '\'' +
-                ", crateTime='" + crateTime + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", app_id='" + app_id + '\'' +
+                "app_id='" + app_id + '\'' +
                 ", app_name='" + app_name + '\'' +
                 ", app_url='" + app_url + '\'' +
                 ", app_logo='" + app_logo + '\'' +
                 ", package_name='" + package_name + '\'' +
                 ", version_name='" + version_name + '\'' +
                 ", version_code='" + version_code + '\'' +
+                ", min_sdk_version='" + min_sdk_version + '\'' +
+                ", target_sdk_version='" + target_sdk_version + '\'' +
                 '}';
     }
 
-    public String getVersion_name() {
-        return version_name;
+    public String getMin_sdk_version() {
+        return min_sdk_version;
     }
 
-    public void setVersion_name(String pVersion_name) {
-        version_name = pVersion_name;
+    public void setMin_sdk_version(String pMin_sdk_version) {
+        min_sdk_version = pMin_sdk_version;
     }
 
-    public String getVersion_code() {
-        return version_code;
+    public String getTarget_sdk_version() {
+        return target_sdk_version;
     }
 
-    public void setVersion_code(String pVersion_code) {
-        version_code = pVersion_code;
-    }
-
-    public String getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(String pUpTime) {
-        upTime = pUpTime;
-    }
-
-    public String getCrateTime() {
-        return crateTime;
-    }
-
-    public void setCrateTime(String pCrateTime) {
-        crateTime = pCrateTime;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String pUser_id) {
-        user_id = pUser_id;
+    public void setTarget_sdk_version(String pTarget_sdk_version) {
+        target_sdk_version = pTarget_sdk_version;
     }
 
     public String getApp_id() {
@@ -118,4 +92,21 @@ public class ApplicationBean {
     public void setPackage_name(String pPackage_name) {
         package_name = pPackage_name;
     }
+
+    public String getVersion_name() {
+        return version_name;
+    }
+
+    public void setVersion_name(String pVersion_name) {
+        version_name = pVersion_name;
+    }
+
+    public String getVersion_code() {
+        return version_code;
+    }
+
+    public void setVersion_code(String pVersion_code) {
+        version_code = pVersion_code;
+    }
+
 }

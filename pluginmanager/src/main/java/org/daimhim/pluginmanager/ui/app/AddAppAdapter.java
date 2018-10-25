@@ -2,6 +2,10 @@ package org.daimhim.pluginmanager.ui.app;
 
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.util.ArrayMap;
+import android.support.v4.util.SimpleArrayMap;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,38 +14,40 @@ import android.widget.ImageView;
 
 import org.daimhim.pictureload.ImgLoadingUtil;
 import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder<Pair<String, String>>>
-        implements RecyclerContract.SimpleContract<List<Pair<String, String>>, Pair<String, String>> {
-    private List<Pair<String, String>> pairList;
+        implements RecyclerContract.SimpleContract<Map<String,String>, Pair<String, String>> {
+    private ArrayMap<String, String> mArrayMap;
 
     public AddAppAdapter() {
-        pairList = new ArrayList<>();
+        mArrayMap = new ArrayMap<>();
     }
 
     @Override
-    public void onRefresh(List<Pair<String, String>> pPairs) {
-        pairList.clear();
-        pairList.addAll(pPairs);
+    public void onRefresh(Map<String,String> pMap) {
+        mArrayMap.clear();
+        mArrayMap.putAll(pMap);
         notifyDataSetChanged();
     }
 
     @Override
     public Pair<String, String> getItem(int pI) {
-        return pairList.get(pI);
+        return new Pair<>(mArrayMap.keyAt(pI),mArrayMap.get(mArrayMap.keyAt(pI)));
     }
 
     @Override
-    public void onLoad(List<Pair<String, String>> pPairs) {
-        pairList.addAll(pPairs);
+    public void onLoad(Map<String,String> pPairs) {
+        mArrayMap.putAll(pPairs);
         notifyDataSetChanged();
     }
 
@@ -68,12 +74,16 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
 
     @Override
     public int getDataItemCount() {
-        return pairList.size();
+        return mArrayMap.size();
+    }
+
+    public Map<String,String> getData(){
+        return mArrayMap;
     }
 
     @Override
     public int getDataItemViewType(int position) {
-        return super.getDataItemViewType(position);
+        return position==0?0:1;
     }
 
     class AddAppLogoViewHolder extends ClickViewHolder<Pair<String, String>> {
@@ -87,7 +97,7 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
 
         @Override
         public void onRefresh(Pair<String, String> pStringStringPair) {
-            ImgLoadingUtil.loadImage(ivLogoPm,pStringStringPair.second);
+            ImgLoadingUtil.loadImage(ivLogoPm, pStringStringPair.second);
         }
     }
 
@@ -96,6 +106,7 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
         TextInputEditText etInputPm;
         @BindView(R.id.et_input_layout_pm)
         TextInputLayout etInputLayoutPm;
+
         public AddAppViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -103,6 +114,42 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
 
         @Override
         public void onRefresh(Pair<String, String> pStringStringPair) {
+            etInputLayoutPm.setHint(pStringStringPair.first);
+            etInputPm.setText(pStringStringPair.second);
+
+            etInputPm.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
+    }
+
+    class Input implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
 
         }
     }

@@ -1,6 +1,5 @@
 package org.daimhim.pluginmanager.ui.user;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.daimhim.helpful.util.HLogUtil;
+import org.daimhim.helpful.util.HSharedUtil;
+import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.bean.UserBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
@@ -23,6 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -45,6 +49,23 @@ public class UserLoginFragment extends Fragment {
     Unbinder unbinder;
     private UserViewModel mUserViewModel;
 
+    private String USER_NAME = "USER_NAME";
+    private String USER_PASS = "USER_PASS";
+    private ObserverCallBack<JavaResponse<UserBean>> mUserLoginObserver = new ObserverCallBack<JavaResponse<UserBean>>() {
+        @Override
+        protected void onSuccess(JavaResponse<UserBean> pUserBeanJavaResponse) {
+            HSharedUtil.putString(getContext(),USER_NAME,pUserBeanJavaResponse.getResult().getAccount_number());
+            HSharedUtil.putString(getContext(),USER_PASS,pUserBeanJavaResponse.getResult().getPass_word());
+            MainUtils.startFragment(getContext(), ApplicationFragment.class);
+        }
+
+        @Override
+        protected void onFailure(JavaResponse pJavaResponse) {
+            Snackbar.make(etUsernamePm,pJavaResponse.getError_msg(),Snackbar.LENGTH_SHORT).show();
+        }
+    };
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,6 +78,10 @@ public class UserLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        if (!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_NAME))&&!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_PASS))){
+            mUserViewModel.userLogin(HSharedUtil.getString(getContext(),USER_NAME),HSharedUtil.getString(getContext(),USER_PASS))
+                    .subscribe(mUserLoginObserver);
+        }
     }
 
 
@@ -79,16 +104,7 @@ public class UserLoginFragment extends Fragment {
                     return;
                 }
                 mUserViewModel.userLogin(etUsernamePm.getText().toString(),etPasswordPm.getText().toString())
-                        .subscribe(new Consumer<JavaResponse<UserBean>>() {
-                            @Override
-                            public void accept(JavaResponse<UserBean> userBeanJavaResponse) throws Exception {
-                                if (TextUtils.equals(userBeanJavaResponse.getError_code(),"0")){
-                                    Snackbar.make(etUsernamePm,userBeanJavaResponse.getError_msg(),Snackbar.LENGTH_SHORT).show();
-                                }else {
-                                    MainUtils.startFragment(getContext(), ApplicationFragment.class);
-                                }
-                            }
-                        });
+                        .subscribe(mUserLoginObserver);
                 break;
             case R.id.bt_cancel_pm:
                 MainUtils.startFragment(getContext(),RegisterFragment.class);

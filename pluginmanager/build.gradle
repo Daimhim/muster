@@ -20,8 +20,8 @@ android {
         debug {
             minifyEnabled false
             debuggable true
-            buildConfigField("String", "BASE_URL", '"http://10.0.2.2:8000/app/"')
-//            buildConfigField("String", "BASE_URL", '"http://10.0.3.2:8000/app/"')
+//            buildConfigField("String", "BASE_URL", '"http://10.0.2.2:8000/app/"')
+            buildConfigField("String", "BASE_URL", '"http://10.0.3.2:8000/app/"')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
@@ -48,7 +48,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
-    implementation (name:'helpful-release',ext:'aar')
+//    implementation (name:'helpful-release',ext:'aar')
+    implementation 'org.daimhim.helpful:helpful:1.0'
     implementation (name:'rvadapter-release',ext:'aar')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -40,8 +41,15 @@ public class UserViewModel extends ViewModel {
         mUser = RetrofitManager.getInstance().getRetrofit().create(User.class);
     }
 
-    public Observable<JavaResponse<UserBean>> userLogin(String userName, String userPassWord) {
-        return mUser.userLogin(userName, userPassWord);
+    public Observable<JavaResponse<UserBean>> userLogin(String userName, final String userPassWord) {
+        return mUser.userLogin(userName, userPassWord)
+                .map(new Function<JavaResponse<UserBean>, JavaResponse<UserBean>>() {
+                    @Override
+                    public JavaResponse<UserBean> apply(JavaResponse<UserBean> pUserBeanJavaResponse) throws Exception {
+                        pUserBeanJavaResponse.getResult().setPass_word(userPassWord);
+                        return pUserBeanJavaResponse;
+                    }
+                });
     }
 
     public LiveData<Integer> userRegister(String userName, String userPassWord) {

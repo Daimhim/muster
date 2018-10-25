@@ -4,8 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Pair;
 
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.helpful.util.HLogUtil;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
@@ -13,7 +16,11 @@ import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -91,5 +98,21 @@ public class ApplicationViewModel extends ViewModel {
                         return lUriJavaResponse;
                     }
                 });
+    }
+
+    public Observable<Map<String,String>> getInputMenu(){
+        Map<String,String> lPairList = new LinkedHashMap<>();
+        Class<ApplicationBean> lApplicationBeanClass = ApplicationBean.class;
+        Field[] lFields = lApplicationBeanClass.getDeclaredFields();
+        for (int i = lFields.length-1; i >= 0; i--) {
+            if (!TextUtils.equals(lFields[i].getName(),"app_id")) {
+                lPairList.put(lFields[i].getName(), "");
+            }
+        }
+        return Observable.just(lPairList);
+    }
+
+    public Observable<JavaResponse<Void>> registeredApp(Map<String,String> pPairs){
+        return mApplication.appRegistered(pPairs);
     }
 }

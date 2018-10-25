@@ -3,10 +3,13 @@ package org.daimhim.pluginmanager.model.request;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -25,13 +28,16 @@ import retrofit2.http.Url;
  * @author：Administrator
  */
 public interface Application {
+    /**
+     * @Field("userId") String userId,
+     * @Field("appName") String appName,
+     * @Field("appUrl") String appUrl,
+     * @Field("appLogo") String appLogo,
+     * @Field("packageName") String packageName
+     */
     @POST("apk/register/app/")
-    void appRegistered(
-            @Field("userId") String userId,
-            @Field("appName") String appName,
-            @Field("appUrl") String appUrl,
-            @Field("appLogo") String appLogo,
-            @Field("packageName") String packageName
+    Observable<JavaResponse<Void>> appRegistered(
+            @FieldMap Map<String,String> pMap
     );
 
     @POST("apk/update/app/")
