@@ -17,9 +17,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.daimhim.helpful.util.HImageUtil;
+import org.daimhim.helpful.util.HLogUtil;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
@@ -36,7 +36,6 @@ import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -113,57 +112,55 @@ public class AddAppFragment extends Fragment {
             case R.id.bt_upload_apk:
                 break;
             case R.id.bt_download_apk:
-                if (TextUtils.isEmpty(mAddAppAdapter.getData().get("app_url"))) {
+                String lApp_url = mAddAppAdapter.getData().get("app_url");
+                if (TextUtils.isEmpty(lApp_url)) {
                     Snackbar.make(view, "url can not be empty", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                mApplicationViewModel.upLoadApk(mAddAppAdapter.getData().get("app_url"))
-                        .map(new Function<JavaResponse<Uri>, ApplicationBean>() {
-                            @Override
-                            public ApplicationBean apply(JavaResponse<Uri> pUriJavaResponse) throws Exception {
-                                ApplicationBean lBean = new ApplicationBean();
-                                Uri lResult = pUriJavaResponse.getResult();
-                                PackageManager lPackageManager = getContext().getPackageManager();
-                                PackageInfo lPackageArchiveInfo = lPackageManager.getPackageArchiveInfo(lResult.getPath(), PackageManager.GET_ACTIVITIES);
-                                if (lPackageArchiveInfo != null) {
-                                    ApplicationInfo appInfo = lPackageArchiveInfo.applicationInfo;
-                                    appInfo.sourceDir = lResult.getPath();
-                                    appInfo.publicSourceDir = lResult.getPath();
-                                    lBean.setApp_name(lPackageManager.getApplicationLabel(appInfo).toString());// 得到应用名
-                                    lBean.setPackage_name(appInfo.packageName);
-                                    if (Build.VERSION.SDK_INT >= 28) {
-                                        lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
-                                    } else {
-                                        lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.versionCode));
-                                    }
-                                    lBean.setVersion_name(lPackageArchiveInfo.versionName);
-                                    Drawable lDrawable = appInfo.loadIcon(lPackageManager);
-                                    CacheFileUtils lInstance = CacheFileUtils.getInstance();
-                                    Uri lPng = lInstance.saveBitmap(HImageUtil.drawableToBitmap(lDrawable),
-                                            lInstance.getDiskCacheDir(CacheFileUtils.CACHE_IMAGE_DIR).getPath(),
-                                            lInstance.generateRandomFilename("png"));
-                                    lBean.setApp_logo(lPng.getPath());
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        lBean.setMin_sdk_version(String.valueOf(appInfo.minSdkVersion));
-                                    }
-                                    lBean.setTarget_sdk_version(String.valueOf(appInfo.targetSdkVersion));
+                mApplicationViewModel.upLoadApk(lApp_url)
+                        .map(pUriJavaResponse -> {
+                            ApplicationBean lBean = new ApplicationBean();
+                            Uri lResult = pUriJavaResponse.getResult();
+                            PackageManager lPackageManager = getContext().getPackageManager();
+                            PackageInfo lPackageArchiveInfo = lPackageManager.getPackageArchiveInfo(lResult.getPath(), PackageManager.GET_ACTIVITIES);
+                            if (lPackageArchiveInfo != null) {
+                                ApplicationInfo appInfo = lPackageArchiveInfo.applicationInfo;
+                                appInfo.sourceDir = lResult.getPath();
+                                appInfo.publicSourceDir = lResult.getPath();
+                                lBean.setApp_name(lPackageManager.getApplicationLabel(appInfo).toString());// 得到应用名
+                                lBean.setPackage_name(appInfo.packageName);
+                                if (Build.VERSION.SDK_INT >= 28) {
+                                    lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
+                                } else {
+                                    lBean.setVersion_code(String.valueOf(lPackageArchiveInfo.versionCode));
                                 }
-                                return lBean;
+                                lBean.setVersion_name(lPackageArchiveInfo.versionName);
+                                Drawable lDrawable = appInfo.loadIcon(lPackageManager);
+                                CacheFileUtils lInstance = CacheFileUtils.getInstance();
+                                Uri lPng = lInstance.saveBitmap(HImageUtil.drawableToBitmap(lDrawable),
+                                        lInstance.getDiskCacheDir(CacheFileUtils.CACHE_IMAGE_DIR).getAbsolutePath(),
+                                        lInstance.generateRandomFilename("png"));
+                                lBean.setApp_logo(lPng.getPath());
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    lBean.setMin_sdk_version(String.valueOf(appInfo.minSdkVersion));
+                                }
+                                lBean.setTarget_sdk_version(String.valueOf(appInfo.targetSdkVersion));
                             }
+                            return lBean;
                         })
-                        .map(new Function<ApplicationBean, Map<String,String>>() {
-                            @Override
-                            public Map<String, String> apply(ApplicationBean pApplicationBean) throws Exception {
-                                Map<String,String> lMap = new LinkedHashMap<>();
-                                Class<? extends ApplicationBean> lClass = pApplicationBean.getClass();
-                                Field[] lFields = lClass.getDeclaredFields();
-                                for (Field field:
-                                        lFields) {
+                        .map(pApplicationBean -> {
+                            Map<String,String> lMap = new LinkedHashMap<>();
+                            Class<? extends ApplicationBean> lClass = pApplicationBean.getClass();
+                            Field[] lFields = lClass.getDeclaredFields();
+                            for (Field field:
+                                    lFields) {
+                                if (!TextUtils.equals(field.getName(),"app_id")) {
                                     field.setAccessible(true);
-                                    lMap.put(field.getName(), (String) field.get(field.getName()));
+                                    lMap.put(field.getName(), (String) field.get(pApplicationBean));
                                 }
-                                return lMap;
                             }
+                            lMap.put("app_url",lApp_url);
+                            return lMap;
                         })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -180,7 +177,7 @@ public class AddAppFragment extends Fragment {
 
                             @Override
                             public void onError(Throwable e) {
-
+                                e.printStackTrace();
                             }
 
                             @Override

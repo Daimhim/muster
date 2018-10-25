@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+import org.daimhim.helpful.util.HLogUtil;
 import org.daimhim.pluginmanager.R;
 
 import java.io.BufferedReader;
@@ -44,10 +45,10 @@ import java.util.Random;
  * @author：Administrator
  */
 public class CacheFileUtils {
-    public static final String CACHE_IMAGE_DIR = "cache_image";
-    public static final String CACHE_AUDIO_DIR = "cache_audio";
-    public static final String CACHE_MESSAGE_DIR = "cache_message";
-    public static final String CACHE_FILE_DIR = "cache_file";
+    public static final String CACHE_IMAGE_DIR = "/image";
+    public static final String CACHE_AUDIO_DIR = "/audio";
+    public static final String CACHE_MESSAGE_DIR = "/message";
+    public static final String CACHE_FILE_DIR = "/file";
 
     private final String RESOURCE_DIRECTORY = "";
 
@@ -101,7 +102,7 @@ public class CacheFileUtils {
                 cacheDirFile.mkdirs();
             }
         } else {
-            cacheDirFile = new File(cachePath + uniqueName);
+            cacheDirFile = new File(cachePath + "/" + uniqueName);
             if (!cacheDirFile.exists()) {
                 cacheDirFile.mkdirs();
             }
@@ -217,11 +218,11 @@ public class CacheFileUtils {
      */
     public void initCacheFile(Context context) {
         LogUtils.e("initCacheFile");
+        GET_PACKAGE_NAME = context.getPackageName();
+        ENVIRONMENT_GET_EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath();
         GET_EXTERNAL_CACHE_DIR_PATH = getExternalCacheDir().getPath();
         GET_CACHE_DIR_PATH = context.getCacheDir().getPath();
         GET_FILES_DIR_ABSOLUTE_PATH = context.getFilesDir().getAbsolutePath();
-        GET_PACKAGE_NAME = context.getPackageName();
-        ENVIRONMENT_GET_EXTERNAL_STORAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath();
         ENVIRONMENT_MEDIA_MOUNTED = Environment.MEDIA_MOUNTED;
         final String cacheDir = getDiskCacheDir().getAbsolutePath();
 
@@ -897,6 +898,9 @@ public class CacheFileUtils {
                 dir.mkdirs();
             }
             File file = new File(dir, destFileName);
+            if (!file.exists()){
+                file.createNewFile();
+            }
             fos = new FileOutputStream(file);
             while ((len = is.read(buf)) != -1) {
                 sum += len;
@@ -935,7 +939,7 @@ public class CacheFileUtils {
             if(!folder.exists()){
                 folder.mkdir();
             }
-            File file = new File(folder.getPath() + fileName);
+            File file = new File(folder,fileName);
             if(file.exists()){
                 file.delete();
             }
@@ -985,19 +989,19 @@ public class CacheFileUtils {
         public static boolean DEBUG = true;
 
         public static void e(String text) {
-            System.out.println(text);
+            HLogUtil.d("CacheFileUtils",text);
         }
 
         public static void d(String text) {
-            System.out.println(text);
+            HLogUtil.d("CacheFileUtils",text);
         }
 
         public static void w(String text) {
-            System.out.println(text);
+            HLogUtil.d("CacheFileUtils",text);
         }
 
         public static void e(Exception pE) {
-            System.out.println(pE);
+            HLogUtil.d("CacheFileUtils",pE.getMessage());
         }
     }
 }

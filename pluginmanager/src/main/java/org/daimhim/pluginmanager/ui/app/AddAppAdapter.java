@@ -5,6 +5,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.SimpleArrayMap;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -14,12 +15,10 @@ import android.widget.ImageView;
 
 import org.daimhim.pictureload.ImgLoadingUtil;
 import org.daimhim.pluginmanager.R;
-import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -69,7 +68,11 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
 
     @Override
     public void onBindDataViewHolder(ClickViewHolder<Pair<String, String>> pPairClickViewHolder, int pI) {
-        pPairClickViewHolder.onRefresh(getItem(pI));
+        if (pI == 0){
+            pPairClickViewHolder.onRefresh(new Pair<>("app_logo",mArrayMap.get("app_logo")));
+        }else {
+            pPairClickViewHolder.onRefresh(getItem(pI));
+        }
     }
 
     @Override
@@ -116,41 +119,28 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
         public void onRefresh(Pair<String, String> pStringStringPair) {
             etInputLayoutPm.setHint(pStringStringPair.first);
             etInputPm.setText(pStringStringPair.second);
+            if (etInputPm.getTag() == null){
+                etInputPm.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            etInputPm.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-                }
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        }
-    }
-
-    class Input implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        mArrayMap.put(mArrayMap.keyAt(getLayoutPosition()),s.toString());
+                    }
+                });
+                etInputPm.setTag("1");
+            }
 
         }
     }
+
+
 }
