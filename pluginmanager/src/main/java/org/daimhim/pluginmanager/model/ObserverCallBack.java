@@ -34,16 +34,16 @@ public abstract class ObserverCallBack<T> implements Observer<T> {
                onFailure((JavaResponse) pTJavaResponse);
            }
        }else {
-           JavaResponse<T> lVoidJavaResponse = new JavaResponse<>();
-           lVoidJavaResponse.setResult(pTJavaResponse);
-            onFailure(lVoidJavaResponse);
+           onSuccess(pTJavaResponse);
        }
     }
 
     @Override
     public void onError(Throwable e) {
-        JavaResponse<Void> lVoidJavaResponse = new JavaResponse<>();
-        e.printStackTrace();
+        JavaResponse<Throwable> lVoidJavaResponse = new JavaResponse<>();
+        lVoidJavaResponse.setError_code("0");
+        lVoidJavaResponse.setError_msg(e.getMessage());
+        lVoidJavaResponse.setResult(e);
         onFailure(lVoidJavaResponse);
     }
 

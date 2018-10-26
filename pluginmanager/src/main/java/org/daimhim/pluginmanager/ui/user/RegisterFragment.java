@@ -52,6 +52,12 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        MainUtils.upTitleAndIco(getContext(), "注册", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.backFragment(getContext());
+            }
+        });
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     }
 

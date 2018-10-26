@@ -1,5 +1,9 @@
 package org.daimhim.pluginmanager.model.response;
 
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
+
+import java.util.List;
+
 /**
  * 项目名称：org.daimhim.pluginmanager.model.response
  * 项目版本：muster
@@ -12,4 +16,21 @@ package org.daimhim.pluginmanager.model.response;
  * @author：Administrator
  */
 public class ApplicationResponse {
+
+    private List<ApplicationBean> list;
+
+    @Override
+    public String toString() {
+        return "ApplicationResponse{" +
+                "list=" + list +
+                '}';
+    }
+
+    public List<ApplicationBean> getList() {
+        return list;
+    }
+
+    public void setList(List<ApplicationBean> pList) {
+        list = pList;
+    }
 }

@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.model.request;
 
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
+import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import java.util.Map;
@@ -57,7 +58,7 @@ public interface Application {
     );
 
     @GET("apk/get/app/list/")
-    Observable<JavaResponse<ApplicationBean>> getAappList(
+    Observable<JavaResponse<ApplicationResponse>> getAappList(
             @Query("userId") String userId
     );
 

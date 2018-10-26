@@ -15,44 +15,46 @@ import android.widget.ImageView;
 
 import org.daimhim.pictureload.ImgLoadingUtil;
 import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.model.bean.AddAppMenuBean;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder<Pair<String, String>>>
-        implements RecyclerContract.SimpleContract<Map<String,String>, Pair<String, String>> {
-    private ArrayMap<String, String> mArrayMap;
+public class EditAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickViewHolder<AddAppMenuBean>>
+        implements RecyclerContract.SimpleContract<List<AddAppMenuBean>, AddAppMenuBean> {
+    private List<AddAppMenuBean> mPairs;
 
-    public AddAppAdapter() {
-        mArrayMap = new ArrayMap<>();
+    public EditAppAdapter() {
+        mPairs = new ArrayList<>();
     }
 
     @Override
-    public void onRefresh(Map<String,String> pMap) {
-        mArrayMap.clear();
-        mArrayMap.putAll(pMap);
+    public void onRefresh(List<AddAppMenuBean> pMap) {
+        mPairs.clear();
+        mPairs.addAll(pMap);
         notifyDataSetChanged();
     }
 
     @Override
-    public Pair<String, String> getItem(int pI) {
-        return new Pair<>(mArrayMap.keyAt(pI),mArrayMap.get(mArrayMap.keyAt(pI)));
+    public AddAppMenuBean getItem(int pI) {
+        return mPairs.get(pI);
     }
 
     @Override
-    public void onLoad(Map<String,String> pPairs) {
-        mArrayMap.putAll(pPairs);
+    public void onLoad(List<AddAppMenuBean> pMap) {
+        mPairs.addAll(pMap);
         notifyDataSetChanged();
     }
 
     @Override
-    public ClickViewHolder<Pair<String, String>> onCreateDataViewHolder(ViewGroup pViewGroup, int pI) {
-        ClickViewHolder<Pair<String, String>> lViewHolder = null;
+    public ClickViewHolder<AddAppMenuBean> onCreateDataViewHolder(ViewGroup pViewGroup, int pI) {
+        ClickViewHolder<AddAppMenuBean> lViewHolder = null;
         switch (pI) {
             case 0:
                 lViewHolder = new AddAppLogoViewHolder(LayoutInflater.from(pViewGroup.getContext())
@@ -67,21 +69,25 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
     }
 
     @Override
-    public void onBindDataViewHolder(ClickViewHolder<Pair<String, String>> pPairClickViewHolder, int pI) {
-        if (pI == 0){
-            pPairClickViewHolder.onRefresh(new Pair<>("app_logo",mArrayMap.get("app_logo")));
-        }else {
-            pPairClickViewHolder.onRefresh(getItem(pI));
-        }
+    public void onBindDataViewHolder(ClickViewHolder<AddAppMenuBean> pPairClickViewHolder, int pI) {
+        pPairClickViewHolder.onRefresh(getItem(pI));
     }
 
     @Override
     public int getDataItemCount() {
-        return mArrayMap.size();
+        return mPairs.size();
     }
 
-    public Map<String,String> getData(){
-        return mArrayMap;
+    public List<AddAppMenuBean> getPairs() {
+        return mPairs;
+    }
+    public String getValue(String key) {
+        for (int i = 0; i < mPairs.size(); i++) {
+            if (TextUtils.equals(mPairs.get(i).getKey(),key)){
+                return mPairs.get(i).getVaue();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -89,7 +95,7 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
         return position==0?0:1;
     }
 
-    class AddAppLogoViewHolder extends ClickViewHolder<Pair<String, String>> {
+    class AddAppLogoViewHolder extends ClickViewHolder<AddAppMenuBean> {
         @BindView(R.id.iv_logo_pm)
         ImageView ivLogoPm;
 
@@ -99,12 +105,12 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
         }
 
         @Override
-        public void onRefresh(Pair<String, String> pStringStringPair) {
-            ImgLoadingUtil.loadImage(ivLogoPm, pStringStringPair.second);
+        public void onRefresh(AddAppMenuBean pStringStringPair) {
+            ImgLoadingUtil.loadImage(ivLogoPm, pStringStringPair.getVaue());
         }
     }
 
-    class AddAppViewHolder extends ClickViewHolder<Pair<String, String>> {
+    class AddAppViewHolder extends ClickViewHolder<AddAppMenuBean> {
         @BindView(R.id.et_input_pm)
         TextInputEditText etInputPm;
         @BindView(R.id.et_input_layout_pm)
@@ -116,9 +122,9 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
         }
 
         @Override
-        public void onRefresh(Pair<String, String> pStringStringPair) {
-            etInputLayoutPm.setHint(pStringStringPair.first);
-            etInputPm.setText(pStringStringPair.second);
+        public void onRefresh(AddAppMenuBean pStringStringPair) {
+            etInputLayoutPm.setHint(pStringStringPair.getKey());
+            etInputPm.setText(pStringStringPair.getVaue());
             if (etInputPm.getTag() == null){
                 etInputPm.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -133,7 +139,7 @@ public class AddAppAdapter extends RecyclerViewEmpty<RecyclerViewEmpty.ClickView
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        mArrayMap.put(mArrayMap.keyAt(getLayoutPosition()),s.toString());
+                        mPairs.get(getLayoutPosition()).setVaue(s.toString());
                     }
                 });
                 etInputPm.setTag("1");

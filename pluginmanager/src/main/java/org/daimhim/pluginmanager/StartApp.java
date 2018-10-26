@@ -23,9 +23,16 @@ import org.daimhim.pluginmanager.utils.NetWorkUtils;
  * @author：Administrator
  */
 public class StartApp extends Application {
+    private static StartApp app;
+
+    public static StartApp getInstance() {
+        return app;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        app = this;
         CacheFileUtils.getInstance().initCacheFile(this);
         RetrofitManager.Config lConfig = new RetrofitManager.Config();
         lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);

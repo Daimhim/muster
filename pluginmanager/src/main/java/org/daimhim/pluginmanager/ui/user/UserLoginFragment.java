@@ -77,6 +77,7 @@ public class UserLoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        MainUtils.upTitleAndIco(getContext(),"登录",R.mipmap.ic_launcher,null);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         if (!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_NAME))&&!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_PASS))){
             mUserViewModel.userLogin(HSharedUtil.getString(getContext(),USER_NAME),HSharedUtil.getString(getContext(),USER_PASS))

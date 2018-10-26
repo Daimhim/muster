@@ -2,7 +2,6 @@ package org.daimhim.pluginmanager.ui.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -16,49 +15,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.daimhim.pluginmanager.R;
-import org.daimhim.pluginmanager.ui.app.AddAppFragment;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
+import org.daimhim.pluginmanager.ui.app.EditAppFragment;
 import org.daimhim.pluginmanager.ui.user.UserLoginFragment;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment lFragmentById = getSupportFragmentManager().findFragmentById(R.id.content_main);
-                if (lFragmentById instanceof ApplicationFragment){
-                    superimposedFragment(new AddAppFragment());
-                }else if (lFragmentById instanceof AddAppFragment){
-                    ((AddAppFragment)lFragmentById).addApp();
-                }
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
-                .beginTransaction();
-        lFragmentTransaction
-                .replace(R.id.content_main, new UserLoginFragment());
-        lFragmentTransaction.commit();
+
+        replaceFragment(new UserLoginFragment());
     }
 
     public void superimposedFragment(Fragment pFragment){
@@ -140,5 +125,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void upTitle(String text){
+        Objects.requireNonNull(getSupportActionBar()).setTitle(text);
+    }
+    public void upTitleLiftIco(int rId,View.OnClickListener pClickListener){
+        mToolbar.setNavigationIcon(rId);
+        mToolbar.setNavigationOnClickListener(pClickListener);
+    }
+
+    public void showUserInfo(){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
     }
 }
