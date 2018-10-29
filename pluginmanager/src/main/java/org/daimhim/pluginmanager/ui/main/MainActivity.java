@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +18,12 @@ import android.view.MenuItem;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
 import org.daimhim.pluginmanager.ui.app.EditAppFragment;
+import org.daimhim.pluginmanager.ui.base.BaseActivity;
 import org.daimhim.pluginmanager.ui.user.UserLoginFragment;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar mToolbar;
@@ -46,15 +48,16 @@ public class MainActivity extends AppCompatActivity
         replaceFragment(new UserLoginFragment());
     }
 
-    public void superimposedFragment(Fragment pFragment){
+    public void superimposedFragment(Fragment pFragment) {
         FragmentTransaction lFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        lFragmentTransaction.add(R.id.content_main,pFragment);
+        lFragmentTransaction.add(R.id.content_main, pFragment);
+        lFragmentTransaction.hide(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.content_main)));
         lFragmentTransaction.show(pFragment);
         lFragmentTransaction.addToBackStack(null);
         lFragmentTransaction.commit();
     }
 
-    public void replaceFragment(Fragment pFragment){
+    public void replaceFragment(Fragment pFragment) {
         FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
         lFragmentTransaction
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void backFragment(){
+    public void backFragment() {
         getSupportFragmentManager().popBackStack();
     }
 
@@ -127,15 +130,16 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void upTitle(String text){
+    public void upTitle(String text) {
         Objects.requireNonNull(getSupportActionBar()).setTitle(text);
     }
-    public void upTitleLiftIco(int rId,View.OnClickListener pClickListener){
+
+    public void upTitleLiftIco(int rId, View.OnClickListener pClickListener) {
         mToolbar.setNavigationIcon(rId);
         mToolbar.setNavigationOnClickListener(pClickListener);
     }
 
-    public void showUserInfo(){
+    public void showUserInfo() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
     }

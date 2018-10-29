@@ -48,6 +48,7 @@ public class StartApp extends Application {
             @Override
             public void run() {
                 HFileUtil.initFileDir(getBaseContext());
+                CacheFileUtils.getInstance().initCacheFile(getBaseContext());
             }
         }).start();
     }

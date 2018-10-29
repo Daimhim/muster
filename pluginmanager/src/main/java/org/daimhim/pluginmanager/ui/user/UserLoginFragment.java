@@ -53,14 +53,14 @@ public class UserLoginFragment extends Fragment {
     private String USER_PASS = "USER_PASS";
     private ObserverCallBack<JavaResponse<UserBean>> mUserLoginObserver = new ObserverCallBack<JavaResponse<UserBean>>() {
         @Override
-        protected void onSuccess(JavaResponse<UserBean> pUserBeanJavaResponse) {
+        public void onSuccess(JavaResponse<UserBean> pUserBeanJavaResponse) {
             HSharedUtil.putString(getContext(),USER_NAME,pUserBeanJavaResponse.getResult().getAccount_number());
             HSharedUtil.putString(getContext(),USER_PASS,pUserBeanJavaResponse.getResult().getPass_word());
             MainUtils.startFragment(getContext(), ApplicationFragment.class);
         }
 
         @Override
-        protected void onFailure(JavaResponse pJavaResponse) {
+        public void onFailure(JavaResponse pJavaResponse) {
             Snackbar.make(etUsernamePm,pJavaResponse.getError_msg(),Snackbar.LENGTH_SHORT).show();
         }
     };

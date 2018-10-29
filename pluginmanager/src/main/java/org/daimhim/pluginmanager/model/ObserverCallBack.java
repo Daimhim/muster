@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -18,7 +19,7 @@ import io.reactivex.disposables.Disposable;
  *
  * @author：Administrator
  */
-public abstract class ObserverCallBack<T> implements Observer<T> {
+public abstract class ObserverCallBack<T> implements Observer<T> , SingleObserver<T>{
 
     @Override
     public void onSubscribe(Disposable d) {
@@ -40,6 +41,7 @@ public abstract class ObserverCallBack<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
         JavaResponse<Throwable> lVoidJavaResponse = new JavaResponse<>();
         lVoidJavaResponse.setError_code("0");
         lVoidJavaResponse.setError_msg(e.getMessage());
@@ -52,7 +54,7 @@ public abstract class ObserverCallBack<T> implements Observer<T> {
 
     }
 
-    protected abstract void onSuccess(T pT);
-    protected abstract void onFailure(JavaResponse pJavaResponse);
+    public abstract void onSuccess(T pT);
+    public abstract void onFailure(JavaResponse pJavaResponse);
 
 }

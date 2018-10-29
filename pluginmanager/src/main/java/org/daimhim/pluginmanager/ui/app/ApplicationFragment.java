@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
+import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
 
 import butterknife.BindView;
@@ -34,10 +34,10 @@ import butterknife.Unbinder;
  *
  * @author：Administrator
  */
-public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ApplicationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     RecyclerView mRlRecyclerView;
     SwipeRefreshLayout mSrlSwipeRefreshLayout;
-    @BindView(R.id.fab_fab)
+    @BindView(R.id.fab_fab_pm)
     FloatingActionButton fabFab;
     Unbinder unbinder;
     private ApplicationAdapter mApplicationAdapter;
@@ -58,13 +58,13 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
         lApplicationViewModel.loadApplicationList()
                 .subscribe(new ObserverCallBack<JavaResponse<ApplicationResponse>>() {
                     @Override
-                    protected void onSuccess(JavaResponse<ApplicationResponse> pApplicationResponseJavaResponse) {
+                    public void onSuccess(JavaResponse<ApplicationResponse> pApplicationResponseJavaResponse) {
                         mApplicationAdapter.onRefresh(pApplicationResponseJavaResponse.getResult().getList());
                         mSrlSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
-                    protected void onFailure(JavaResponse pJavaResponse) {
+                    public void onFailure(JavaResponse pJavaResponse) {
                         mSrlSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -77,10 +77,21 @@ public class ApplicationFragment extends Fragment implements SwipeRefreshLayout.
         mApplicationAdapter = new ApplicationAdapter();
         mRlRecyclerView.setAdapter(mApplicationAdapter);
         MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
-        fabFab.setOnClickListener(v -> {
-            MainUtils.superimposedFragment(getContext(),EditAppFragment.class);
+        fabFab.setOnClickListener(v -> MainUtils.superimposedFragment(getContext(),EditAppFragment.class));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainUtils.upTitleAndIco(getContext(), "my app", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.showUserInfo(getContext());
+            }
         });
     }
+
+
 
     @Override
     public void onRefresh() {

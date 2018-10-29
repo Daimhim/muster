@@ -12,6 +12,7 @@ package org.daimhim.pluginmanager.model.bean;
  * @author：Administrator
  */
 public class ApplicationBean {
+
     private String app_id;
     private String app_name;
     private String app_url;

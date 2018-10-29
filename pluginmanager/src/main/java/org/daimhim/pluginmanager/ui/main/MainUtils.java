@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.ui.main;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,6 +24,20 @@ public class MainUtils {
             try {
                 hideKeyboard(pContext);
                 ((MainActivity) pContext).replaceFragment((Fragment) pFragment.newInstance());
+            } catch (IllegalAccessException pE) {
+                pE.printStackTrace();
+            } catch (InstantiationException pE) {
+                pE.printStackTrace();
+            }
+        }
+    }
+    public static void startFragment(Context pContext, Class pFragment, Bundle args) {
+        if (pContext instanceof MainActivity) {
+            try {
+                hideKeyboard(pContext);
+                Fragment lFragment = (Fragment) pFragment.newInstance();
+                lFragment.setArguments(args);
+                ((MainActivity) pContext).replaceFragment(lFragment);
             } catch (IllegalAccessException pE) {
                 pE.printStackTrace();
             } catch (InstantiationException pE) {

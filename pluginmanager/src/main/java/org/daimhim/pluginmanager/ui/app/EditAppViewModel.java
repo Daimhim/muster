@@ -18,6 +18,7 @@ import org.daimhim.pluginmanager.model.request.Application;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,6 +103,40 @@ public class EditAppViewModel extends ViewModel {
             lPairs.add(lBean);
         }
         return Observable.just(lPairs);
+    }
+
+    public Observable<ArrayMap<String, String>> analyzeLocal(File file) {
+        return Observable.just(file)
+                .map(pFile -> {
+                    ArrayMap<String, String> lArrayMap = new ArrayMap<>();
+                    CacheFileUtils lInstance = CacheFileUtils.getInstance();
+                    PackageManager lPackageManager = StartApp.getInstance().getPackageManager();
+                    PackageInfo lPackageArchiveInfo = lPackageManager.getPackageArchiveInfo(pFile.getPath(), PackageManager.GET_ACTIVITIES);
+                    if (lPackageArchiveInfo != null) {
+                        ApplicationInfo appInfo = lPackageArchiveInfo.applicationInfo;
+                        appInfo.sourceDir = pFile.getPath();
+                        appInfo.publicSourceDir = pFile.getPath();
+                        Drawable lDrawable = appInfo.loadIcon(lPackageManager);
+                        Uri lPng = lInstance.saveBitmap(HImageUtil.drawableToBitmap(lDrawable),
+                                lInstance.getDiskCacheDir(CacheFileUtils.CACHE_IMAGE_DIR).getAbsolutePath(),
+                                lInstance.generateRandomFilename("png"));
+                        lArrayMap.put(mInputMenu[0], lPng.getPath());
+                        lArrayMap.put(mInputMenu[1], lPackageManager.getApplicationLabel(appInfo).toString());
+                        lArrayMap.put(mInputMenu[2], pFile.getPath());
+                        lArrayMap.put(mInputMenu[3], appInfo.packageName);
+                        lArrayMap.put(mInputMenu[4], lPackageArchiveInfo.versionName);
+                        if (Build.VERSION.SDK_INT >= 28) {
+                            lArrayMap.put(mInputMenu[5], String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
+                        } else {
+                            lArrayMap.put(mInputMenu[5], String.valueOf(lPackageArchiveInfo.versionCode));
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            lArrayMap.put(mInputMenu[6], String.valueOf(appInfo.minSdkVersion));
+                        }
+                        lArrayMap.put(mInputMenu[7], String.valueOf(appInfo.targetSdkVersion));
+                    }
+                    return lArrayMap;
+                });
     }
 
     public Observable<JavaResponse<Void>> registeredApp(Map<String, String> pPairs) {
