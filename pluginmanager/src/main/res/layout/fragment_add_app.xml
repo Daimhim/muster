@@ -55,8 +55,18 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bt_app_pm"
         app:layout_constraintTop_toBottomOf="@+id/bt_upload_apk_pm" />
 
-
+    <Button
+        android:id="@+id/bt_app_pm"
+        android:text="添加"
+        android:textColor="@color/cl_333333"
+        android:layout_marginTop="@dimen/dimen_size_8"
+        android:layout_marginBottom="@dimen/dimen_size_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

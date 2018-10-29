@@ -75,8 +75,8 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    public void backFragment() {
-        getSupportFragmentManager().popBackStack();
+    public boolean backFragment() {
+        return getSupportFragmentManager().popBackStackImmediate();
     }
 
     @Override

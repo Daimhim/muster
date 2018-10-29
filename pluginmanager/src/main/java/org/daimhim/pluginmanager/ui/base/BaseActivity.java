@@ -22,8 +22,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment lFragmentById = getSupportFragmentManager().findFragmentById(R.id.content_main);
-        if (lFragmentById instanceof BackHandledInterface){
-            ((BackHandledInterface) lFragmentById).onBackPressed();
+        if (lFragmentById instanceof BackHandledInterface && ((BackHandledInterface) lFragmentById).onBackPressed()){
+
+        }else {
+            super.onBackPressed();
         }
     }
 }

@@ -1,5 +1,8 @@
 package org.daimhim.pluginmanager.model.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * 项目名称：org.daimhim.pluginmanager.model
  * 项目版本：muster
@@ -11,7 +14,7 @@ package org.daimhim.pluginmanager.model.bean;
  *
  * @author：Administrator
  */
-public class ApplicationBean {
+public class ApplicationBean implements Parcelable {
 
     private String app_id;
     private String app_name;
@@ -110,4 +113,48 @@ public class ApplicationBean {
         version_code = pVersion_code;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.app_id);
+        dest.writeString(this.app_name);
+        dest.writeString(this.app_url);
+        dest.writeString(this.app_logo);
+        dest.writeString(this.package_name);
+        dest.writeString(this.version_name);
+        dest.writeString(this.version_code);
+        dest.writeString(this.min_sdk_version);
+        dest.writeString(this.target_sdk_version);
+    }
+
+    public ApplicationBean() {
+    }
+
+    protected ApplicationBean(Parcel in) {
+        this.app_id = in.readString();
+        this.app_name = in.readString();
+        this.app_url = in.readString();
+        this.app_logo = in.readString();
+        this.package_name = in.readString();
+        this.version_name = in.readString();
+        this.version_code = in.readString();
+        this.min_sdk_version = in.readString();
+        this.target_sdk_version = in.readString();
+    }
+
+    public static final Parcelable.Creator<ApplicationBean> CREATOR = new Parcelable.Creator<ApplicationBean>() {
+        @Override
+        public ApplicationBean createFromParcel(Parcel source) {
+            return new ApplicationBean(source);
+        }
+
+        @Override
+        public ApplicationBean[] newArray(int size) {
+            return new ApplicationBean[size];
+        }
+    };
 }

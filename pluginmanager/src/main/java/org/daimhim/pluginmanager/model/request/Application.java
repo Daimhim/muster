@@ -11,6 +11,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -36,19 +37,15 @@ public interface Application {
      * @Field("appLogo") String appLogo,
      * @Field("packageName") String packageName
      */
+    @FormUrlEncoded
     @POST("apk/register/app/")
     Observable<JavaResponse<Void>> appRegistered(
             @FieldMap Map<String,String> pMap
     );
-
+    @FormUrlEncoded
     @POST("apk/update/app/")
-    void appUpdate(
-            @Field("userId") String userId,
-            @Field("appId") String appId,
-            @Field("appName") String appName,
-            @Field("appUrl") String appUrl,
-            @Field("appLogo") String appLogo,
-            @Field("packageName") String packageName
+    Observable<JavaResponse<Void>> appUpdate(
+            @FieldMap Map<String,String> pMap
     );
 
     @POST("apk/delete/app/")

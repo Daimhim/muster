@@ -111,5 +111,6 @@ public class UserLoginFragment extends Fragment {
                 MainUtils.startFragment(getContext(),RegisterFragment.class);
                 break;
         }
+        MainUtils.hideKeyboard(getContext());
     }
 }

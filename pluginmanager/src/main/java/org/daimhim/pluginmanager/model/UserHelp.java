@@ -1,6 +1,9 @@
 package org.daimhim.pluginmanager.model;
 
 import org.daimhim.pluginmanager.model.bean.UserBean;
+import org.daimhim.pluginmanager.utils.ClassReflection;
+
+import java.lang.reflect.Field;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.model
@@ -34,17 +37,18 @@ public class UserHelp {
     }
 
     public void upUserInfo(UserBean pUserBean) {
-        mUserBean.setUser_id(pUserBean.getUser_id());
-        mUserBean.setAccount_number(pUserBean.getAccount_number());
-        mUserBean.setCrateTime(pUserBean.getCrateTime());
-        mUserBean.setPass_word(pUserBean.getPass_word());
-        mUserBean.setUpTime(pUserBean.getUpTime());
-        mUserBean.setUser_logo(pUserBean.getUser_logo());
-        mUserBean.setUser_name(pUserBean.getUser_name());
-        mUserBean.setUser_phone(pUserBean.getUser_phone());
+        try {
+            ClassReflection.reflectionAttr(pUserBean,mUserBean);
+        } catch (Exception pE) {
+            pE.printStackTrace();
+        }
     }
 
     public String getUserId() {
         return mUserBean.getUser_id();
     }
+
+
+
+
 }

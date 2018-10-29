@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/cl_ffffff">
 
     <ImageView
         android:id="@+id/iv_logo_pm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_size_80"
+        android:layout_height="@dimen/dimen_size_80"
         android:layout_margin="@dimen/dimen_size_12"
-        android:src="@mipmap/ic_launcher_round"
+        tools:src="@mipmap/ic_launcher_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="App Name"
+        tools:text="App Name"
         android:id="@+id/tv_app_name_pm"
         android:layout_width="@dimen/dimen_size_0"
         android:layout_height="wrap_content"
@@ -31,7 +32,7 @@
 
     <TextView
         android:id="@+id/tv_package_name_pm"
-        android:text="package Name"
+        tools:text="package Name"
         android:layout_width="@dimen/dimen_size_0"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_size_10"

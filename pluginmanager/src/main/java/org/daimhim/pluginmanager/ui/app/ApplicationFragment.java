@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.ui.app;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,8 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
     FloatingActionButton fabFab;
     Unbinder unbinder;
     private ApplicationAdapter mApplicationAdapter;
+    private ApplicationViewModel mApplicationViewModel;
+    private ObserverCallBack<JavaResponse<ApplicationResponse>> mObserver;
 
     @Nullable
     @Override
@@ -54,20 +57,21 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        ApplicationViewModel lApplicationViewModel = ViewModelProviders.of(this).get(ApplicationViewModel.class);
-        lApplicationViewModel.loadApplicationList()
-                .subscribe(new ObserverCallBack<JavaResponse<ApplicationResponse>>() {
-                    @Override
-                    public void onSuccess(JavaResponse<ApplicationResponse> pApplicationResponseJavaResponse) {
-                        mApplicationAdapter.onRefresh(pApplicationResponseJavaResponse.getResult().getList());
-                        mSrlSwipeRefreshLayout.setRefreshing(false);
-                    }
+        mApplicationViewModel = ViewModelProviders.of(this).get(ApplicationViewModel.class);
+        mObserver = new ObserverCallBack<JavaResponse<ApplicationResponse>>() {
+            @Override
+            public void onSuccess(JavaResponse<ApplicationResponse> pApplicationResponseJavaResponse) {
+                mApplicationAdapter.onRefresh(pApplicationResponseJavaResponse.getResult().getList());
+                mSrlSwipeRefreshLayout.setRefreshing(false);
+            }
 
-                    @Override
-                    public void onFailure(JavaResponse pJavaResponse) {
-                        mSrlSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+            @Override
+            public void onFailure(JavaResponse pJavaResponse) {
+                mSrlSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        mApplicationViewModel.loadApplicationList()
+                .subscribe(mObserver);
     }
 
     private void initView(@NonNull View view) {
@@ -80,27 +84,27 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         fabFab.setOnClickListener(v -> MainUtils.superimposedFragment(getContext(),EditAppFragment.class));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        MainUtils.upTitleAndIco(getContext(), "my app", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.showUserInfo(getContext());
-            }
-        });
-    }
-
-
 
     @Override
     public void onRefresh() {
-        ViewModelProviders.of(this).get(ApplicationViewModel.class).loadApplicationList();
+        mApplicationViewModel.loadApplicationList()
+                .subscribe(mObserver);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MainUtils.upTitleAndIco(getContext(), "my app", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.showUserInfo(getContext());
+            }
+        });
     }
 }

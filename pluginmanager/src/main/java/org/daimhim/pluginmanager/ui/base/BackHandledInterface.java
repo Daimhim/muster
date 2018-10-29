@@ -12,5 +12,5 @@ package org.daimhim.pluginmanager.ui.base;
  * @author：Administrator
  */
 public interface BackHandledInterface {
-    void onBackPressed();
+    boolean onBackPressed();
 }

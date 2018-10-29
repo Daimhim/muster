@@ -1,11 +1,15 @@
 package org.daimhim.pluginmanager.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import org.daimhim.pluginmanager.R;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -45,6 +49,7 @@ public class MainUtils {
             }
         }
     }
+
     public static void superimposedFragment(Context pContext, Class pFragment) {
         if (pContext instanceof MainActivity) {
             try {
@@ -57,11 +62,70 @@ public class MainUtils {
             }
         }
     }
-
+    public static void superimposedFragment(Context pContext, int requestCode, Class pFragment) {
+        if (pContext instanceof MainActivity) {
+            try {
+                hideKeyboard(pContext);
+                Fragment lFragment = (Fragment) pFragment.newInstance();
+                Bundle lArgs = new Bundle();
+                lArgs.putInt("requestCode",requestCode);
+                lFragment.setArguments(lArgs);
+                ((MainActivity) pContext).superimposedFragment(lFragment);
+            } catch (IllegalAccessException pE) {
+                pE.printStackTrace();
+            } catch (InstantiationException pE) {
+                pE.printStackTrace();
+            }
+        }
+    }
     public static void backFragment(Context pContext){
         if (pContext instanceof MainActivity) {
             hideKeyboard(pContext);
+            Fragment lFragmentById = null;
+            lFragmentById = ((MainActivity) pContext)
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.content_main);
+            int lRequestCode = -1;
+            if (lFragmentById !=null && lFragmentById.getArguments() != null){
+                lRequestCode = lFragmentById.getArguments().getInt("requestCode");
+            }
             ((MainActivity) pContext).backFragment();
+            lFragmentById = ((MainActivity) pContext)
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.content_main);
+            if (lFragmentById != null) {
+                lFragmentById.setUserVisibleHint(true);
+                lFragmentById.onActivityResult(lRequestCode,-1,null);
+            }
+        }
+    }
+    public static void backFragment(Context pContext,Bundle pBundle){
+        if (pContext instanceof MainActivity) {
+            hideKeyboard(pContext);
+            Fragment lFragmentById = null;
+            lFragmentById = ((MainActivity) pContext)
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.content_main);
+            int lRequestCode = -1;
+            if (lFragmentById !=null && lFragmentById.getArguments() != null){
+                lRequestCode = lFragmentById.getArguments().getInt("requestCode");
+            }
+
+            ((MainActivity) pContext).backFragment();
+            lFragmentById = ((MainActivity) pContext)
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.content_main);
+            if (lFragmentById != null) {
+                if (lFragmentById.getArguments() != null){
+                    lFragmentById.getArguments().putAll(pBundle);
+                }else {
+                    lFragmentById.setArguments(pBundle);
+                }
+                lFragmentById.setUserVisibleHint(true);
+                if (lRequestCode!=-1){
+                    lFragmentById.onActivityResult(lRequestCode,-1,new Intent().putExtras(pBundle));
+                }
+            }
         }
     }
 

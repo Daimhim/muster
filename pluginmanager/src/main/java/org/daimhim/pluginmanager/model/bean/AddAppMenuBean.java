@@ -16,6 +16,14 @@ public class AddAppMenuBean {
     private String key;
     private String vaue;
 
+    public AddAppMenuBean() {
+    }
+
+    public AddAppMenuBean(String pKey, String pVaue) {
+        key = pKey;
+        vaue = pVaue;
+    }
+
     @Override
     public String toString() {
         return "AddAppMenuBean{" +

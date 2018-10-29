@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -43,11 +44,13 @@ public class UserViewModel extends ViewModel {
 
     public Observable<JavaResponse<UserBean>> userLogin(String userName, final String userPassWord) {
         return mUser.userLogin(userName, userPassWord)
-                .map(new Function<JavaResponse<UserBean>, JavaResponse<UserBean>>() {
+                .doOnNext(new Consumer<JavaResponse<UserBean>>() {
                     @Override
-                    public JavaResponse<UserBean> apply(JavaResponse<UserBean> pUserBeanJavaResponse) throws Exception {
-                        pUserBeanJavaResponse.getResult().setPass_word(userPassWord);
-                        return pUserBeanJavaResponse;
+                    public void accept(JavaResponse<UserBean> pUserBeanJavaResponse) throws Exception {
+                        if (pUserBeanJavaResponse.getResult() != null) {
+                            UserHelp.getInstance().upUserInfo(pUserBeanJavaResponse.getResult());
+                            pUserBeanJavaResponse.getResult().setPass_word(userPassWord);
+                        }
                     }
                 });
     }

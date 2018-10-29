@@ -82,9 +82,10 @@ public class SelectAppFragment extends Fragment {
                 Bundle lArgs = new Bundle();
                 ApplicationBean lItem = mSelectAppAdapter.getItem(pI);
                 lArgs.putParcelable("value",lItem);
-                MainUtils.startFragment(getContext(),EditAppFragment.class, lArgs);
+                MainUtils.backFragment(getContext(),lArgs);
             }
         });
+        getAppList();
     }
 
     @Override

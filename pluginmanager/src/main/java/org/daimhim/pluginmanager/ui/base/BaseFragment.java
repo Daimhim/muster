@@ -1,6 +1,10 @@
 package org.daimhim.pluginmanager.ui.base;
 
+import android.os.Build;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+
+import java.util.Objects;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.base
@@ -14,9 +18,9 @@ import android.support.v4.app.Fragment;
  * @author：Administrator
  */
 public class BaseFragment extends Fragment implements BackHandledInterface{
-
+    protected final String TAG = getClass().getSimpleName();
     @Override
-    public void onBackPressed() {
-
+    public boolean onBackPressed() {
+        return false;
     }
 }

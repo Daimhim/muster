@@ -8,18 +8,21 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.util.Pair;
+import android.text.TextUtils;
 
 import org.daimhim.distance.RetrofitManager;
 import org.daimhim.helpful.util.HImageUtil;
 import org.daimhim.pluginmanager.StartApp;
+import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.AddAppMenuBean;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.request.Application;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,13 +97,18 @@ public class EditAppViewModel extends ViewModel {
                 });
     }
 
-    public Observable<List<AddAppMenuBean>> getInputMenu() {
-        List<AddAppMenuBean> lPairs = new ArrayList<>();
-        AddAppMenuBean lBean = null;
-        for (int i = 0; i < mInputMenu.length; i++) {
-            lBean = new AddAppMenuBean();
-            lBean.setKey(mInputMenu[i]);
-            lPairs.add(lBean);
+    public Observable<List<AddAppMenuBean>> getInputMenu(ApplicationBean pApplicationBean) {
+        List<AddAppMenuBean> lPairs = null;
+        if (null!=pApplicationBean){
+            lPairs = partConversion(pApplicationBean);
+        }else {
+            lPairs = new ArrayList<>();
+            AddAppMenuBean lBean = null;
+            for (int i = 0; i < mInputMenu.length; i++) {
+                lBean = new AddAppMenuBean();
+                lBean.setKey(mInputMenu[i]);
+                lPairs.add(lBean);
+            }
         }
         return Observable.just(lPairs);
     }
@@ -139,7 +147,51 @@ public class EditAppViewModel extends ViewModel {
                 });
     }
 
-    public Observable<JavaResponse<Void>> registeredApp(Map<String, String> pPairs) {
-        return mApplication.appRegistered(pPairs);
+    public Observable<JavaResponse<Void>> editApp(ApplicationBean pApplicationBean) {
+        Map<String, String> lStringMap = new HashMap<>();
+        lStringMap.put("userId",UserHelp.getInstance().getUserId());
+        lStringMap.put("appLogo",pApplicationBean.getApp_logo());
+        lStringMap.put("appName",pApplicationBean.getApp_name());
+        lStringMap.put("appUrl",pApplicationBean.getApp_url());
+        lStringMap.put("packageName",pApplicationBean.getPackage_name());
+        lStringMap.put("versionName",pApplicationBean.getVersion_name());
+        lStringMap.put("versionCode",pApplicationBean.getVersion_code());
+        lStringMap.put("minSdkVersion",pApplicationBean.getMin_sdk_version());
+        lStringMap.put("targetSdkVersion",pApplicationBean.getTarget_sdk_version());
+        if (TextUtils.isEmpty(pApplicationBean.getApp_id())){
+            return mApplication.appRegistered(lStringMap);
+        }else {
+            lStringMap.put("appId",pApplicationBean.getApp_id());
+            return mApplication.appUpdate(lStringMap);
+        }
+    }
+
+    public <T> T  partConversion(Object object){
+        if (object instanceof ApplicationBean){
+            ApplicationBean lObject = (ApplicationBean) object;
+            List<AddAppMenuBean> lBeanList = new ArrayList<>();
+            lBeanList.add(new AddAppMenuBean(mInputMenu[0],lObject.getApp_logo()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[1],lObject.getApp_name()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[2],lObject.getApp_url()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[3],lObject.getPackage_name()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[4],lObject.getVersion_name()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[5],lObject.getVersion_code()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[6],lObject.getMin_sdk_version()));
+            lBeanList.add(new AddAppMenuBean(mInputMenu[7],lObject.getTarget_sdk_version()));
+            return (T) lBeanList;
+        }else if (object instanceof List){
+            List<AddAppMenuBean> lObject = (List<AddAppMenuBean>) object;
+            ApplicationBean lApplicationBean = new ApplicationBean();
+            lApplicationBean.setApp_logo(lObject.get(0).getVaue());
+            lApplicationBean.setApp_name(lObject.get(1).getVaue());
+            lApplicationBean.setApp_url(lObject.get(2).getVaue());
+            lApplicationBean.setPackage_name(lObject.get(3).getVaue());
+            lApplicationBean.setVersion_name(lObject.get(4).getVaue());
+            lApplicationBean.setVersion_code(lObject.get(5).getVaue());
+            lApplicationBean.setMin_sdk_version(lObject.get(6).getVaue());
+            lApplicationBean.setTarget_sdk_version(lObject.get(7).getVaue());
+            return (T) lApplicationBean;
+        }
+        return null;
     }
 }
