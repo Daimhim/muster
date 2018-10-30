@@ -5,6 +5,8 @@ import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -28,11 +30,13 @@ public interface FileManager {
     @Multipart
     @POST("upLoadFile/")
     Observable<JavaResponse<FileBean>> upLoadFile(
-            @Part("userId") String userId, @Part MultipartBody.Part file
+            @Part("userId") RequestBody userId, @Part MultipartBody.Part file
     );
 
     @GET("getFile/")
-    void getFile(@Field("userId") String userId,
-                 @Field("fileId") String fileId
+    @Deprecated
+    Observable<JavaResponse<ResponseBody>> getFile(
+            @Field("userId") String userId,
+            @Field("fileId") String fileId
     );
 }

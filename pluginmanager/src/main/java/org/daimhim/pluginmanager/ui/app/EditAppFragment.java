@@ -222,7 +222,7 @@ public class EditAppFragment extends BaseFragment {
                     @Override
                     public void onFailure(JavaResponse pJavaResponse) {
                         Snackbar.make(rlRecyclerView, pJavaResponse.getError_msg(), Snackbar.LENGTH_SHORT).show();
-                        MainUtils.backFragment(getContext());
+//                        MainUtils.backFragment(getContext());
                     }
                 });
     }

@@ -131,9 +131,13 @@ public class MainUtils {
 
     public static void hideKeyboard(Context context){
         if (context instanceof AppCompatActivity) {
-            ((InputMethodManager) ((MainActivity) context).getSystemService(Context.INPUT_METHOD_SERVICE))
-                    .hideSoftInputFromWindow(((MainActivity) context).getCurrentFocus().getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
+            InputMethodManager lSystemService = (InputMethodManager) ((MainActivity) context).getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (null!=lSystemService) {
+                View lCurrentFocus = ((MainActivity) context).getCurrentFocus();
+                if (null!=lCurrentFocus) {
+                    lSystemService.hideSoftInputFromWindow(lCurrentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
         }
     }
 

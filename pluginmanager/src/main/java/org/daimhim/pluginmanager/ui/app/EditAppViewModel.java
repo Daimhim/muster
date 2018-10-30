@@ -168,11 +168,14 @@ public class EditAppViewModel extends ViewModel {
         lStringMap.put("targetSdkVersion",pApplicationBean.getTarget_sdk_version());
 
         if (!pApplicationBean.getApp_logo().startsWith("http")){
+
             File lFile = new File(pApplicationBean.getApp_logo());
-            RequestBody lRequestBody = RequestBody.create(MediaType.parse("application/octet-stream"), lFile);
+            RequestBody lRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), lFile);
             MultipartBody.Part lFile1 = MultipartBody.Part.createFormData("file", lFile.getName(), lRequestBody);
-            return mFileManager.upLoadFile(UserHelp.getInstance().getUserId(),
-                    lFile1)
+
+            lRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), UserHelp.getInstance().getUserId());
+
+            return mFileManager.upLoadFile(lRequestBody,lFile1)
                     .flatMap((Function<JavaResponse<FileBean>, ObservableSource<JavaResponse<Void>>>) pFileBeanJavaResponse -> {
                         if (pFileBeanJavaResponse.getResult() == null){
                             JavaResponse<Void> lVoidJavaResponse = new JavaResponse<>();

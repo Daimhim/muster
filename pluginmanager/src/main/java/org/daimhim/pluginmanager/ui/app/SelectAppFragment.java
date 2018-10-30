@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +78,7 @@ public class SelectAppFragment extends Fragment {
         mEditAppViewModel = ViewModelProviders.of(this).get(EditAppViewModel.class);
         mSelectAppAdapter = new SelectAppAdapter();
         rlRecyclerViewPm.setAdapter(mSelectAppAdapter);
+        rlRecyclerViewPm.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         mSelectAppAdapter.setOnItemClickListener(new RecyclerContract.OnItemClickListener() {
             @Override
             public void onItemClick(View pView, int pI) {

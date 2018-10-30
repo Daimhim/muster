@@ -9,6 +9,7 @@ import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,6 @@ public class ApplicationAdapter extends RecyclerViewEmpty<ApplicationAdapter.App
     public ApplicationAdapter() {
         mApplicationBeans = new ArrayList<>();
     }
-
     @Override
     public AppViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         return new AppViewHolder(LayoutInflater.from(parent.getContext())
