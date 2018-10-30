@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import org.daimhim.afilechooser.ipaulpro.afilechooser.utils.FileUtils;
-import org.daimhim.helpful.util.HLogUtil;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.bean.AddAppMenuBean;
@@ -217,11 +216,13 @@ public class EditAppFragment extends BaseFragment {
                     @Override
                     public void onSuccess(JavaResponse<Void> pVoidJavaResponse) {
                         Snackbar.make(rlRecyclerView, pVoidJavaResponse.getError_msg(), Snackbar.LENGTH_SHORT).show();
+                        MainUtils.backFragment(getContext());
                     }
 
                     @Override
                     public void onFailure(JavaResponse pJavaResponse) {
                         Snackbar.make(rlRecyclerView, pJavaResponse.getError_msg(), Snackbar.LENGTH_SHORT).show();
+                        MainUtils.backFragment(getContext());
                     }
                 });
     }

@@ -16,19 +16,26 @@ import org.daimhim.pluginmanager.StartApp;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.AddAppMenuBean;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
+import org.daimhim.pluginmanager.model.bean.FileBean;
 import org.daimhim.pluginmanager.model.request.Application;
+import org.daimhim.pluginmanager.model.request.FileManager;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.app
@@ -43,6 +50,7 @@ import io.reactivex.functions.Function;
  */
 public class EditAppViewModel extends ViewModel {
     private Application mApplication = RetrofitManager.getInstance().getRetrofit().create(Application.class);
+    private FileManager mFileManager = RetrofitManager.getInstance().getRetrofit().create(FileManager.class);
     private String[] mInputMenu = {
             "appLogo", //0
             "appName", //1
@@ -158,12 +166,38 @@ public class EditAppViewModel extends ViewModel {
         lStringMap.put("versionCode",pApplicationBean.getVersion_code());
         lStringMap.put("minSdkVersion",pApplicationBean.getMin_sdk_version());
         lStringMap.put("targetSdkVersion",pApplicationBean.getTarget_sdk_version());
+
+        if (!pApplicationBean.getApp_logo().startsWith("http")){
+            File lFile = new File(pApplicationBean.getApp_logo());
+            RequestBody lRequestBody = RequestBody.create(MediaType.parse("application/octet-stream"), lFile);
+            MultipartBody.Part lFile1 = MultipartBody.Part.createFormData("file", lFile.getName(), lRequestBody);
+            return mFileManager.upLoadFile(UserHelp.getInstance().getUserId(),
+                    lFile1)
+                    .flatMap((Function<JavaResponse<FileBean>, ObservableSource<JavaResponse<Void>>>) pFileBeanJavaResponse -> {
+                        if (pFileBeanJavaResponse.getResult() == null){
+                            JavaResponse<Void> lVoidJavaResponse = new JavaResponse<>();
+                            lVoidJavaResponse.setError_code(pFileBeanJavaResponse.getError_code());
+                            lVoidJavaResponse.setError_msg(pFileBeanJavaResponse.getError_msg());
+                            return Observable.just(lVoidJavaResponse);
+                        }
+                        lStringMap.put("appLogo",pFileBeanJavaResponse.getResult().getFile_id());
+                        if (TextUtils.isEmpty(pApplicationBean.getApp_id())){
+                            return mApplication.appRegistered(lStringMap);
+                        }else {
+                            lStringMap.put("appId",pApplicationBean.getApp_id());
+                            return mApplication.appUpdate(lStringMap);
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
         if (TextUtils.isEmpty(pApplicationBean.getApp_id())){
             return mApplication.appRegistered(lStringMap);
         }else {
             lStringMap.put("appId",pApplicationBean.getApp_id());
             return mApplication.appUpdate(lStringMap);
         }
+
     }
 
     public <T> T  partConversion(Object object){
