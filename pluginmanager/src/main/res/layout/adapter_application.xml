@@ -26,9 +26,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
     <com.google.android.flexbox.FlexboxLayout
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:justifyContent="flex_start"
+        app:alignItems="flex_start"
+        app:alignContent="flex_start"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_name_pm"
         app:layout_constraintLeft_toRightOf="@+id/iv_logo_pm"
         android:layout_marginLeft="@dimen/dimen_size_12"
