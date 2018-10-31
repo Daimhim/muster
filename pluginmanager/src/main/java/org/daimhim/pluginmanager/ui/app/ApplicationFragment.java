@@ -118,6 +118,10 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
                 MainUtils.showUserInfo(getContext());
             }
         });
+        mApplicationViewModel.loadApplicationList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mObserver);
     }
 
     @Override

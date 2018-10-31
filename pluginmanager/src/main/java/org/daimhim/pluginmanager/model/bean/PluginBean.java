@@ -12,10 +12,7 @@ package org.daimhim.pluginmanager.model.bean;
  * @author：Administrator
  */
 public class PluginBean {
-    private String upTime;
-    private String crateTime;
     private String plugin_id;
-    private String app_id;
     private String plugin_name;
     private String plugin_description;
     private String package_name;
@@ -28,10 +25,7 @@ public class PluginBean {
     @Override
     public String toString() {
         return "PluginBean{" +
-                "upTime='" + upTime + '\'' +
-                ", crateTime='" + crateTime + '\'' +
-                ", plugin_id='" + plugin_id + '\'' +
-                ", app_id='" + app_id + '\'' +
+                "plugin_id='" + plugin_id + '\'' +
                 ", plugin_name='" + plugin_name + '\'' +
                 ", plugin_description='" + plugin_description + '\'' +
                 ", package_name='" + package_name + '\'' +
@@ -43,36 +37,12 @@ public class PluginBean {
                 '}';
     }
 
-    public String getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(String pUpTime) {
-        upTime = pUpTime;
-    }
-
-    public String getCrateTime() {
-        return crateTime;
-    }
-
-    public void setCrateTime(String pCrateTime) {
-        crateTime = pCrateTime;
-    }
-
     public String getPlugin_id() {
         return plugin_id;
     }
 
     public void setPlugin_id(String pPlugin_id) {
         plugin_id = pPlugin_id;
-    }
-
-    public String getApp_id() {
-        return app_id;
-    }
-
-    public void setApp_id(String pApp_id) {
-        app_id = pApp_id;
     }
 
     public String getPlugin_name() {
