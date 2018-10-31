@@ -26,8 +26,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.user
@@ -81,6 +84,8 @@ public class UserLoginFragment extends Fragment {
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         if (!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_NAME))&&!TextUtils.isEmpty(HSharedUtil.getString(getContext(),USER_PASS))){
             mUserViewModel.userLogin(HSharedUtil.getString(getContext(),USER_NAME),HSharedUtil.getString(getContext(),USER_PASS))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mUserLoginObserver);
         }
     }
@@ -105,6 +110,8 @@ public class UserLoginFragment extends Fragment {
                     return;
                 }
                 mUserViewModel.userLogin(etUsernamePm.getText().toString(),etPasswordPm.getText().toString())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(mUserLoginObserver);
                 break;
             case R.id.bt_cancel_pm:

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +16,12 @@ import android.view.ViewGroup;
 
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
+import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @author：Administrator
  */
-public class ApplicationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ApplicationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerContract.OnItemClickListener {
     RecyclerView mRlRecyclerView;
     SwipeRefreshLayout mSrlSwipeRefreshLayout;
     @BindView(R.id.fab_fab_pm)
@@ -84,8 +88,10 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         mSrlSwipeRefreshLayout.setOnRefreshListener(this);
         mApplicationAdapter = new ApplicationAdapter();
         mRlRecyclerView.setAdapter(mApplicationAdapter);
+        mRlRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
         fabFab.setOnClickListener(v -> MainUtils.superimposedFragment(getContext(),EditAppFragment.class));
+        mApplicationAdapter.setOnItemClickListener(this);
     }
 
 
@@ -112,5 +118,11 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
                 MainUtils.showUserInfo(getContext());
             }
         });
+    }
+
+    @Override
+    public void onItemClick(View pView, int pI) {
+        ApplicationBean lItem = mApplicationAdapter.getItem(pI);
+
     }
 }

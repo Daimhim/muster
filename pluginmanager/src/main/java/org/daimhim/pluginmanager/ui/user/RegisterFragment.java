@@ -96,5 +96,6 @@ public class RegisterFragment extends Fragment {
                 MainUtils.startFragment(getContext(),UserLoginFragment.class);
                 break;
         }
+        MainUtils.hideKeyboard(getContext());
     }
 }

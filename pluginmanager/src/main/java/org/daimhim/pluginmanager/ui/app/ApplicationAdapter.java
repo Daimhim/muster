@@ -50,6 +50,7 @@ public class ApplicationAdapter extends RecyclerViewEmpty<ApplicationAdapter.App
         ApplicationBean lItem = getItem(position);
         ImgLoadingUtil.loadImage(holder.ivLogoPm, AddressMachining.fileIdToImageUrl(lItem.getApp_logo()));
         holder.tvAppNamePm.setText(lItem.getApp_name());
+        holder.performItemClick(holder.itemView,this);
     }
 
     @Override

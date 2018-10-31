@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="@+id/iv_logo_pm"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/tv_app_name_pm"
+        android:textSize="@dimen/dimen_text_size_16"
         android:text="@string/app_name"
         android:textColor="@color/cl_333333"
         android:layout_marginHorizontal="@dimen/dimen_size_12"
@@ -34,12 +35,85 @@
         android:layout_marginRight="@dimen/dimen_size_12"
         app:layout_constraintBottom_toBottomOf="@+id/iv_logo_pm"
         app:layout_constraintRight_toRightOf="parent"
+        app:flexWrap="wrap"
         android:layout_width="@dimen/dimen_size_0"
         android:layout_height="@dimen/dimen_size_0">
         <TextView
             android:text="@string/app_name"
             android:padding="@dimen/dimen_size_2"
-            android:background="@drawable/shape_solid_ff6600_corners_3"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="strapp_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="stringapp_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
+            android:layout_margin="@dimen/dimen_size_2"
+            android:textColor="@color/cl_666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/app_name"
+            android:padding="@dimen/dimen_size_2"
+            android:background="@color/cl_ff6600"
             android:layout_margin="@dimen/dimen_size_2"
             android:textColor="@color/cl_666666"
             android:layout_width="wrap_content"
