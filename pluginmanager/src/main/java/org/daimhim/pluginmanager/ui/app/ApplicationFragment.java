@@ -22,6 +22,8 @@ import org.daimhim.pluginmanager.ui.main.MainUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -71,6 +73,8 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
             }
         };
         mApplicationViewModel.loadApplicationList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mObserver);
     }
 
@@ -88,6 +92,8 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
     @Override
     public void onRefresh() {
         mApplicationViewModel.loadApplicationList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mObserver);
     }
 
