@@ -19,7 +19,6 @@ public interface PluginManager {
             @Field("packageName") String packageName,
             @Field("pluginDescription") String pluginDescription
     );
-    @FormUrlEncoded
     @GET("apk/get/apk/list/")
     Observable<JavaResponse<PluginResponse>> getPluginList(
             @Query("userId") String userId,

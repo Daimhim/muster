@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/bt_upload_apk_pm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_12"
+        android:text="上传APK"
+        android:textColor="@color/cl_333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/bt_download_apk_pm"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_download_apk_pm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载APK"
+        android:textColor="@color/cl_333333"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_upload_apk_pm"
+        app:layout_constraintLeft_toRightOf="@+id/bt_upload_apk_pm"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/et_plugin_name_input_layout_pm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_8"
+        android:layout_marginRight="@dimen/dimen_size_8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_upload_apk_pm">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_plugin_name_input_pm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="plugin_name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/cl_333333"
+            android:textSize="@dimen/dimen_text_size_14" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/et_plugin_url_input_layout_pm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_8"
+        android:layout_marginRight="@dimen/dimen_size_8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_plugin_name_input_layout_pm">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_plugin_url_input_pm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="plugin_url"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/cl_333333"
+            android:textSize="@dimen/dimen_text_size_14" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/et_package_name_input_layout_pm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_8"
+        android:layout_marginRight="@dimen/dimen_size_8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_plugin_url_input_layout_pm">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_package_name_input_pm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="package_name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/cl_333333"
+            android:textSize="@dimen/dimen_text_size_14" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/et_plugin_description_input_pm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_80"
+        android:layout_marginLeft="@dimen/dimen_size_8"
+        android:layout_marginTop="@dimen/dimen_size_8"
+        android:layout_marginRight="@dimen/dimen_size_8"
+        android:background="@drawable/shape_stroke_666666_corners_3"
+        android:gravity="left|top"
+        android:hint="plugin_description"
+        android:padding="@dimen/dimen_size_3"
+        android:textColor="@color/cl_333333"
+        android:textSize="@dimen/dimen_text_size_14"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_package_name_input_layout_pm" />
+
+    <Button
+        android:id="@+id/bt_app_pm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_20"
+        android:layout_marginBottom="@dimen/dimen_size_8"
+        android:text="添加"
+        android:textColor="@color/cl_333333"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_plugin_description_input_pm" />
+</android.support.constraint.ConstraintLayout>

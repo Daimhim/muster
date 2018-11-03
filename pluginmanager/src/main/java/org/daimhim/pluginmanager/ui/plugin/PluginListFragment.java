@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PluginListFragment extends BaseFragment {
+public class PluginListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     @BindView(R.id.rl_recycler_view_pm)
     RecyclerView rlRecyclerViewPm;
@@ -33,6 +33,8 @@ public class PluginListFragment extends BaseFragment {
     Unbinder unbinder;
     private PluginViewModel mPluginViewModel;
     private String mPluginId;
+    private PluginAdapter mPluginAdapter;
+    private ObserverCallBack<JavaResponse<PluginResponse>> mObserver;
 
     @Nullable
     @Override
@@ -53,27 +55,44 @@ public class PluginListFragment extends BaseFragment {
                 MainUtils.backFragment(getContext());
             }
         });
+        mPluginAdapter = new PluginAdapter();
+        rlRecyclerViewPm.setAdapter(mPluginAdapter);
+        srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
         Bundle lArguments = getArguments();
         if (lArguments!=null) {
-            mPluginId = lArguments.getString("pluginId");
+            mPluginId = lArguments.getString("app_id");
+            mObserver = new ObserverCallBack<JavaResponse<PluginResponse>>() {
+                @Override
+                public void onSuccess(JavaResponse<PluginResponse> pPluginResponseJavaResponse) {
+                    mPluginAdapter.onRefresh(pPluginResponseJavaResponse.getResult().getList());
+                    srlSwipeRefreshLayoutPm.setRefreshing(false);
+                }
+
+                @Override
+                public void onFailure(JavaResponse pJavaResponse) {
+                    srlSwipeRefreshLayoutPm.setRefreshing(false);
+                }
+            };
             mPluginViewModel.getPluginList(mPluginId)
-                    .subscribe(new ObserverCallBack<JavaResponse<PluginResponse>>() {
-                        @Override
-                        public void onSuccess(JavaResponse<PluginResponse> pPluginResponseJavaResponse) {
-
-                        }
-
-                        @Override
-                        public void onFailure(JavaResponse pJavaResponse) {
-
-                        }
-                    });
+                    .subscribe(mObserver);
         }
+        fabFabPm.setOnClickListener(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPluginViewModel.getPluginList(mPluginId)
+                .subscribe(mObserver);
+    }
+
+    @Override
+    public void onClick(View v) {
+        MainUtils.startFragment(getContext(),PluginEditFragment.class);
     }
 }

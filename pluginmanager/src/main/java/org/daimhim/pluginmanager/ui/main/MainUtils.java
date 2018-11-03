@@ -62,12 +62,43 @@ public class MainUtils {
             }
         }
     }
+    public static void superimposedFragment(Context pContext, Class pFragment,Bundle args) {
+        if (pContext instanceof MainActivity) {
+            try {
+                hideKeyboard(pContext);
+                Fragment lFragment = (Fragment) pFragment.newInstance();
+                lFragment.setArguments(args);
+                ((MainActivity) pContext).superimposedFragment(lFragment);
+            } catch (IllegalAccessException pE) {
+                pE.printStackTrace();
+            } catch (InstantiationException pE) {
+                pE.printStackTrace();
+            }
+        }
+    }
     public static void superimposedFragment(Context pContext, int requestCode, Class pFragment) {
         if (pContext instanceof MainActivity) {
             try {
                 hideKeyboard(pContext);
                 Fragment lFragment = (Fragment) pFragment.newInstance();
                 Bundle lArgs = new Bundle();
+                lArgs.putInt("requestCode",requestCode);
+                lFragment.setArguments(lArgs);
+                ((MainActivity) pContext).superimposedFragment(lFragment);
+            } catch (IllegalAccessException pE) {
+                pE.printStackTrace();
+            } catch (InstantiationException pE) {
+                pE.printStackTrace();
+            }
+        }
+    }
+    public static void superimposedFragment(Context pContext,int requestCode, Class pFragment,Bundle args) {
+        if (pContext instanceof MainActivity) {
+            try {
+                hideKeyboard(pContext);
+                Fragment lFragment = (Fragment) pFragment.newInstance();
+                Bundle lArgs = new Bundle();
+                lFragment.setArguments(args);
                 lArgs.putInt("requestCode",requestCode);
                 lFragment.setArguments(lArgs);
                 ((MainActivity) pContext).superimposedFragment(lFragment);

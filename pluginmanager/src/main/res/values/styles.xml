@@ -16,5 +16,12 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="input_0066cc_666666_style" parent="Theme.AppCompat.NoActionBar">
+        <!-- 底部线 默认颜色 -->
+        <item name="colorControlNormal">@color/cl_666666</item>
+        <!-- 底部线 EditText激活时颜色 -->
+        <item name="colorControlActivated">@color/cl_0066cc</item>
+        <!-- 设置光标 -->
+        <item name="android:textCursorDrawable">@color/cl_ff6600</item>
+    </style>
 </resources>
