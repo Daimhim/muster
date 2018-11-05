@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.ui.plugin;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,7 +33,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     FloatingActionButton fabFabPm;
     Unbinder unbinder;
     private PluginViewModel mPluginViewModel;
-    private String mPluginId;
+    private String mAppId;
     private PluginAdapter mPluginAdapter;
     private ObserverCallBack<JavaResponse<PluginResponse>> mObserver;
 
@@ -60,7 +61,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
         Bundle lArguments = getArguments();
         if (lArguments!=null) {
-            mPluginId = lArguments.getString("app_id");
+            mAppId = lArguments.getString("app_id");
             mObserver = new ObserverCallBack<JavaResponse<PluginResponse>>() {
                 @Override
                 public void onSuccess(JavaResponse<PluginResponse> pPluginResponseJavaResponse) {
@@ -73,7 +74,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
                     srlSwipeRefreshLayoutPm.setRefreshing(false);
                 }
             };
-            mPluginViewModel.getPluginList(mPluginId)
+            mPluginViewModel.getPluginList(mAppId)
                     .subscribe(mObserver);
         }
         fabFabPm.setOnClickListener(this);
@@ -87,12 +88,28 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        mPluginViewModel.getPluginList(mPluginId)
+        mPluginViewModel.getPluginList(mAppId)
                 .subscribe(mObserver);
     }
 
     @Override
     public void onClick(View v) {
-        MainUtils.startFragment(getContext(),PluginEditFragment.class);
+        MainUtils.superimposedFragment(getContext(),50,PluginEditFragment.class);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.backFragment(getContext());
+            }
+        });
+        switch (requestCode){
+            case 50:
+                onRefresh();
+                break;
+        }
     }
 }

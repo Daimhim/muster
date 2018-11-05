@@ -21,6 +21,7 @@ import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.pluginmanager.ui.plugin.PluginEditFragment;
 import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
 import org.daimhim.rvadapter.RecyclerContract;
 
@@ -127,9 +128,10 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
 
     @Override
     public void onItemClick(View pView, int pI) {
-        ApplicationBean lItem = mApplicationAdapter.getItem(pI);
-        Bundle lArgs = new Bundle();
-        lArgs.putString("app_id",lItem.getApp_id());
-        MainUtils.superimposedFragment(getContext(), PluginListFragment.class, lArgs);
+        MainUtils.superimposedFragment(getContext(),50, PluginEditFragment.class);
+//        ApplicationBean lItem = mApplicationAdapter.getItem(pI);
+//        Bundle lArgs = new Bundle();
+//        lArgs.putString("app_id",lItem.getApp_id());
+//        MainUtils.superimposedFragment(getContext(), PluginListFragment.class, lArgs);
     }
 }

@@ -32,6 +32,7 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainUtils.getI().init(this,R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -46,6 +47,11 @@ public class MainActivity extends BaseActivity
 
 
         replaceFragment(new UserLoginFragment());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void superimposedFragment(Fragment pFragment) {

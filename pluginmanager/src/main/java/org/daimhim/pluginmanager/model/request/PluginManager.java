@@ -13,16 +13,16 @@ import retrofit2.http.Query;
 public interface PluginManager {
 
     @FormUrlEncoded
-    @POST("apk/upload/apk/")
+    @POST("apk/register/plugin/")
     Observable<JavaResponse<Void>> uploadPlugin(
             @Field("pluginName") String pluginName,
             @Field("packageName") String packageName,
             @Field("pluginDescription") String pluginDescription
     );
-    @GET("apk/get/apk/list/")
+    @GET("apk/get/plugin/list/")
     Observable<JavaResponse<PluginResponse>> getPluginList(
             @Query("userId") String userId,
-            @Query("pluginId") String pluginId
+            @Query("appId") String appId
     );
 
 

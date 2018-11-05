@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':fragmentdemo'
 //include ':ipcdemo'
 //include ':simcpux'
 //include ':mvpplugin'

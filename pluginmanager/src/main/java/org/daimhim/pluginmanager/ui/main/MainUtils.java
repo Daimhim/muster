@@ -1,15 +1,19 @@
 package org.daimhim.pluginmanager.ui.main;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
+import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -23,6 +27,44 @@ import org.daimhim.pluginmanager.R;
  * @author：Administrator
  */
 public class MainUtils {
+
+    private FragmentManager mSupportFragmentManager;
+
+    private MainUtils() {
+
+    }
+
+    public static MainUtils getI() {
+        return MainUtils.SingletonHolder.sInstance;
+    }
+
+    private static class SingletonHolder {
+        private static final MainUtils sInstance = new MainUtils();
+    }
+    private Context mContext = null;
+    private FragmentStackManager mFragmentStackManager;
+    public void init(Context pContext,int rId){
+        mContext = pContext;
+        if (pContext instanceof AppCompatActivity) {
+            mSupportFragmentManager = ((AppCompatActivity) pContext).getSupportFragmentManager();
+            mFragmentStackManager = new FragmentStackManager(mSupportFragmentManager,rId);
+        }else {
+            throw new IllegalStateException("pContext not equals AppCompatActivity");
+        }
+    }
+
+    public void startFragment(Intent intent){
+        ComponentName lComponent = intent.getComponent();
+//        lComponent.getPackageName() + lComponent.getClassName();
+
+    }
+
+    public void back(){
+        mFragmentStackManager.popBackStack();
+
+    }
+
+
     public static void startFragment(Context pContext, Class pFragment) {
         if (pContext instanceof MainActivity) {
             try {
