@@ -1,5 +1,7 @@
 package org.daimhim.fragmentdemo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -18,16 +20,20 @@ import android.view.View;
  * @author：Administrator
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    private Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+        MainUtils.getI().init(mContext,R.id.fl_layout);
         initView();
     }
 
     private void initView() {
+//        startActivityForResult();
+//        setResult();
         findViewById(R.id.bt_01).setOnClickListener(this);
         findViewById(R.id.bt_02).setOnClickListener(this);
         findViewById(R.id.bt_03).setOnClickListener(this);
@@ -40,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
             case R.id.bt_01:
-                //clear
-                FragmentTransaction lFragmentTransaction = getSupportFragmentManager().beginTransaction();
-
+//                startActivity();
+                Intent lIntent = new Intent(mContext, DefaultFragment.class);
+                lIntent.putExtra("value","0");
+                MainUtils.getI().startFragment(lIntent);
                 break;
             case R.id.bt_02:
+
                 break;
             case R.id.bt_03:
                 break;
