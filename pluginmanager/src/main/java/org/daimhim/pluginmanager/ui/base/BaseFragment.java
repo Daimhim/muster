@@ -1,10 +1,16 @@
 package org.daimhim.pluginmanager.ui.base;
 
-import android.os.Build;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import java.util.Objects;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.base
@@ -22,5 +28,95 @@ public class BaseFragment extends Fragment implements BackHandledInterface{
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+    public String getTags() {
+        return "TAG:" + getClass().getSimpleName();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i(getTags(), "onCreateView");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.i(getTags(), "onViewCreated");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(getTags(), "onCreate");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(getTags(), "onAttach");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i(getTags(), "onActivityCreated");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(getTags(), "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(getTags(), "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(getTags(), "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(getTags(), "onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i(getTags(), "onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(getTags(), "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(getTags(), "onDetach");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(getTags(), "onActivityResult");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.i(getTags(), "setUserVisibleHint:"+isVisibleToUser);
     }
 }

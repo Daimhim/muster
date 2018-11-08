@@ -36,6 +36,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/iv_logo_pm"
         app:layout_constraintRight_toRightOf="parent"
         app:flexWrap="wrap"
+        android:visibility="gone"
         android:layout_width="@dimen/dimen_size_0"
         android:layout_height="@dimen/dimen_size_0">
         <TextView
