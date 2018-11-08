@@ -54,6 +54,7 @@ public class MainUtils {
         starFragmentForResult(intent, -1);
     }
 
+
     public void starFragmentForResult(Intent intent, int requestCode) {
         ComponentName lComponent = intent.getComponent();
         try {
@@ -114,6 +115,8 @@ public class MainUtils {
         }
         backPast();
         getStackAndTopFragment().onActivityResult(requestCode,resultCode,pIntent);
+        getStackAndTopFragment().onStart();
+        getStackAndTopFragment().onResume();
     }
 
     /**

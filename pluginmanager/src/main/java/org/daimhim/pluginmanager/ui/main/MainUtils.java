@@ -6,14 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import org.daimhim.pluginmanager.R;
-import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
-import org.daimhim.pluginmanager.utils.CacheFileUtils;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -27,11 +23,13 @@ import org.daimhim.pluginmanager.utils.CacheFileUtils;
  * @author：Administrator
  */
 public class MainUtils {
-
+    public static final int FLAG_BEFORE_HIDE = 0x01100000;
+    private String TAG = getClass().getSimpleName();
     private FragmentManager mSupportFragmentManager;
+    private SparseArray<FragmentStackManager> mFragmentStackManagerSparseArray;
 
     private MainUtils() {
-
+        mFragmentStackManagerSparseArray = new SparseArray<>();
     }
 
     public static MainUtils getI() {
@@ -41,186 +39,142 @@ public class MainUtils {
     private static class SingletonHolder {
         private static final MainUtils sInstance = new MainUtils();
     }
+
     private Context mContext = null;
-    private FragmentStackManager mFragmentStackManager;
-    public void init(Context pContext,int rId){
+
+    public void init(Context pContext, int rId) {
         mContext = pContext;
         if (pContext instanceof AppCompatActivity) {
             mSupportFragmentManager = ((AppCompatActivity) pContext).getSupportFragmentManager();
-            mFragmentStackManager = new FragmentStackManager(mSupportFragmentManager,rId);
-        }else {
+            mFragmentStackManagerSparseArray.put(mFragmentStackManagerSparseArray.size(),
+                    new FragmentStackManager(mSupportFragmentManager, rId));
+        } else {
             throw new IllegalStateException("pContext not equals AppCompatActivity");
         }
     }
 
-    public void startFragment(Intent intent){
+    public void startFragment(Intent intent) {
+        starFragmentForResult(intent, -1);
+    }
+
+
+    public void starFragmentForResult(Intent intent, int requestCode) {
         ComponentName lComponent = intent.getComponent();
-//        lComponent.getPackageName() + lComponent.getClassName();
-
-    }
-
-    public void back(){
-        mFragmentStackManager.popBackStack();
-
-    }
-
-
-    public static void startFragment(Context pContext, Class pFragment) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                ((MainActivity) pContext).replaceFragment((Fragment) pFragment.newInstance());
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
+        try {
+            Class<?> lClass = Class.forName(lComponent.getClassName());
+            Fragment lFragment = (Fragment) lClass.newInstance();
+            Bundle lExtras = intent.getExtras();
+            if (null == lExtras) {
+                lExtras = new Bundle();
             }
-        }
-    }
-    public static void startFragment(Context pContext, Class pFragment, Bundle args) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                Fragment lFragment = (Fragment) pFragment.newInstance();
-                lFragment.setArguments(args);
-                ((MainActivity) pContext).replaceFragment(lFragment);
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
+            lExtras.putInt("requestCode", requestCode);
+            lFragment.setArguments(lExtras);
+            boolean isHide = false;
+            int lFlags = intent.getFlags();
+            switch (lFlags) {
+                case FLAG_BEFORE_HIDE:
+                    isHide = true;
+                    break;
+                default:
+                    break;
             }
+            getFragmentStackManager().addToStack(lFragment,isHide);
+        } catch (ClassNotFoundException pE) {
+            pE.printStackTrace();
+        } catch (IllegalAccessException pE) {
+            pE.printStackTrace();
+        } catch (InstantiationException pE) {
+            pE.printStackTrace();
+        } catch (ClassCastException pE) {
+            pE.printStackTrace();
+        } catch (NullPointerException pE) {
+            pE.printStackTrace();
         }
     }
 
-    public static void superimposedFragment(Context pContext, Class pFragment) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                ((MainActivity) pContext).superimposedFragment((Fragment) pFragment.newInstance());
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
-            }
-        }
+    /**
+     * get Top Stack Count
+     *
+     * @return int
+     */
+    public int getTopStackCount() {
+        return getFragmentStackManager().getConut();
     }
-    public static void superimposedFragment(Context pContext, Class pFragment,Bundle args) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                Fragment lFragment = (Fragment) pFragment.newInstance();
-                lFragment.setArguments(args);
-                ((MainActivity) pContext).superimposedFragment(lFragment);
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
-            }
-        }
-    }
-    public static void superimposedFragment(Context pContext, int requestCode, Class pFragment) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                Fragment lFragment = (Fragment) pFragment.newInstance();
-                Bundle lArgs = new Bundle();
-                lArgs.putInt("requestCode",requestCode);
-                lFragment.setArguments(lArgs);
-                ((MainActivity) pContext).superimposedFragment(lFragment);
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
-            }
-        }
-    }
-    public static void superimposedFragment(Context pContext,int requestCode, Class pFragment,Bundle args) {
-        if (pContext instanceof MainActivity) {
-            try {
-                hideKeyboard(pContext);
-                Fragment lFragment = (Fragment) pFragment.newInstance();
-                Bundle lArgs = new Bundle();
-                lFragment.setArguments(args);
-                lArgs.putInt("requestCode",requestCode);
-                lFragment.setArguments(lArgs);
-                ((MainActivity) pContext).superimposedFragment(lFragment);
-            } catch (IllegalAccessException pE) {
-                pE.printStackTrace();
-            } catch (InstantiationException pE) {
-                pE.printStackTrace();
-            }
-        }
-    }
-    public static void backFragment(Context pContext){
-        if (pContext instanceof MainActivity) {
-            hideKeyboard(pContext);
-            Fragment lFragmentById = null;
-            lFragmentById = ((MainActivity) pContext)
-                    .getSupportFragmentManager()
-                    .findFragmentById(R.id.content_main);
-            int lRequestCode = -1;
-            if (lFragmentById !=null && lFragmentById.getArguments() != null){
-                lRequestCode = lFragmentById.getArguments().getInt("requestCode");
-            }
-            ((MainActivity) pContext).backFragment();
-            lFragmentById = ((MainActivity) pContext)
-                    .getSupportFragmentManager()
-                    .findFragmentById(R.id.content_main);
-            if (lFragmentById != null) {
-                lFragmentById.setUserVisibleHint(true);
-                lFragmentById.onActivityResult(lRequestCode,-1,null);
-            }
-        }
-    }
-    public static void backFragment(Context pContext,Bundle pBundle){
-        if (pContext instanceof MainActivity) {
-            hideKeyboard(pContext);
-            Fragment lFragmentById = null;
-            lFragmentById = ((MainActivity) pContext)
-                    .getSupportFragmentManager()
-                    .findFragmentById(R.id.content_main);
-            int lRequestCode = -1;
-            if (lFragmentById !=null && lFragmentById.getArguments() != null){
-                lRequestCode = lFragmentById.getArguments().getInt("requestCode");
-            }
 
-            ((MainActivity) pContext).backFragment();
-            lFragmentById = ((MainActivity) pContext)
-                    .getSupportFragmentManager()
-                    .findFragmentById(R.id.content_main);
-            if (lFragmentById != null) {
-                if (lFragmentById.getArguments() != null){
-                    lFragmentById.getArguments().putAll(pBundle);
-                }else {
-                    lFragmentById.setArguments(pBundle);
-                }
-                lFragmentById.setUserVisibleHint(true);
-                if (lRequestCode!=-1){
-                    lFragmentById.onActivityResult(lRequestCode,-1,new Intent().putExtras(pBundle));
-                }
-            }
+    public void finishFragment(Fragment pFragment) {
+        finishFragment(pFragment, -1);
+    }
+
+    public void finishFragment(Fragment pFragment, int resultCode) {
+        finishFragment(pFragment, resultCode, new Intent());
+    }
+
+    /**
+     * close current Fragment
+     *
+     * @param pFragment  current Fragment
+     * @param resultCode response Code
+     * @param pIntent    Value
+     */
+    public void finishFragment(Fragment pFragment, int resultCode, Intent pIntent) {
+        Bundle lArguments = pFragment.getArguments();
+        int requestCode = -1;
+        if (lArguments != null) {
+            requestCode = lArguments.getInt("requestCode");
+        }
+        getFragmentStackManager().remove(pFragment);
+        if (requestCode != -1) {
+            getStackAndTopFragment().onActivityResult(requestCode, resultCode, pIntent);
+            getStackAndTopFragment().onStart();
+            getStackAndTopFragment().onResume();
         }
     }
 
-    public static void hideKeyboard(Context context){
+    /**
+     * @param pFragmentStackManager
+     * @return
+     */
+    public int getStackCount(FragmentStackManager pFragmentStackManager) {
+        for (int i = 0; i < getStackCount(); i++) {
+            if (mFragmentStackManagerSparseArray.get(i) == pFragmentStackManager) {
+                return mFragmentStackManagerSparseArray.get(i).getConut();
+            }
+        }
+        return 0;
+    }
+
+    public FragmentStackManager getFragmentStackManager() {
+        return mFragmentStackManagerSparseArray.get(mFragmentStackManagerSparseArray.size() - 1);
+    }
+
+    public int getStackCount() {
+        return mFragmentStackManagerSparseArray.size();
+    }
+
+    public Fragment getStackAndTopFragment() {
+        return getFragmentStackManager().getTopFragment();
+    }
+
+    public static void hideKeyboard(Context context) {
         if (context instanceof AppCompatActivity) {
             InputMethodManager lSystemService = (InputMethodManager) ((MainActivity) context).getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (null!=lSystemService) {
+            if (null != lSystemService) {
                 View lCurrentFocus = ((MainActivity) context).getCurrentFocus();
-                if (null!=lCurrentFocus) {
+                if (null != lCurrentFocus) {
                     lSystemService.hideSoftInputFromWindow(lCurrentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         }
     }
 
-    public static void upTitleAndIco(Context pContext, String title, int rId, View.OnClickListener pClickListener){
+    public static void upTitleAndIco(Context pContext, String title, int rId, View.OnClickListener pClickListener) {
         if (pContext instanceof MainActivity) {
             ((MainActivity) pContext).upTitle(title);
-            ((MainActivity) pContext).upTitleLiftIco(rId,pClickListener);
+            ((MainActivity) pContext).upTitleLiftIco(rId, pClickListener);
         }
     }
-    public static void showUserInfo(Context pContext){
+
+    public static void showUserInfo(Context pContext) {
         if (pContext instanceof MainActivity) {
             ((MainActivity) pContext).showUserInfo();
         }

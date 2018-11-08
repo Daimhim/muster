@@ -1,4 +1,4 @@
-include ':app', ':fragmentdemo'
+include ':app'
 //include ':ipcdemo'
 //include ':simcpux'
 //include ':mvpplugin'
@@ -17,4 +17,5 @@ include ':databridge'
 include ':pmdata'
 include ':pluginmanager'
 //include ':lifelonglearning'
+//include ':fragmentdemo'
 

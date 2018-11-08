@@ -3,7 +3,6 @@ package org.daimhim.pluginmanager.ui.main;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.ArrayMap;
 import android.util.SparseArray;
 
 /**
@@ -19,22 +18,25 @@ import android.util.SparseArray;
  */
 public class FragmentStackManager {
     private SparseArray<Fragment> mFragmentSparseArray;
-    private FragmentManager mSupportFragmentManager;
+    private final FragmentManager mSupportFragmentManager;
     private int mRId;
 
-    public FragmentStackManager(FragmentManager pFragmentManager,int rId) {
+    public FragmentStackManager(FragmentManager pFragmentManager, int rId) {
         mFragmentSparseArray = new SparseArray<>();
         mSupportFragmentManager = pFragmentManager;
         mRId = rId;
     }
 
-    public void addToStack(Fragment pFragment){
+    public void addToStack(Fragment pFragment,boolean isHide){
         FragmentTransaction lFragmentTransaction = mSupportFragmentManager.beginTransaction();
         Fragment lTopFragment = getTopFragment();
         lFragmentTransaction.add(mRId,pFragment);
         if (null != lTopFragment) {
             lFragmentTransaction.hide(lTopFragment);
             lTopFragment.setUserVisibleHint(false);
+            if (isHide) {
+                lFragmentTransaction.hide(lTopFragment);
+            }
         }
         pFragment.setUserVisibleHint(true);
         lFragmentTransaction.show(pFragment);
@@ -45,20 +47,26 @@ public class FragmentStackManager {
         }
         mFragmentSparseArray.put(mFragmentSparseArray.size(),pFragment);
     }
-
     public void popBackStack(){
         Fragment lTopFragment = getTopFragment();
         if (null != lTopFragment) {
             FragmentTransaction lFragmentTransaction = mSupportFragmentManager.beginTransaction();
             lFragmentTransaction.hide(lTopFragment);
-            lTopFragment.onPause();
             lFragmentTransaction.remove(lTopFragment);
             mFragmentSparseArray.remove(mFragmentSparseArray.size() - 1);
             lTopFragment = getTopFragment();
             lFragmentTransaction.show(lTopFragment);
             lFragmentTransaction.commit();
         }
-
+    }
+    public void remove(Fragment pFragment){
+        FragmentTransaction lFragmentTransaction = mSupportFragmentManager.beginTransaction();
+        if (pFragment.getUserVisibleHint()){
+            lFragmentTransaction.hide(pFragment);
+        }
+        lFragmentTransaction.remove(pFragment);
+        lFragmentTransaction.commit();
+        mFragmentSparseArray.remove(mFragmentSparseArray.indexOfValue(pFragment));
     }
 
     public Fragment getTopFragment(){
@@ -69,6 +77,9 @@ public class FragmentStackManager {
         return mFragmentSparseArray.get(0);
     }
 
+    public int getConut(){
+        return mFragmentSparseArray.size();
+    }
 
 
 

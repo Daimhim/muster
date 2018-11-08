@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.ui.app;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +24,6 @@ import org.daimhim.helpful.util.HImageUtil;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.StartApp;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
-import org.daimhim.pluginmanager.model.bean.AddAppMenuBean;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
@@ -38,9 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
@@ -82,10 +79,10 @@ public class SelectAppFragment extends Fragment {
         mSelectAppAdapter.setOnItemClickListener(new RecyclerContract.OnItemClickListener() {
             @Override
             public void onItemClick(View pView, int pI) {
-                Bundle lArgs = new Bundle();
+                Intent lIntent = new Intent();
                 ApplicationBean lItem = mSelectAppAdapter.getItem(pI);
-                lArgs.putParcelable("value",lItem);
-                MainUtils.backFragment(getContext(),lArgs);
+                lIntent.putExtra("value",lItem);
+                MainUtils.getI().finishFragment(SelectAppFragment.this,50, lIntent);
             }
         });
         getAppList();

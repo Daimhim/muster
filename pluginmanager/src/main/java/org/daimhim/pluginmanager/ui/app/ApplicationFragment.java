@@ -16,13 +16,11 @@ import android.view.ViewGroup;
 
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
-import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.ui.plugin.PluginEditFragment;
-import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
 import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
@@ -92,7 +90,7 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         mRlRecyclerView.setAdapter(mApplicationAdapter);
         mRlRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
-        fabFab.setOnClickListener(v -> MainUtils.superimposedFragment(getContext(),EditAppFragment.class));
+        fabFab.setOnClickListener(v -> MainUtils.getI().startFragment(new Intent(getContext(),EditAppFragment.class).addFlags(MainUtils.FLAG_BEFORE_HIDE)));
         mApplicationAdapter.setOnItemClickListener(this);
     }
 
@@ -128,7 +126,7 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
 
     @Override
     public void onItemClick(View pView, int pI) {
-        MainUtils.superimposedFragment(getContext(),50, PluginEditFragment.class);
+        MainUtils.getI().starFragmentForResult(new Intent(getContext(),PluginEditFragment.class),50);
 //        ApplicationBean lItem = mApplicationAdapter.getItem(pI);
 //        Bundle lArgs = new Bundle();
 //        lArgs.putString("app_id",lItem.getApp_id());

@@ -49,14 +49,12 @@ public class FragmentStackManager {
         if (null != lTopFragment) {
             FragmentTransaction lFragmentTransaction = mSupportFragmentManager.beginTransaction();
             lFragmentTransaction.hide(lTopFragment);
-            lTopFragment.onPause();
             lFragmentTransaction.remove(lTopFragment);
             mFragmentSparseArray.remove(mFragmentSparseArray.size() - 1);
             lTopFragment = getTopFragment();
             lFragmentTransaction.show(lTopFragment);
             lFragmentTransaction.commit();
         }
-
     }
 
     public Fragment getTopFragment(){

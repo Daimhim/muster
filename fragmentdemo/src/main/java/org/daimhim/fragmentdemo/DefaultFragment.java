@@ -1,6 +1,7 @@
 package org.daimhim.fragmentdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,31 +28,23 @@ import android.widget.TextView;
  * @author：Administrator
  */
 public class DefaultFragment extends Fragment {
-    private String TAG = "TAG:"+getClass().getSimpleName();
-    public static DefaultFragment newInstance(String value) {
 
-        Bundle args = new Bundle();
-        args.putString("value",value);
-        DefaultFragment fragment = new DefaultFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public String getTags() {
+        return "TAG:" + getClass().getSimpleName() + ":" + (null == getArguments() ? "" : getArguments().getString("value"));
     }
+
     private TextView mTextView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onCreateView");
-        }else {
-            Log.d(TAG, "onCreateView");
-        }
+        Log.i(getTags(), "onCreateView");
         mTextView = new TextView(getContext());
         LinearLayout.LayoutParams lLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mTextView.setLayoutParams(lLayoutParams);
         mTextView.setGravity(Gravity.CENTER);
         mTextView.setText(getClass().getSimpleName());
-        mTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.cl_000000));
+        mTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.cl_000000));
         return mTextView;
     }
 
@@ -59,113 +52,87 @@ public class DefaultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle lArguments = getArguments();
-        if (null!=lArguments && !TextUtils.isEmpty(lArguments.getString("value"))) {
+        if (null != lArguments && !TextUtils.isEmpty(lArguments.getString("value"))) {
             mTextView.setText(lArguments.getString("value"));
         }
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onViewCreated");
-        }else {
-            Log.d(TAG, "onViewCreated");
-        }
+        mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.getI().finishFragment(DefaultFragment.this);
+            }
+        });
+        Log.i(getTags(), "onViewCreated");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onCreate");
-        }else {
-            Log.d(TAG, "onCreate");
-        }
+        Log.i(getTags(), "onCreate");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onAttach");
-        }else {
-            Log.d(TAG, "onAttach");
-        }
+        Log.i(getTags(), "onAttach");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onActivityCreated");
-        }else {
-            Log.d(TAG, "onActivityCreated");
-        }
+        Log.i(getTags(), "onActivityCreated");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onStart");
-        }else {
-            Log.d(TAG, "onStart");
-        }
+        Log.i(getTags(), "onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onResume");
-        }else {
-            Log.d(TAG, "onResume");
-        }
+        Log.i(getTags(), "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onPause");
-        }else {
-            Log.d(TAG, "onPause");
-        }
+        Log.i(getTags(), "onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onStop");
-        }else {
-            Log.d(TAG, "onStop");
-        }
+        Log.i(getTags(), "onStop");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onDestroyView");
-        }else {
-            Log.d(TAG, "onDestroyView");
-        }
+        Log.i(getTags(), "onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onDestroy");
-        }else {
-            Log.d(TAG, "onDestroy");
-        }
+        Log.i(getTags(), "onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (Integer.valueOf(getArguments().getString("value"))%2==0) {
-            Log.i(TAG, "onDetach");
-        }else {
-            Log.d(TAG, "onDetach");
-        }
+        Log.i(getTags(), "onDetach");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(getTags(), "onActivityResult");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.i(getTags(), "setUserVisibleHint:"+isVisibleToUser);
     }
 }

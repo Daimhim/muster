@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_01:
 //                startActivity();
                 Intent lIntent = new Intent(mContext, DefaultFragment.class);
-                lIntent.putExtra("value","0");
+                lIntent.putExtra("value",String.valueOf(MainUtils.getI().getTopStackCount()));
                 MainUtils.getI().startFragment(lIntent);
                 break;
             case R.id.bt_02:

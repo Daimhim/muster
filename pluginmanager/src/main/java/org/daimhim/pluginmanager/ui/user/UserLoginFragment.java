@@ -1,6 +1,7 @@
 package org.daimhim.pluginmanager.ui.user;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,24 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.daimhim.helpful.util.HLogUtil;
 import org.daimhim.helpful.util.HSharedUtil;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
 import org.daimhim.pluginmanager.model.bean.UserBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
-import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.ui.app.ApplicationFragment;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -59,7 +55,8 @@ public class UserLoginFragment extends Fragment {
         public void onSuccess(JavaResponse<UserBean> pUserBeanJavaResponse) {
             HSharedUtil.putString(getContext(),USER_NAME,pUserBeanJavaResponse.getResult().getAccount_number());
             HSharedUtil.putString(getContext(),USER_PASS,pUserBeanJavaResponse.getResult().getPass_word());
-            MainUtils.startFragment(getContext(), ApplicationFragment.class);
+            MainUtils.getI().startFragment(new Intent(getContext(), ApplicationFragment.class));
+            MainUtils.getI().finishFragment(UserLoginFragment.this);
         }
 
         @Override
@@ -115,7 +112,7 @@ public class UserLoginFragment extends Fragment {
                         .subscribe(mUserLoginObserver);
                 break;
             case R.id.bt_cancel_pm:
-                MainUtils.startFragment(getContext(),RegisterFragment.class);
+                MainUtils.getI().startFragment(new Intent(getContext(),RegisterFragment.class));
                 break;
         }
         MainUtils.hideKeyboard(getContext());

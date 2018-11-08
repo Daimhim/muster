@@ -61,7 +61,7 @@ public class PluginEditFragment extends BaseFragment {
         MainUtils.upTitleAndIco(getContext(), "插件编辑", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainUtils.backFragment(getContext());
+                MainUtils.getI().finishFragment(PluginEditFragment.this);
             }
         });
     }

@@ -2,6 +2,7 @@ package org.daimhim.pluginmanager.ui.user;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +56,7 @@ public class RegisterFragment extends Fragment {
         MainUtils.upTitleAndIco(getContext(), "注册", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainUtils.backFragment(getContext());
+                MainUtils.getI().finishFragment(RegisterFragment.this);
             }
         });
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
@@ -85,7 +86,7 @@ public class RegisterFragment extends Fragment {
                             public void onChanged(@Nullable Integer pInteger) {
                                 if (pInteger!=null && pInteger == 1) {
                                     Snackbar.make(etUsernamePm,"registration success",Snackbar.LENGTH_SHORT).show();
-                                    MainUtils.startFragment(getContext(),UserLoginFragment.class);
+                                    MainUtils.getI().startFragment(new Intent(getContext(),UserLoginFragment.class));
                                 }else {
                                     Snackbar.make(etUsernamePm,"registration failed",Snackbar.LENGTH_SHORT).show();
                                 }
@@ -93,7 +94,7 @@ public class RegisterFragment extends Fragment {
                         });
                 break;
             case R.id.bt_cancel_pm:
-                MainUtils.startFragment(getContext(),UserLoginFragment.class);
+                MainUtils.getI().finishFragment(RegisterFragment.this);
                 break;
         }
         MainUtils.hideKeyboard(getContext());

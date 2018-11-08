@@ -1,5 +1,6 @@
 package org.daimhim.pluginmanager.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -32,7 +33,7 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MainUtils.getI().init(this,R.layout.activity_main);
+        MainUtils.getI().init(this,R.id.content_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -45,8 +46,7 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        replaceFragment(new UserLoginFragment());
+        MainUtils.getI().startFragment(new Intent(this,UserLoginFragment.class));
     }
 
     @Override
@@ -54,22 +54,6 @@ public class MainActivity extends BaseActivity
         super.onResume();
     }
 
-    public void superimposedFragment(Fragment pFragment) {
-        FragmentTransaction lFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        lFragmentTransaction.add(R.id.content_main, pFragment);
-        lFragmentTransaction.hide(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.content_main)));
-        lFragmentTransaction.show(pFragment);
-        lFragmentTransaction.addToBackStack(null);
-        lFragmentTransaction.commit();
-    }
-
-    public void replaceFragment(Fragment pFragment) {
-        FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
-                .beginTransaction();
-        lFragmentTransaction
-                .replace(R.id.content_main, pFragment);
-        lFragmentTransaction.commit();
-    }
 
     @Override
     public void onBackPressed() {

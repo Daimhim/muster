@@ -53,7 +53,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainUtils.backFragment(getContext());
+                MainUtils.getI().finishFragment(PluginListFragment.this);
             }
         });
         mPluginAdapter = new PluginAdapter();
@@ -94,7 +94,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onClick(View v) {
-        MainUtils.superimposedFragment(getContext(),50,PluginEditFragment.class);
+        MainUtils.getI().starFragmentForResult(new Intent(getContext(),PluginEditFragment.class),50);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainUtils.backFragment(getContext());
+                MainUtils.getI().finishFragment(PluginListFragment.this);
             }
         });
         switch (requestCode){

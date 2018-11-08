@@ -74,7 +74,7 @@ public class EditAppFragment extends BaseFragment {
         MainUtils.upTitleAndIco(getContext(), "App编辑", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainUtils.backFragment(getContext());
+                MainUtils.getI().finishFragment(EditAppFragment.this);
             }
         });
         mEditAppViewModel = ViewModelProviders.of(this).get(EditAppViewModel.class);
@@ -143,7 +143,7 @@ public class EditAppFragment extends BaseFragment {
 
                 break;
             case R.id.bt_select_apk_pm:
-                MainUtils.superimposedFragment(getContext(),SELECT_FILE_REQUEST_CODE,SelectAppFragment.class);
+                MainUtils.getI().starFragmentForResult(new Intent(getContext(),SelectAppFragment.class),SELECT_FILE_REQUEST_CODE);
                 break;
         }
     }
@@ -204,7 +204,7 @@ public class EditAppFragment extends BaseFragment {
 
     @Override
     public boolean onBackPressed() {
-        MainUtils.startFragment(getContext(), ApplicationFragment.class);
+        MainUtils.getI().startFragment(new Intent(getContext(), ApplicationFragment.class));
         return true;
     }
 
@@ -216,7 +216,7 @@ public class EditAppFragment extends BaseFragment {
                     @Override
                     public void onSuccess(JavaResponse<Void> pVoidJavaResponse) {
                         Snackbar.make(rlRecyclerView, pVoidJavaResponse.getError_msg(), Snackbar.LENGTH_SHORT).show();
-                        MainUtils.backFragment(getContext());
+                        MainUtils.getI().finishFragment(EditAppFragment.this);
                     }
 
                     @Override
