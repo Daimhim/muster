@@ -91,7 +91,6 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         mApplicationAdapter = new ApplicationAdapter();
         mRlRecyclerView.setAdapter(mApplicationAdapter);
         mRlRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
         fabFab.setOnClickListener(v -> MainUtils.getI().startFragment(new Intent(getContext(),EditAppFragment.class)));
         mApplicationAdapter.setOnItemClickListener(this);
     }
@@ -112,18 +111,17 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        MainUtils.upTitleAndIco(getContext(), "my app", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.showUserInfo(getContext());
-            }
-        });
+    public void onResume() {
+        super.onResume();
+        initTitle();
         mApplicationViewModel.loadApplicationList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mObserver);
+    }
+
+    private void initTitle() {
+        MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
     }
 
     @Override

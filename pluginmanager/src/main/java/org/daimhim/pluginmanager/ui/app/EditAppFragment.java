@@ -149,7 +149,7 @@ public class EditAppFragment extends BaseFragment {
     }
 
     /**
-     * 吊起
+     * go chooser
      */
     private void showChooser() {
         // Use the GET_CONTENT intent from the utility class

@@ -50,12 +50,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPluginViewModel = ViewModelProviders.of(this).get(PluginViewModel.class);
-        MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.getI().finishFragment(PluginListFragment.this);
-            }
-        });
+        initTile();
         mPluginAdapter = new PluginAdapter();
         rlRecyclerViewPm.setAdapter(mPluginAdapter);
         srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
@@ -80,6 +75,15 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         fabFabPm.setOnClickListener(this);
     }
 
+    private void initTile() {
+        MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.getI().finishFragment(PluginListFragment.this);
+            }
+        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -100,12 +104,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_view_headline_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.getI().finishFragment(PluginListFragment.this);
-            }
-        });
+        initTile();
         switch (requestCode){
             case 50:
                 onRefresh();

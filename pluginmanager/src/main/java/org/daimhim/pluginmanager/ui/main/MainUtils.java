@@ -201,8 +201,12 @@ public class MainUtils {
         if (lArguments != null) {
             requestCode = lArguments.getInt("requestCode");
         }
+        //If it is not at the top, don't restart
+        boolean isRestart = getStackAndTopFragment() == pFragment;
         getFragmentStackManager().remove(pFragment);
-        getFragmentStackManager().restart(requestCode,resultCode,pIntent);
+        if (isRestart) {
+            getFragmentStackManager().restart(requestCode, resultCode, pIntent);
+        }
     }
 
     /**
