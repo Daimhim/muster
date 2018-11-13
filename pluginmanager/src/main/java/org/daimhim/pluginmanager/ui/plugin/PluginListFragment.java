@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +20,13 @@ import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.model.response.PluginResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PluginListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class PluginListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, RecyclerContract.OnItemClickListener {
 
     @BindView(R.id.rl_recycler_view_pm)
     RecyclerView rlRecyclerViewPm;
@@ -54,6 +57,8 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         mPluginAdapter = new PluginAdapter();
         rlRecyclerViewPm.setAdapter(mPluginAdapter);
         srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
+        rlRecyclerViewPm.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        mPluginAdapter.setOnItemClickListener(this);
         Bundle lArguments = getArguments();
         if (lArguments!=null) {
             mAppId = lArguments.getString("app_id");
@@ -61,11 +66,6 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
                 @Override
                 public void onSuccess(JavaResponse<PluginResponse> pPluginResponseJavaResponse) {
                     mPluginAdapter.onRefresh(pPluginResponseJavaResponse.getResult().getList());
-                    srlSwipeRefreshLayoutPm.setRefreshing(false);
-                }
-
-                @Override
-                public void onFailure(JavaResponse pJavaResponse) {
                     srlSwipeRefreshLayoutPm.setRefreshing(false);
                 }
             };
@@ -98,7 +98,9 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onClick(View v) {
-        MainUtils.getI().starFragmentForResult(new Intent(getContext(),PluginEditFragment.class),50);
+        Intent lIntent = new Intent(getContext(), PluginEditFragment.class);
+        lIntent.putExtra("appId",mAppId);
+        MainUtils.getI().starFragmentForResult(lIntent,50);
     }
 
     @Override
@@ -110,5 +112,10 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
                 onRefresh();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View pView, int pI) {
+
     }
 }

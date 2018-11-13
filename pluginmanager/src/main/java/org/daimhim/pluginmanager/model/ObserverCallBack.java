@@ -1,8 +1,10 @@
 package org.daimhim.pluginmanager.model;
 
-import android.text.TextUtils;
+
 
 import org.daimhim.pluginmanager.model.response.JavaResponse;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
+
 
 import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
@@ -19,7 +21,8 @@ import io.reactivex.disposables.Disposable;
  *
  * @author：Administrator
  */
-public abstract class ObserverCallBack<T> implements Observer<T> , SingleObserver<T>{
+public abstract class ObserverCallBack<T> implements Observer<T>, SingleObserver<T> {
+
 
     @Override
     public void onSubscribe(Disposable d) {
@@ -28,15 +31,15 @@ public abstract class ObserverCallBack<T> implements Observer<T> , SingleObserve
 
     @Override
     public void onNext(T pTJavaResponse) {
-       if (pTJavaResponse instanceof JavaResponse){
-           if (TextUtils.equals(((JavaResponse) pTJavaResponse).getError_code(),"1")) {
-               onSuccess(pTJavaResponse);
-           }else {
-               onFailure((JavaResponse) pTJavaResponse);
-           }
-       }else {
-           onSuccess(pTJavaResponse);
-       }
+        if (pTJavaResponse instanceof JavaResponse) {
+            if ("1".equals(((JavaResponse) pTJavaResponse).getError_code())) {
+                onSuccess(pTJavaResponse);
+            } else {
+                onFailure((JavaResponse) pTJavaResponse);
+            }
+        } else {
+            onSuccess(pTJavaResponse);
+        }
     }
 
     @Override
@@ -54,7 +57,9 @@ public abstract class ObserverCallBack<T> implements Observer<T> , SingleObserve
 
     }
 
-    public abstract void onSuccess(T pT);
-    public abstract void onFailure(JavaResponse pJavaResponse);
+    public void onFailure(JavaResponse pJavaResponse){
+        MainUtils.getI().toast(pJavaResponse.getError_msg());
+    }
 
+    public abstract void onSuccess(T pT);
 }

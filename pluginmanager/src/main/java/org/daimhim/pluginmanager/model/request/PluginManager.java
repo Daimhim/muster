@@ -15,6 +15,7 @@ public interface PluginManager {
     @FormUrlEncoded
     @POST("apk/register/plugin/")
     Observable<JavaResponse<Void>> uploadPlugin(
+            @Field("appId") String appId,
             @Field("pluginName") String pluginName,
             @Field("packageName") String packageName,
             @Field("pluginDescription") String pluginDescription

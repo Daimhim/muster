@@ -4,12 +4,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import org.daimhim.pluginmanager.R;
 
 import java.util.ArrayList;
 
@@ -256,6 +260,12 @@ public class MainUtils {
     public static void showUserInfo(Context pContext) {
         if (pContext instanceof MainActivity) {
             ((MainActivity) pContext).showUserInfo();
+        }
+    }
+
+    public void toast(String text){
+        if (mContext instanceof AppCompatActivity){
+            Snackbar.make(((AppCompatActivity) mContext).findViewById(android.R.id.content),text,Snackbar.LENGTH_SHORT).show();
         }
     }
 }

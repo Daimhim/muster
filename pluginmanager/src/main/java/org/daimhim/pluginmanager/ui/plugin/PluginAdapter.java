@@ -1,5 +1,6 @@
 package org.daimhim.pluginmanager.ui.plugin;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.bean.PluginBean;
+import org.daimhim.pluginmanager.utils.BlankPage;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
@@ -46,8 +48,29 @@ public class PluginAdapter extends RecyclerViewEmpty<PluginAdapter.PluginViewHol
         pPluginViewHolder.tvPluginNamePm.setText(lItem.getPlugin_name());
         pPluginViewHolder.tvPackageNamePm.setText(lItem.getPackage_name());
         pPluginViewHolder.tvDescriptionPm.setText(lItem.getPlugin_description());
-        pPluginViewHolder.tvNewVersionPm.setText(lItem.getLast_version_code());
-        pPluginViewHolder.tvUpTimePm.setText(lItem.getLast_version_upTime());
+        pPluginViewHolder.tvNewVersionPm.setText(String.format("最新版本:%s",lItem.getLast_version_code()));
+        if (!TextUtils.isEmpty(lItem.getLast_version_upTime())) {
+            pPluginViewHolder.tvUpTimePm.setText(String.format("更新时间:%s", lItem.getLast_version_upTime()));
+            pPluginViewHolder.tvUpTimePm.setVisibility(View.VISIBLE);
+        }else {
+            pPluginViewHolder.tvUpTimePm.setVisibility(View.INVISIBLE);
+        }
+        pPluginViewHolder.performItemClick(pPluginViewHolder.itemView,this);
+    }
+
+    @Override
+    public ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
+        return new ClickViewHolder(BlankPage.newBlankPage(parent.getContext(),"Plugin is Empty"));
+    }
+
+    @Override
+    public int getEmptyViewType() {
+        return 2;
+    }
+
+    @Override
+    public boolean isEmptyView() {
+        return getDataItemCount() == 0;
     }
 
     @Override

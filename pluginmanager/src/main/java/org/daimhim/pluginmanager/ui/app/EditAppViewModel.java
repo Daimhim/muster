@@ -30,6 +30,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -73,35 +74,11 @@ public class EditAppViewModel extends ViewModel {
                             lInstance.generateRandomFilename("apk")
                     );
                 })
-                .map(pFile -> {
-                    ArrayMap<String, String> lArrayMap = new ArrayMap<>();
-                    CacheFileUtils lInstance = CacheFileUtils.getInstance();
-                    PackageManager lPackageManager = StartApp.getInstance().getPackageManager();
-                    PackageInfo lPackageArchiveInfo = lPackageManager.getPackageArchiveInfo(pFile.getPath(), PackageManager.GET_ACTIVITIES);
-                    if (lPackageArchiveInfo != null) {
-                        ApplicationInfo appInfo = lPackageArchiveInfo.applicationInfo;
-                        appInfo.sourceDir = pFile.getPath();
-                        appInfo.publicSourceDir = pFile.getPath();
-                        Drawable lDrawable = appInfo.loadIcon(lPackageManager);
-                        Uri lPng = lInstance.saveBitmap(HImageUtil.drawableToBitmap(lDrawable),
-                                lInstance.getDiskCacheDir(CacheFileUtils.CACHE_IMAGE_DIR).getAbsolutePath(),
-                                lInstance.generateRandomFilename("png"));
-                        lArrayMap.put(mInputMenu[0], lPng.getPath());
-                        lArrayMap.put(mInputMenu[1], lPackageManager.getApplicationLabel(appInfo).toString());
-                        lArrayMap.put(mInputMenu[2], url);
-                        lArrayMap.put(mInputMenu[3], appInfo.packageName);
-                        lArrayMap.put(mInputMenu[4], lPackageArchiveInfo.versionName);
-                        if (Build.VERSION.SDK_INT >= 28) {
-                            lArrayMap.put(mInputMenu[5], String.valueOf(lPackageArchiveInfo.getLongVersionCode()));
-                        } else {
-                            lArrayMap.put(mInputMenu[5], String.valueOf(lPackageArchiveInfo.versionCode));
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            lArrayMap.put(mInputMenu[6], String.valueOf(appInfo.minSdkVersion));
-                        }
-                        lArrayMap.put(mInputMenu[7], String.valueOf(appInfo.targetSdkVersion));
+                .flatMap(new Function<File, ObservableSource<ArrayMap<String, String>>>() {
+                    @Override
+                    public ObservableSource<ArrayMap<String, String>> apply(File pFile) throws Exception {
+                        return analyzeLocal(pFile);
                     }
-                    return lArrayMap;
                 });
     }
 

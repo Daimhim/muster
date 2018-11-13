@@ -11,6 +11,7 @@ import org.daimhim.pluginmanager.model.response.PluginResponse;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.http.Query;
 
 public class PluginViewModel extends ViewModel {
 
@@ -18,10 +19,11 @@ public class PluginViewModel extends ViewModel {
     private PluginManager mPluginManager = RetrofitManager.getInstance().getRetrofit().create(PluginManager.class);
 
     public Observable<JavaResponse<Void>> uploadPlugin(
+            String appId,
             String pluginName,
             String packageName,
             String pluginDescription) {
-        return mPluginManager.uploadPlugin(pluginName, packageName, pluginDescription)
+        return mPluginManager.uploadPlugin(appId,pluginName, packageName, pluginDescription)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

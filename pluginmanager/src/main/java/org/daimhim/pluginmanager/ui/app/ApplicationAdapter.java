@@ -11,6 +11,7 @@ import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.bean.ApplicationBean;
 import org.daimhim.pluginmanager.utils.AddressMachining;
+import org.daimhim.pluginmanager.utils.BlankPage;
 import org.daimhim.rvadapter.RecyclerContract;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
 
@@ -64,7 +65,19 @@ public class ApplicationAdapter extends RecyclerViewEmpty<ApplicationAdapter.App
         mApplicationBeans.addAll(pApplicationBeans);
         notifyDataSetChanged();
     }
+    @Override
+    public ClickViewHolder onCreateEmptyViewHolder(ViewGroup parent, int viewType) {
+        return new ClickViewHolder(BlankPage.newBlankPage(parent.getContext(),"app is Empty"));
+    }
+    @Override
+    public boolean isEmptyView() {
+        return getDataItemCount() == 0;
+    }
 
+    @Override
+    public int getEmptyViewType() {
+        return 2;
+    }
     @Override
     public ApplicationBean getItem(int position) {
         return mApplicationBeans.get(position);

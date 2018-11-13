@@ -40,7 +40,7 @@
             android:id="@+id/et_plugin_name_input_pm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="plugin_name"
+            android:hint="* plugin_name"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/cl_333333"
@@ -82,13 +82,14 @@
             android:id="@+id/et_package_name_input_pm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="package_name"
+            android:hint="* package_name"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/cl_333333"
             android:textSize="@dimen/dimen_text_size_14" />
 
     </android.support.design.widget.TextInputLayout>
+
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/et_plugin_description_input_pm"
@@ -99,7 +100,7 @@
         android:layout_marginRight="@dimen/dimen_size_8"
         android:background="@drawable/shape_stroke_666666_corners_3"
         android:gravity="left|top"
-        android:hint="plugin_description"
+        android:hint="* plugin_description"
         android:padding="@dimen/dimen_size_3"
         android:textColor="@color/cl_333333"
         android:textSize="@dimen/dimen_text_size_14"
@@ -118,4 +119,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_plugin_description_input_pm" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/fl_layout_pm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:alignContent="flex_start"
+        android:layout_marginLeft="@dimen/dimen_size_8"
+        android:layout_marginTop="@dimen/dimen_size_20"
+        android:layout_marginRight="@dimen/dimen_size_8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_app_pm" />
 </android.support.constraint.ConstraintLayout>
