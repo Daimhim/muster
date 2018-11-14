@@ -3,6 +3,7 @@ package org.daimhim.pluginmanager.ui.version;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.bean.ApkBean;
 import org.daimhim.pluginmanager.ui.base.BaseAdapter;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
@@ -21,12 +22,12 @@ import org.daimhim.rvadapter.RecyclerViewEmpty;
 public class VersionAdapter extends BaseAdapter<VersionAdapter.VersionViewHolder,ApkBean,ApkBean> {
     @Override
     public int getView() {
-        return 0;
+        return R.layout.viewholder_version;
     }
 
     @Override
-    public void onBindDataViewHolder(VersionAdapter.VersionViewHolder pVersionViewHolder, int pI) {
-
+    public void onBindDataViewHolder(VersionViewHolder pVersionViewHolder, int pI) {
+        pVersionViewHolder.onRefresh(getItem(pI));
     }
 
     static class VersionViewHolder extends RecyclerViewEmpty.ClickViewHolder<ApkBean>{

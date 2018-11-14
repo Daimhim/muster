@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
+import org.daimhim.pluginmanager.model.bean.PluginBean;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.model.response.PluginResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.pluginmanager.ui.version.VersionListFragment;
 import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
@@ -97,7 +99,7 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     @Override
-    public void onClick(View v) {
+        public void onClick(View v) {
         Intent lIntent = new Intent(getContext(), PluginEditFragment.class);
         lIntent.putExtra("appId",mAppId);
         MainUtils.getI().starFragmentForResult(lIntent,50);
@@ -116,6 +118,9 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onItemClick(View pView, int pI) {
-
+        Intent lIntent = new Intent(getContext(), VersionListFragment.class);
+        PluginBean lItem = mPluginAdapter.getItem(pI);
+        lIntent.putExtra("pluginId",lItem.getPlugin_id());
+        MainUtils.getI().startFragment(lIntent);
     }
 }

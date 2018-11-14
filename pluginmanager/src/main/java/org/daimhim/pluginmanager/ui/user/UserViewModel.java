@@ -9,6 +9,7 @@ import org.daimhim.pluginmanager.model.bean.UserBean;
 import org.daimhim.pluginmanager.model.UserHelp;
 import org.daimhim.pluginmanager.model.request.User;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
+import org.daimhim.pluginmanager.ui.base.BaseViewModel;
 import org.daimhim.pluginmanager.utils.StringUtils;
 
 import io.reactivex.Observable;
@@ -30,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @author：Administrator
  */
-public class UserViewModel extends ViewModel {
+public class UserViewModel extends BaseViewModel {
     public static int SUCCESS = 1;
     public static int FAILURE = 0;
 

@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.daimhim.pluginmanager.R;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
+import org.daimhim.pluginmanager.ui.version.VersionListFragment;
+
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.base
@@ -23,12 +27,14 @@ import android.view.ViewGroup;
  *
  * @author：Administrator
  */
-public class BaseFragment extends Fragment implements BackHandledInterface{
+public abstract class BaseFragment extends Fragment implements BackHandledInterface {
     protected final String TAG = getClass().getSimpleName();
+
     @Override
     public boolean onBackPressed() {
         return false;
     }
+
     public String getTags() {
         return "TAG:" + getClass().getSimpleName();
     }
@@ -39,7 +45,6 @@ public class BaseFragment extends Fragment implements BackHandledInterface{
         Log.i(getTags(), "onCreateView");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
 
 
     @Override
@@ -69,13 +74,35 @@ public class BaseFragment extends Fragment implements BackHandledInterface{
     @Override
     public void onStart() {
         super.onStart();
+        MainUtils.upTitleAndIco(getContext(), getTitle(), R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.getI().finishFragment(BaseFragment.this);
+            }
+        });
         Log.i(getTags(), "onStart");
+    }
+
+    protected String getTitle(){
+        return getClass().getSimpleName();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.i(getTags(), "onResume");
+    }
+
+    public void finishFragment() {
+        MainUtils.getI().finishFragment(this);
+    }
+
+    public void finishFragment(int resultCode) {
+        MainUtils.getI().finishFragment(this, resultCode);
+    }
+
+    public void finishFragment(int resultCode, Intent pIntent) {
+        MainUtils.getI().finishFragment(this, resultCode, pIntent);
     }
 
     @Override
@@ -117,6 +144,6 @@ public class BaseFragment extends Fragment implements BackHandledInterface{
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.i(getTags(), "setUserVisibleHint:"+isVisibleToUser);
+        Log.i(getTags(), "setUserVisibleHint:" + isVisibleToUser);
     }
 }
