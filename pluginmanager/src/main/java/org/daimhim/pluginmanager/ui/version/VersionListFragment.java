@@ -95,6 +95,7 @@ public class VersionListFragment extends BaseFragment implements SwipeRefreshLay
     @OnClick(R.id.fab_fab_pm)
     public void onViewClicked() {
         Intent lIntent = new Intent(getContext(),VersionEditFragment.class);
+        lIntent.putExtra("pluginId",mPluginId);
         MainUtils.getI().starFragmentForResult(lIntent,50);
     }
 

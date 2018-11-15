@@ -10,6 +10,8 @@ import org.daimhim.helpful.util.HImageUtil;
 import org.daimhim.pluginmanager.utils.CacheFileUtils;
 import org.daimhim.pluginmanager.utils.NetWorkUtils;
 
+import timber.log.Timber;
+
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -33,6 +35,7 @@ public class StartApp extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
+        Timber.plant(new Timber.DebugTree());
         CacheFileUtils.getInstance().initCacheFile(this);
         RetrofitManager.Config lConfig = new RetrofitManager.Config();
         lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);

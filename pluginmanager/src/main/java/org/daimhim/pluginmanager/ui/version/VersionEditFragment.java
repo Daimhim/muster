@@ -2,6 +2,7 @@ package org.daimhim.pluginmanager.ui.version;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,21 +10,32 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
 
 import org.daimhim.afilechooser.ipaulpro.afilechooser.utils.FileUtils;
+import org.daimhim.helpful.util.HViewUtil;
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.ObserverCallBack;
+import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.app.EditAppViewModel;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
+import org.daimhim.pluginmanager.ui.main.MainUtils;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +69,8 @@ public class VersionEditFragment extends BaseFragment {
     private EditAppViewModel mEditAppViewModel;
     private VersionViewModel mVersionViewModel;
     private ObserverCallBack<ArrayMap<String, String>> mObserver;
+    private HashMap<String,String> mHashMap;
+    private String mPluginId;
 
     @Nullable
     @Override
@@ -71,14 +85,41 @@ public class VersionEditFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         mEditAppViewModel = ViewModelProviders.of(this).get(EditAppViewModel.class);
         mVersionViewModel = ViewModelProviders.of(this).get(VersionViewModel.class);
+        Bundle lArguments = getArguments();
+        if (null != lArguments){
+            mPluginId = lArguments.getString("pluginId");
+        }
         mObserver = new ObserverCallBack<ArrayMap<String, String>>() {
             @Override
             public void onSuccess(ArrayMap<String, String> pStringStringArrayMap) {
-
+                flLayoutPm.removeAllViews();
+                Set<Map.Entry<String, String>> lEntries = pStringStringArrayMap.entrySet();
+                Iterator<Map.Entry<String, String>> lIterator = lEntries.iterator();
+                while (lIterator.hasNext()) {
+                    Map.Entry<String, String> lNext = lIterator.next();
+                    if (!TextUtils.isEmpty(lNext.getValue())) {
+                        flLayoutPm.addView(getApkTag(getContext(), lNext.getKey() + ":" + lNext.getValue()));
+                    }
+                }
+                if (mHashMap == null){
+                    mHashMap = new HashMap<>();
+                }
+                mHashMap.clear();
+                mHashMap.putAll(pStringStringArrayMap);
             }
         };
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainUtils.upTitleAndIco(getContext(), "版本编辑", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainUtils.getI().finishFragment(VersionEditFragment.this);
+            }
+        });
+    }
 
     @Override
     public void onDestroyView() {
@@ -108,6 +149,21 @@ public class VersionEditFragment extends BaseFragment {
                         .subscribe(mObserver);
                 break;
             case R.id.bt_app_pm:
+                String pluginDescription = etPluginDescriptionInputPm.getText().toString();
+                if (TextUtils.isEmpty(pluginDescription)) {
+                    Snackbar.make(view, "Description can not be empty", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+                mHashMap.put("apkDescription",pluginDescription);
+                mHashMap.put("pluginId",mPluginId);
+                mHashMap.put("apkPath",etPluginUrlInputPm.getText().toString());
+                mVersionViewModel.registerVersion(mHashMap)
+                        .subscribe(new ObserverCallBack<JavaResponse<Void>>() {
+                            @Override
+                            public void onSuccess(JavaResponse<Void> pVoidJavaResponse) {
+                                finishFragment();
+                            }
+                        });
                 break;
         }
     }
@@ -146,5 +202,24 @@ public class VersionEditFragment extends BaseFragment {
         } catch (ActivityNotFoundException e) {
             // The reason for the existence of aFileChooser
         }
+    }
+
+    TextView getApkTag(Context pContext, String text) {
+        TextView lTextView = new TextView(pContext);
+        RelativeLayout.LayoutParams lLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lTextView.setLayoutParams(lLayoutParams);
+        int lV = (int) HViewUtil.dip2px(pContext, 5);
+        lLayoutParams.setMargins(
+                lV,
+                lV,
+                lV,
+                lV);
+        lTextView.setPadding(lV, 0, lV, 0);
+        lTextView.setGravity(Gravity.CENTER);
+        lTextView.setText(text);
+        lTextView.setBackgroundResource(R.drawable.shape_stroke_666666_corners_3);
+        lTextView.setTextColor(ContextCompat.getColor(pContext, R.color.cl_666666));
+        return lTextView;
     }
 }

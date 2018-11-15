@@ -3,9 +3,17 @@ package org.daimhim.pluginmanager.model.request;
 import org.daimhim.pluginmanager.model.response.ApkResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 /**
@@ -25,8 +33,10 @@ public interface VersionManager {
             @Query("userId") String userId,
             @Query("pluginId") String pluginId
     );
-    @POST("apk/register/app/")
-    Observable<JavaResponse<Void>> registerVersion();
+    @Multipart
+    @POST("apk/upload/apk/")
+    Observable<JavaResponse<Void>> registerVersion(@PartMap Map<String, RequestBody> args);
+
     @POST("apk/update/app/")
     Observable<JavaResponse<Void>> updateVersion();
 }

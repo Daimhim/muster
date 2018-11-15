@@ -74,17 +74,7 @@ public abstract class BaseFragment extends Fragment implements BackHandledInterf
     @Override
     public void onStart() {
         super.onStart();
-        MainUtils.upTitleAndIco(getContext(), getTitle(), R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.getI().finishFragment(BaseFragment.this);
-            }
-        });
         Log.i(getTags(), "onStart");
-    }
-
-    protected String getTitle(){
-        return getClass().getSimpleName();
     }
 
     @Override
