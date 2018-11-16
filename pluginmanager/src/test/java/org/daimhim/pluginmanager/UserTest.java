@@ -1,15 +1,17 @@
 package org.daimhim.pluginmanager;
 
-import org.daimhim.distance.NetConnectedListener;
 import org.daimhim.distance.RetrofitManager;
+import org.daimhim.pluginmanager.model.ObserverCallBack;
+import org.daimhim.pluginmanager.model.UserHelp;
+import org.daimhim.pluginmanager.model.bean.UserBean;
 import org.daimhim.pluginmanager.model.request.User;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * 项目名称：org.daimhim.pluginmanager
@@ -22,73 +24,35 @@ import io.reactivex.disposables.Disposable;
  *
  * @author：Administrator
  */
-public class UserTest extends AbsInterfaceTest {
+public class UserTest extends AbsInterfaceTest<UserBean> {
     User mUser;
     private String userName = "15015112011";
     private String passWord = "112011";
+
     @Before
     @Override
-    public void init() {
-        RetrofitManager.Config lConfig = new RetrofitManager.Config();
-        lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);
-        lConfig.setCacheFile(System.getProperty("user.dir"));
-        lConfig.setNetConnectedListener(new NetConnectedListener() {
-            @Override
-            public boolean isNetConnected() {
-                return true;
-            }
-        });
-        System.out.println(lConfig.toString());
-        RetrofitManager.getInstance().init(lConfig);
+    public void start() {
         mUser = RetrofitManager.getInstance().getRetrofit().create(User.class);
     }
 
-    @Test
-    public void userRegistered() {
-        mUser.userRegistered(userName, passWord)
-                .subscribe(new Observer<JavaResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable pDisposable) {
+    @Override
+    public Observable<JavaResponse<UserBean>> onExecute() {
+        return mUser.userRegistered(userName, passWord)
+                .flatMap((Function<JavaResponse, ObservableSource<JavaResponse<UserBean>>>) pJavaResponse -> mUser.userLogin(userName, passWord)
+                        .doOnNext(pUserBeanJavaResponse -> {
+                            System.out.println(pUserBeanJavaResponse.getResult().toString());
+                            UserHelp.getInstance().upUserInfo(pUserBeanJavaResponse.getResult());
+                        }));
 
-                    }
-
-                    @Override
-                    public void onNext(JavaResponse pJavaResponse) {
-                        System.out.println(pJavaResponse.toString());
-                    }
-
-                    @Override
-                    public void onError(Throwable pThrowable) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
-    @After
-    public void userLogin(){
-        mUser.userLogin(userName, passWord)
-                .subscribe(new Observer<JavaResponse>() {
+
+    @Override
+    public void end() {
+        start();
+        onExecute()
+                .subscribe(new ObserverCallBack<JavaResponse<UserBean>>() {
                     @Override
-                    public void onSubscribe(Disposable pDisposable) {
-
-                    }
-
-                    @Override
-                    public void onNext(JavaResponse pJavaResponse) {
-                        System.out.println(pJavaResponse.toString());
-                    }
-
-                    @Override
-                    public void onError(Throwable pThrowable) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onSuccess(JavaResponse<UserBean> pUserBeanJavaResponse) {
 
                     }
                 });

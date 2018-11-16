@@ -10,9 +10,15 @@ import org.daimhim.pluginmanager.model.response.ApkResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
@@ -42,38 +48,42 @@ public class VersionViewModel extends BaseViewModel {
 
     private VersionManager mVersionManager = RetrofitManager.getInstance().getRetrofit().create(VersionManager.class);
 
-    public Observable<JavaResponse<ApkResponse>> getAllVersion(String pluginId){
-        return mVersionManager.getAllVersion(UserHelp.getInstance().getUserId(),pluginId)
+    public Observable<JavaResponse<ApkResponse>> getAllVersion(String pluginId) {
+        return mVersionManager.getAllVersion(UserHelp.getInstance().getUserId(), pluginId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
 
-    public Observable<JavaResponse<Void>> registerVersion(Map<String,String> pMaps){
+    public Observable<JavaResponse<Void>> registerVersion(Map<String, String> pMaps) {
         HashMap<String, String> pMap = new HashMap<>(pMaps);
+        List<MultipartBody.Part> lParts = new ArrayList<>();
         String lApkPath = pMap.get("apkPath");
         pMap.put("apkPath", pMap.get("appUrl"));
-        pMap.put("appUrl",lApkPath);
+        pMap.put("appUrl", lApkPath);
         HashMap<String, RequestBody> lHashMap = new HashMap<>();
 
         Iterator<Map.Entry<String, String>> lIterator = pMap.entrySet().iterator();
         RequestBody lRequestBody = null;
-        while (lIterator.hasNext()){
+        File lFile = null;
+        while (lIterator.hasNext()) {
             Map.Entry<String, String> lNext = lIterator.next();
-            Timber.i("getKey:%s getValue:%s",lNext.getKey(),lNext.getValue());
-            if ("appLogo".equals(lNext.getKey()) || "apkPath".equals(lNext.getKey())){
-                lRequestBody = MultipartBody.create(MediaType.parse("multipart/form-data"),new File(lNext.getValue()));
-            }else {
-                lRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),lNext.getValue());
+            if ("appLogo".equals(lNext.getKey()) || "apkPath".equals(lNext.getKey())) {
+                lFile = new File(lNext.getValue());
+                lRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), lFile);
+                lParts.add(MultipartBody.Part.createFormData(lNext.getKey(), lFile.getName(), lRequestBody));
+            } else {
+                lRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), lNext.getValue());
+                lHashMap.put(lNext.getKey(), lRequestBody);
             }
-            lHashMap.put(lNext.getKey(),lRequestBody);
         }
-        lHashMap.put("userId",RequestBody.create(MediaType.parse("multipart/form-data"),UserHelp.getInstance().getUserId()));
-        return mVersionManager.registerVersion(lHashMap)
+        lHashMap.put("userId", RequestBody.create(MediaType.parse("multipart/form-data"), UserHelp.getInstance().getUserId()));
+        return mVersionManager.registerVersion(lHashMap,lParts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public void updateVersion(){
+
+    public void updateVersion() {
 
     }
 

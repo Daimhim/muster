@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -85,8 +86,12 @@ public class RetrofitManager {
             mRetrofit = new Retrofit.Builder()
                     .client(lBuilder.build())
                     .baseUrl(mConfig.BASE_DOMAIN)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+                    .addConverterFactory(mConfig.mFactory == null
+                            ? GsonConverterFactory.create()
+                            :mConfig.mFactory)
+                    .addCallAdapterFactory(mConfig.isCallAsync()
+                            ? RxJava2CallAdapterFactory.createAsync()
+                            :RxJava2CallAdapterFactory.create())
                     .build();
         }
         return mRetrofit;
@@ -137,9 +142,10 @@ public class RetrofitManager {
         private int CONNECT_TIME_OUT = 3000;
         //写出时长，单位：毫秒
         private int WRITE_TIME_OUT = 3000;
+        private boolean callAsync = true;
         private NetConnectedListener mNetConnectedListener;
         private ArrayList<Interceptor> mInterceptor;
-
+        private Converter.Factory mFactory;
         public Config() {
             mInterceptor = new ArrayList<>();
         }
@@ -172,6 +178,22 @@ public class RetrofitManager {
             mInterceptor.add(pInterceptor);
         }
 
+        public boolean isCallAsync() {
+            return callAsync;
+        }
+
+        public void setCallAsync(boolean pCallAsync) {
+            callAsync = pCallAsync;
+        }
+
+        public Converter.Factory getFactory(int position) {
+            return mFactory;
+        }
+
+        public void addFactory(Converter.Factory pFactory) {
+            mFactory = pFactory;
+        }
+
         @Override
         public String toString() {
             return "Config{" +
@@ -180,6 +202,7 @@ public class RetrofitManager {
                     ", READ_TIME_OUT=" + READ_TIME_OUT +
                     ", CONNECT_TIME_OUT=" + CONNECT_TIME_OUT +
                     ", WRITE_TIME_OUT=" + WRITE_TIME_OUT +
+                    ", callAsync=" + callAsync +
                     ", mNetConnectedListener=" + mNetConnectedListener +
                     ", mInterceptor=" + mInterceptor +
                     '}';

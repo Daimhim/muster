@@ -264,6 +264,9 @@ public class MainUtils {
     }
 
     public void toast(String text){
+        if (null == mContext){
+            System.out.println(text);
+        }
         if (mContext instanceof AppCompatActivity){
             Snackbar.make(((AppCompatActivity) mContext).findViewById(android.R.id.content),text,Snackbar.LENGTH_SHORT).show();
         }

@@ -35,7 +35,7 @@ public interface VersionManager {
     );
     @Multipart
     @POST("apk/upload/apk/")
-    Observable<JavaResponse<Void>> registerVersion(@PartMap Map<String, RequestBody> args);
+    Observable<JavaResponse<Void>> registerVersion(@PartMap Map<String, RequestBody> args,@Part List<MultipartBody.Part> pPartList);
 
     @POST("apk/update/app/")
     Observable<JavaResponse<Void>> updateVersion();

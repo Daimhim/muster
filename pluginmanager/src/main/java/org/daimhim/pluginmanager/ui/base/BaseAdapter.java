@@ -13,6 +13,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.base
  * 项目版本：muster
@@ -47,7 +49,12 @@ public abstract class BaseAdapter<V extends RecyclerViewEmpty.ClickViewHolder<T1
         Type genericSuperclass = lClass.getGenericSuperclass();
         if (genericSuperclass instanceof ParameterizedType) {
             Type[] actualTypeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
-            return actualTypeArguments[0].getTypeName();
+            Class<V> lActualTypeArgument = (Class<V>) actualTypeArguments[0];
+            Timber.i(lActualTypeArgument.getName());
+            Timber.i(lActualTypeArgument.getSimpleName());
+            Timber.i(lActualTypeArgument.getCanonicalName());
+            Timber.i(lActualTypeArgument.getTypeName());
+            return "";
         }
         return null;
     }

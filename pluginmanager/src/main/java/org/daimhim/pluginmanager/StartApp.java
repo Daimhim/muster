@@ -39,6 +39,7 @@ public class StartApp extends Application {
         CacheFileUtils.getInstance().initCacheFile(this);
         RetrofitManager.Config lConfig = new RetrofitManager.Config();
         lConfig.setBASE_DOMAIN(BuildConfig.BASE_URL);
+        lConfig.setCallAsync(true);
         lConfig.setCacheFile(getCacheDir().getAbsolutePath());
         lConfig.setNetConnectedListener(new NetConnectedListener() {
             @Override
