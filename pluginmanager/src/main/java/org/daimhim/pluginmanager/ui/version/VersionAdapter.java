@@ -30,7 +30,7 @@ public class VersionAdapter extends BaseAdapter<VersionAdapter.VersionViewHolder
         pVersionViewHolder.onRefresh(getItem(pI));
     }
 
-    static class VersionViewHolder extends RecyclerViewEmpty.ClickViewHolder<ApkBean>{
+    class VersionViewHolder extends RecyclerViewEmpty.ClickViewHolder<ApkBean>{
         public VersionViewHolder(View itemView) {
             super(itemView);
         }
