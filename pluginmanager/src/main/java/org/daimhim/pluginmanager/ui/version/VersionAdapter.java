@@ -1,12 +1,17 @@
 package org.daimhim.pluginmanager.ui.version;
 
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.flexbox.FlexboxLayout;
 
 import org.daimhim.pluginmanager.R;
 import org.daimhim.pluginmanager.model.bean.ApkBean;
 import org.daimhim.pluginmanager.ui.base.BaseAdapter;
 import org.daimhim.rvadapter.RecyclerViewEmpty;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.version
@@ -19,7 +24,7 @@ import org.daimhim.rvadapter.RecyclerViewEmpty;
  *
  * @author：Administrator
  */
-public class VersionAdapter extends BaseAdapter<VersionAdapter.VersionViewHolder,ApkBean,ApkBean> {
+public class VersionAdapter extends BaseAdapter<VersionAdapter.VersionViewHolder, ApkBean, ApkBean> {
     @Override
     public int getView() {
         return R.layout.viewholder_version;
@@ -27,12 +32,21 @@ public class VersionAdapter extends BaseAdapter<VersionAdapter.VersionViewHolder
 
     @Override
     public void onBindDataViewHolder(VersionViewHolder pVersionViewHolder, int pI) {
-        pVersionViewHolder.onRefresh(getItem(pI));
+        ApkBean lItem = getItem(pI);
+        pVersionViewHolder.tvAppNamePm.setText(lItem.getApk_name());
+        pVersionViewHolder.tvDescriptionPm.setText(lItem.getApk_description());
     }
 
-    class VersionViewHolder extends RecyclerViewEmpty.ClickViewHolder<ApkBean>{
+    static class VersionViewHolder extends BaseAdapter.ClickViewHolder<ApkBean> {
+        @BindView(R.id.tv_app_name_pm)
+        TextView tvAppNamePm;
+        @BindView(R.id.tv_description_pm)
+        TextView tvDescriptionPm;
+        @BindView(R.id.fab_fab_pm)
+        FlexboxLayout fabFabPm;
         public VersionViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

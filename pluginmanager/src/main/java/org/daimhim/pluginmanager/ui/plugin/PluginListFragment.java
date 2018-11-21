@@ -55,7 +55,6 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPluginViewModel = ViewModelProviders.of(this).get(PluginViewModel.class);
-        initTile();
         mPluginAdapter = new PluginAdapter();
         rlRecyclerViewPm.setAdapter(mPluginAdapter);
         srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
@@ -77,14 +76,12 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
         fabFabPm.setOnClickListener(this);
     }
 
-    private void initTile() {
-        MainUtils.upTitleAndIco(getContext(), "插件管理", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.getI().finishFragment(PluginListFragment.this);
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainUtils.getI().upTitle("插件管理");
     }
+
 
     @Override
     public void onDestroyView() {
@@ -108,7 +105,6 @@ public class PluginListFragment extends BaseFragment implements SwipeRefreshLayo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        initTile();
         switch (requestCode){
             case 50:
                 onRefresh();

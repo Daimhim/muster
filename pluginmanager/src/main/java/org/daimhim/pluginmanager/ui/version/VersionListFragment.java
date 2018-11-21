@@ -2,11 +2,15 @@ package org.daimhim.pluginmanager.ui.version;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
 import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
+import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +41,7 @@ import butterknife.Unbinder;
  *
  * @author：Administrator
  */
-public class VersionListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class VersionListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerContract.OnItemLongClickListener {
 
     @BindView(R.id.rl_recycler_view_pm)
     RecyclerView rlRecyclerViewPm;
@@ -69,6 +74,7 @@ public class VersionListFragment extends BaseFragment implements SwipeRefreshLay
             }
         };
         mVersionAdapter = new VersionAdapter();
+        rlRecyclerViewPm.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         Bundle lArguments = getArguments();
         if (null != lArguments) {
             mPluginId = lArguments.getString("pluginId");
@@ -77,6 +83,7 @@ public class VersionListFragment extends BaseFragment implements SwipeRefreshLay
         }
         rlRecyclerViewPm.setAdapter(mVersionAdapter);
         srlSwipeRefreshLayoutPm.setOnRefreshListener(this);
+        mVersionAdapter.setpOnItemLongClickListener(this);
     }
 
     @Override
@@ -84,7 +91,11 @@ public class VersionListFragment extends BaseFragment implements SwipeRefreshLay
         super.onDestroyView();
         unbinder.unbind();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainUtils.getI().upTitle("版本列表");
+    }
     @Override
     public void onRefresh() {
         mVersionViewModel.getAllVersion(mPluginId)
@@ -109,5 +120,21 @@ public class VersionListFragment extends BaseFragment implements SwipeRefreshLay
                     break;
             }
         }
+    }
+
+    @Override
+    public void onItemLongClick(View pView, int pI) {
+        AlertDialog.Builder lBuilder = new AlertDialog.Builder(getContext());
+        String[] lStrings = {
+                "copy download url",
+                "delete"
+        };
+        lBuilder.setItems(lStrings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        lBuilder.show();
     }
 }

@@ -10,28 +10,19 @@ import org.daimhim.pluginmanager.model.response.ApkResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseViewModel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import timber.log.Timber;
 
 /**
  * 项目名称：org.daimhim.pluginmanager.ui.version

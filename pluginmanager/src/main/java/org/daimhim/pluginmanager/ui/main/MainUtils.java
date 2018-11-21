@@ -256,7 +256,17 @@ public class MainUtils {
             ((MainActivity) pContext).upTitleLiftIco(rId, pClickListener);
         }
     }
-
+    public void upTitle(String title) {
+        if (mContext instanceof MainActivity) {
+            ((MainActivity) mContext).upTitle(title);
+            ((MainActivity) mContext).upTitleLiftIco(R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finishFragment(getStackAndTopFragment());
+                }
+            });
+        }
+    }
     public static void showUserInfo(Context pContext) {
         if (pContext instanceof MainActivity) {
             ((MainActivity) pContext).showUserInfo();

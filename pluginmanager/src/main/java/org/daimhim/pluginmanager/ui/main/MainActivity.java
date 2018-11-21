@@ -54,14 +54,27 @@ public class MainActivity extends BaseActivity
         super.onResume();
     }
 
-
+    private long mLong;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            long lL = System.currentTimeMillis();
+            if (mLong == 0) {
+                mLong = lL;
+                MainUtils.getI().toast("再按一次退回桌面");
+            } else if (lL - mLong < 1000) {
+                Intent i = new Intent(Intent.ACTION_MAIN);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addCategory(Intent.CATEGORY_HOME);
+                startActivity(i);
+                mLong = 0;
+            } else {
+                mLong = lL;
+                MainUtils.getI().toast("再按一次退回桌面");
+            }
         }
     }
 
@@ -69,32 +82,32 @@ public class MainActivity extends BaseActivity
         return getSupportFragmentManager().popBackStackImmediate();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
-                    .beginTransaction();
-            lFragmentTransaction
-                    .replace(R.id.content_main, new ApplicationFragment());
-            lFragmentTransaction.commit();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            FragmentTransaction lFragmentTransaction = getSupportFragmentManager()
+//                    .beginTransaction();
+//            lFragmentTransaction
+//                    .replace(R.id.content_main, new ApplicationFragment());
+//            lFragmentTransaction.commit();
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -133,4 +146,5 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
     }
+
 }

@@ -113,12 +113,7 @@ public class VersionEditFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MainUtils.upTitleAndIco(getContext(), "版本编辑", R.drawable.ic_arrow_back_black_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainUtils.getI().finishFragment(VersionEditFragment.this);
-            }
-        });
+        MainUtils.getI().upTitle("版本编辑");
     }
 
     @Override
