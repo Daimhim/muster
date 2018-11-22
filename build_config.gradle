@@ -10,7 +10,7 @@ def RetrofitVersion = "2.4.0"
 def OkHttpVersion = '3.11.0'
 
 // LeakCanary
-def LeakCanaryVersion = "1.5"
+def LeakCanaryVersion = "1.6.2"
 
 // RxJava
 def RxJavaVersion = '2.2.0-SNAPSHOT'
@@ -69,6 +69,18 @@ def PictureLoadVersion = "1.0.0"
 //ErrorCollection
 def ErrorCollectionVersion = "1.0.2"
 
+//Junit
+def JunitVersion = "4.12"
+
+//Runner
+def RunnerVersion = "1.0.2"
+
+//EspressoCore
+def EspressoCoreVersion = "3.0.2"
+
+//Timber
+def TimberVersion = "4.7.1"
+
 def buildDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmmss')
@@ -77,9 +89,8 @@ def buildDate() {
 
 ext {
     android = [
-            compileSdkVersion: 26,
-            buildToolsVersion: "27.0.3",
-            applicationId    : "net.meyki.skt",
+            compileSdkVersion: 28,
+            buildToolsVersion: "28.0.3",
             minSdkVersion    : 16,
             targetSdkVersion : 23,
             greenDaoDBVersion: 1,
@@ -99,6 +110,10 @@ ext {
     ]
 
     dependencies = [
+            libJunit                   : "junit:junit:${JunitVersion}",
+            libRunner                  : "com.android.support.test:runner:${RunnerVersion}",
+            libEspressoCore            : "com.android.support.test.espresso:espresso-core:${EspressoCoreVersion}",
+
             // https://developer.android.com/topic/libraries/support-library/revisions.html
             libDesign                  : "com.android.support:design:${SupportVersion}",
             libSupportV4               : "com.android.support:support-v4:${SupportVersion}",
@@ -150,6 +165,9 @@ ext {
             //https://github.com/jdamcd/android-crop
             libCrop                    : "com.soundcloud.android:android-crop:${CropVersion}",
 
+            //https://github.com/JakeWharton/timber
+            libTimber                  : "com.jakewharton.timber:timber:${TimberVersion}",
+
             //https://github.com/Daimhim
             libOneKeyPayment           : "org.daimhim.onekeypayment:onekeypayment:${OneKeyPaymentVersion}",
             libWidget                  : "org.daimhim.widget:widget:${WidgetVersion}",
@@ -165,7 +183,8 @@ ext {
 
     debugDependencies = [
             // https://github.com/square/leakcanary
-            leakCanary: "com.squareup.leakcanary:leakcanary-android:${LeakCanaryVersion}",
+            leakCanary        : "com.squareup.leakcanary:leakcanary-android:${LeakCanaryVersion}",
+            leakFragmentCanary: "com.squareup.leakcanary:leakcanary-support-fragment:${LeakCanaryVersion}",
     ]
 
     releaseDependencies = [
@@ -173,3 +192,19 @@ ext {
             leakCanary: "com.squareup.leakcanary:leakcanary-android-no-op:${LeakCanaryVersion}",
     ]
 }
+
+//implementation rootProject.ext.dependencies.libTimber
+//implementation rootProject.ext.dependencies.libAppCompatV7
+//implementation rootProject.ext.dependencies.libConstraintLayout
+//testImplementation rootProject.ext.dependencies.libJunit
+//androidTestImplementation rootProject.ext.dependencies.libRunner
+//androidTestImplementation rootProject.ext.dependencies.libEspressoCore
+
+//debugImplementation  rootProject.ext.debugDependencies.leakCanary
+//debugImplementation  rootProject.ext.debugDependencies.leakFragmentCanary
+//releaseImplementation  rootProject.ext.releaseDependencies.leakCanary
+
+//compileSdkVersion rootProject.ext.android.compileSdkVersion
+//buildToolsVersion rootProject.ext.android.buildToolsVersion
+//minSdkVersion rootProject.ext.android.minSdkVersion
+//targetSdkVersion rootProject.ext.android.targetSdkVersion
