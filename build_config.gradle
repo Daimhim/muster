@@ -1,5 +1,5 @@
 //Support
-def SupportVersion = "26.0.1"
+def SupportVersion = "27.1.0"
 
 def ConstraintLayoutVersion = "1.1.0"
 
@@ -80,6 +80,9 @@ def EspressoCoreVersion = "3.0.2"
 
 //Timber
 def TimberVersion = "4.7.1"
+
+//Paging
+def PagingVersion = "1.0.1"
 
 def buildDate() {
     def date = new Date()
@@ -168,6 +171,9 @@ ext {
             //https://github.com/JakeWharton/timber
             libTimber                  : "com.jakewharton.timber:timber:${TimberVersion}",
 
+            //
+            libPaging                  : "android.arch.paging:runtime:${PagingVersion}",
+
             //https://github.com/Daimhim
             libOneKeyPayment           : "org.daimhim.onekeypayment:onekeypayment:${OneKeyPaymentVersion}",
             libWidget                  : "org.daimhim.widget:widget:${WidgetVersion}",
@@ -195,6 +201,7 @@ ext {
 
 //implementation rootProject.ext.dependencies.libTimber
 //implementation rootProject.ext.dependencies.libAppCompatV7
+//implementation rootProject.ext.dependencies.libRecyclerViewV7
 //implementation rootProject.ext.dependencies.libConstraintLayout
 //testImplementation rootProject.ext.dependencies.libJunit
 //androidTestImplementation rootProject.ext.dependencies.libRunner

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * 项目名称：org.daimhim.pagingdemo
@@ -19,26 +20,54 @@ import android.view.ViewGroup;
  *
  * @author：Daimhim
  */
-public class MainAdapter extends PagedListAdapter<UserBean,MainAdapter.MainViewHolder> {
+public class MainAdapter extends PagedListAdapter<JokeBean, MainAdapter.MainViewHolder> {
 
-    protected MainAdapter(@NonNull DiffUtil.ItemCallback<UserBean> diffCallback) {
-        super(diffCallback);
+    protected MainAdapter() {
+        super(DIFF_CALLBACK);
     }
 
     @NonNull
     @Override
     public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MainViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_main,parent,false));
+        return new MainViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_main, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        UserBean lItem = getItem(position);
+        JokeBean lItem = getItem(position);
+        if (lItem != null) {
+            holder.mTvContent.setText(lItem.getContent());
+            holder.mTvUpTime.setText(lItem.getUpdatetime());
+        }
+
     }
 
-    class MainViewHolder extends RecyclerView.ViewHolder{
+    static class MainViewHolder extends RecyclerView.ViewHolder {
+        TextView mTvContent;
+        TextView mTvUpTime;
+
         public MainViewHolder(View itemView) {
             super(itemView);
+            this.mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
+            this.mTvUpTime = (TextView) itemView.findViewById(R.id.tv_up_time);
         }
     }
+
+    public static final DiffUtil.ItemCallback<JokeBean> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<JokeBean>() {
+                @Override
+                public boolean areItemsTheSame(
+                        @NonNull JokeBean oldUser, @NonNull JokeBean newUser) {
+                    // User properties may have changed if reloaded from the DB, but ID is fixed
+                    return oldUser.getHashId() == newUser.getHashId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(
+                        @NonNull JokeBean oldUser, @NonNull JokeBean newUser) {
+                    // NOTE: if you use equals, your object must properly override Object#equals()
+                    // Incorrectly returning false here will result in too many animations.
+                    return oldUser.getHashId().equals(newUser.getHashId());
+                }
+            };
 }

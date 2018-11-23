@@ -1,14 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-
-
-
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
         applicationId "org.daimhim.pagingdemo"
-        minSdkVersion 15
-        targetSdkVersion 21
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -27,13 +25,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.jaredrummler:android-processes:1.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation "android.arch.paging:runtime:1.0.0"
+    implementation "android.arch.paging:runtime:1.0.1"
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    implementation rootProject.ext.dependencies.libTimber
+    implementation rootProject.ext.dependencies.libAppCompatV7
+    implementation rootProject.ext.dependencies.libConstraintLayout
+    implementation rootProject.ext.dependencies.libRecyclerViewV7
+    testImplementation rootProject.ext.dependencies.libJunit
+    androidTestImplementation rootProject.ext.dependencies.libRunner
+    androidTestImplementation rootProject.ext.dependencies.libEspressoCore
+    implementation project(path: ':distance')
 }

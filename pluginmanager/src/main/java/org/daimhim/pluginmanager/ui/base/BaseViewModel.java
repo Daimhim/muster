@@ -1,7 +1,9 @@
 package org.daimhim.pluginmanager.ui.base;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -18,8 +20,15 @@ import io.reactivex.disposables.Disposable;
  */
 public class BaseViewModel extends ViewModel {
     private CompositeDisposable mDisposables;
-    public BaseViewModel() {
+    private Application mApplication;
 
+    public BaseViewModel(@NonNull Application application) {
+        mApplication = application;
+    }
+
+    public <T extends Application> T getApplication() {
+        //noinspection unchecked
+        return (T) mApplication;
     }
 
     @Override
