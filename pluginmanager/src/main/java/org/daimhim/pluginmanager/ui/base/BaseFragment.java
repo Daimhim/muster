@@ -29,7 +29,6 @@ import org.daimhim.pluginmanager.ui.version.VersionListFragment;
  */
 public abstract class BaseFragment extends Fragment implements BackHandledInterface {
     protected final String TAG = getClass().getSimpleName();
-    protected Context pContext;
     @Override
     public boolean onBackPressed() {
         MainUtils.getI().finishFragment(this);
@@ -57,13 +56,8 @@ public abstract class BaseFragment extends Fragment implements BackHandledInterf
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context lContext = getContext();
-        pContext = lContext;
+
         Log.i(getTags(), "onCreate");
-    }
-    @Override
-    public Context getContext() {
-        return pContext;
     }
 
     @Override
@@ -89,7 +83,9 @@ public abstract class BaseFragment extends Fragment implements BackHandledInterf
         super.onResume();
         Log.i(getTags(), "onResume");
     }
-
+    public void startFragment(Intent pIntent){
+        MainUtils.getI().startFragment(pIntent);
+    }
     public void finishFragment() {
         MainUtils.getI().finishFragment(this);
     }

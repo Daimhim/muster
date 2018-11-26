@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,15 +25,12 @@ import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 import org.daimhim.pluginmanager.ui.base.BaseFragment;
 import org.daimhim.pluginmanager.ui.main.MainUtils;
-import org.daimhim.pluginmanager.ui.plugin.PluginEditFragment;
 import org.daimhim.pluginmanager.ui.plugin.PluginListFragment;
 import org.daimhim.rvadapter.RecyclerContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -43,7 +44,7 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @author：Administrator
  */
-public class ApplicationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerContract.OnItemClickListener {
+public class ApplicationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     RecyclerView mRlRecyclerView;
     SwipeRefreshLayout mSrlSwipeRefreshLayout;
     @BindView(R.id.fab_fab_pm)
@@ -78,13 +79,15 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
                 mSrlSwipeRefreshLayout.setRefreshing(false);
             }
         };
-        mApplicationViewModel.loadApplicationList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mObserver);
     }
 
     private void initView(@NonNull View view) {
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
         mRlRecyclerView = view.findViewById(R.id.rl_recycler_view_pm);
         mSrlSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_SwipeRefreshLayout_pm);
         mSrlSwipeRefreshLayout.setOnRefreshListener(this);
@@ -92,15 +95,52 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         mRlRecyclerView.setAdapter(mApplicationAdapter);
         mRlRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         fabFab.setOnClickListener(v -> MainUtils.getI().startFragment(new Intent(getContext(),EditAppFragment.class)));
-        mApplicationAdapter.setOnItemClickListener(this);
+        mApplicationAdapter.setOnItemClickListener(this::onItemClick);
+        mApplicationAdapter.setpOnItemLongClickListener(this::onItemLongClick);
+        GestureDetectorCompat lGestureDetectorCompat = new GestureDetectorCompat(getContext(),new GestureDetector.SimpleOnGestureListener(){
+            //一次单独的轻触抬起手指操作，就是普通的点击事件
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                View childViewUnder = mRlRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (childViewUnder != null) {
+                    RecyclerView.ViewHolder childViewHolder = mRlRecyclerView.getChildViewHolder(childViewUnder);
+//                    onItemClick(childViewHolder);
+                }
+                return true;
+            }
+
+            //长按屏幕超过一定时长，就会触发，就是长按事件
+            @Override
+            public void onLongPress(MotionEvent e) {
+                View childViewUnder = mRlRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (childViewUnder != null) {
+                    RecyclerView.ViewHolder childViewHolder = mRlRecyclerView.getChildViewHolder(childViewUnder);
+//                    onLongClick(childViewHolder);
+                }
+            }
+        });
+        mRlRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView pRecyclerView, @NonNull MotionEvent pMotionEvent) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView pRecyclerView, @NonNull MotionEvent pMotionEvent) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean pB) {
+
+            }
+        });
     }
 
 
     @Override
     public void onRefresh() {
         mApplicationViewModel.loadApplicationList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mObserver);
     }
 
@@ -115,8 +155,6 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         super.onResume();
         initTitle();
         mApplicationViewModel.loadApplicationList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mObserver);
     }
 
@@ -124,11 +162,15 @@ public class ApplicationFragment extends BaseFragment implements SwipeRefreshLay
         MainUtils.upTitleAndIco(getContext(), "我的App", R.drawable.ic_view_headline_black_24dp, v -> MainUtils.showUserInfo(getContext()));
     }
 
-    @Override
     public void onItemClick(View pView, int pI) {
         ApplicationBean lItem = mApplicationAdapter.getItem(pI);
         Intent lIntent = new Intent(getContext(), PluginListFragment.class);
         lIntent.putExtra("app_id",lItem.getApp_id());
-        MainUtils.getI().startFragment(lIntent);
+        startFragment(lIntent);
+    }
+
+    public void onItemLongClick(View pView, int pI) {
+        ApplicationBean lItem = mApplicationAdapter.getItem(pI);
+
     }
 }

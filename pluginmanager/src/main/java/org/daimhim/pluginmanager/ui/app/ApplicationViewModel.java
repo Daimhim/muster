@@ -10,6 +10,8 @@ import org.daimhim.pluginmanager.model.response.ApplicationResponse;
 import org.daimhim.pluginmanager.model.response.JavaResponse;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -28,7 +30,9 @@ public class ApplicationViewModel extends ViewModel {
 
 
     public Observable<JavaResponse<ApplicationResponse>> loadApplicationList() {
-        return mApplication.getAappList(UserHelp.getInstance().getUserId());
+        return mApplication.getAappList(UserHelp.getInstance().getUserId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }
