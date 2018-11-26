@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 
 import timber.log.Timber;
 
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRvRecyclerView;

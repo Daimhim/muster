@@ -59,7 +59,7 @@ public class MainAdapter extends PagedListAdapter<JokeBean, MainAdapter.MainView
                 public boolean areItemsTheSame(
                         @NonNull JokeBean oldUser, @NonNull JokeBean newUser) {
                     // User properties may have changed if reloaded from the DB, but ID is fixed
-                    return oldUser.getHashId() == newUser.getHashId();
+                    return oldUser.getHashId().equals(newUser.getHashId());
                 }
 
                 @Override

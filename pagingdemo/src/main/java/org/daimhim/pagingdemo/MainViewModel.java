@@ -1,5 +1,8 @@
 package org.daimhim.pagingdemo;
 
+import android.annotation.SuppressLint;
+import android.arch.core.executor.ArchTaskExecutor;
+import android.arch.core.util.Function;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.arch.paging.DataSource;
@@ -10,11 +13,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.TypedArrayUtils;
+import android.support.v7.recyclerview.extensions.AsyncDifferConfig;
 
 import org.daimhim.distance.RetrofitManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +31,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -38,7 +46,7 @@ import timber.log.Timber;
  * @author：Daimhim
  */
 public class MainViewModel extends ViewModel {
-
+    private String mKey = "6a7f40ff902220aead73f5f746d423f1";
     // Create a LiveData with a String
     private MutableLiveData<PagedList<JokeBean>> mCurrentUser;
     private Joke mJoke;
@@ -55,62 +63,78 @@ public class MainViewModel extends ViewModel {
         if (mJoke == null) {
             mJoke = RetrofitManager.getInstance().getRetrofit().create(Joke.class);
         }
+
         DataSource<Integer, JokeBean> lPageKeyedDataSource = new PageKeyedDataSource<Integer, JokeBean>() {
             @Override
-            public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, JokeBean> callback) {
-                Timber.i("loadInitial:%s",params.requestedLoadSize);
-                Timber.i("loadInitial:%s",params);
-                ArrayList<JokeBean> lJokeBeans = new ArrayList<>();
-                JokeBean lBean  = null;
-                for (int i = 0; i < 20; i++) {
-                    lBean = new JokeBean();
-                    lBean.setUpdatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CANADA).format(new Date(System.currentTimeMillis())));
-                    lBean.setHashId(""+i);
-                    lBean.setContent("错误: 不兼容的类型: long无法转换为String:"+i);
-                    lJokeBeans.add(lBean);
-                }
-                callback.onResult(lJokeBeans,0,1);
+            public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull final LoadInitialCallback<Integer, JokeBean> callback) {
+                Timber.i("loadInitial:%s", params.requestedLoadSize);
+                mJoke.jokeContent(1, params.requestedLoadSize, mKey)
+                        .subscribe(new CallObserver<BaseResponse<JokeResponse>>() {
+                            @Override
+                            public void onNext(BaseResponse<JokeResponse> pJokeResponseBaseResponse) {
+                                callback.onResult(pJokeResponseBaseResponse.getResult().getData(), 1, 2);
+                            }
+                        });
             }
 
             @Override
-            public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, JokeBean> callback) {
-                Timber.i("loadBefore:%s",params.key);
-
+            public void loadBefore(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, JokeBean> callback) {
+                Timber.i("loadBefore key:%s", params.key);
+//                if (params.key == 1){
+//                    callback.onResult(new ArrayList<JokeBean>(),params.key);
+//                    return;
+//                }
+//                mJoke.jokeContent(params.key, params.requestedLoadSize, mKey)
+//                        .subscribe(new CallObserver<BaseResponse<JokeResponse>>() {
+//                            @Override
+//                            public void onNext(BaseResponse<JokeResponse> pJokeResponseBaseResponse) {
+//                                callback.onResult(pJokeResponseBaseResponse.getResult().getData(), (params.key - 1));
+//                            }
+//                        });
             }
 
             @Override
-            public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, JokeBean> callback) {
-                Timber.i("loadAfter key:%s",params.key);
-                Timber.i("loadAfter requestedLoadSize:%s",params.requestedLoadSize);
-                ArrayList<JokeBean> lJokeBeans = new ArrayList<>();
-                JokeBean lBean  = null;
-                for (int i = 0; i < params.requestedLoadSize; i++) {
-                    lBean = new JokeBean();
-                    lBean.setUpdatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CANADA).format(new Date(System.currentTimeMillis())));
-                    lBean.setHashId(""+(i*params.requestedLoadSize));
-                    lBean.setContent("错误: 不兼容的类型: long无法转换为String:"+(i*params.requestedLoadSize));
-                    lJokeBeans.add(lBean);
+            public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, JokeBean> callback) {
+                Timber.i("loadAfter key:%s", params.key);
+                if (params.key == 10){
+                    callback.onResult(Collections.<JokeBean>emptyList(),params.key);
+                    return;
                 }
-                callback.onResult(lJokeBeans,params.key);
+                mJoke.jokeContent(params.key, params.requestedLoadSize, mKey)
+                        .subscribe(new CallObserver<BaseResponse<JokeResponse>>() {
+                            @Override
+                            public void onNext(BaseResponse<JokeResponse> pJokeResponseBaseResponse) {
+                                callback.onResult(pJokeResponseBaseResponse.getResult().getData(), params.key + 1);
+                            }
+                        });
             }
         };
-//        new ScheduledThreadPoolExecutor()
-        PagedList.Builder<Integer, JokeBean> lIntegerJokeBeanBuilder = new PagedList.Builder<>(lPageKeyedDataSource,
-                10)
-                .setInitialKey(0)
-                .setNotifyExecutor(new Executor() {
-                    @MainThread
+
+        @SuppressLint("RestrictedApi") PagedList.Builder<Integer, JokeBean> lIntegerJokeBeanBuilder = new PagedList.Builder<>(lPageKeyedDataSource,
+                8)
+                .setInitialKey(1)
+                .setBoundaryCallback(new PagedList.BoundaryCallback<JokeBean>() {
                     @Override
-                    public void execute(Runnable command) {
-                        command.run();
+                    public void onItemAtEndLoaded(@NonNull JokeBean itemAtEnd) {
+                        super.onItemAtEndLoaded(itemAtEnd);
+
+                        Timber.i("onItemAtEndLoaded:%s",itemAtEnd.toString());
+                    }
+
+                    @Override
+                    public void onItemAtFrontLoaded(@NonNull JokeBean itemAtFront) {
+                        super.onItemAtFrontLoaded(itemAtFront);
+                        Timber.i("onItemAtFrontLoaded:%s",itemAtFront.toString());
+                    }
+
+                    @Override
+                    public void onZeroItemsLoaded() {
+                        super.onZeroItemsLoaded();
+                        Timber.i("onZeroItemsLoaded");
                     }
                 })
-                .setFetchExecutor(new Executor() {
-                    @Override
-                    public void execute(Runnable command) {
-                        new Thread(command).start();
-                    }
-                });
+                .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
+                .setFetchExecutor(ArchTaskExecutor.getIOThreadExecutor());
         return lIntegerJokeBeanBuilder.build();
     }
 

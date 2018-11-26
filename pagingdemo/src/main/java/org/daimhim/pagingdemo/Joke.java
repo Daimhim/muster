@@ -17,8 +17,8 @@ import retrofit2.http.Query;
  */
 public interface Joke {
     @GET("http://v.juhe.cn/joke/content/text.php")
-    Observable<BaseResponse<JokeResponse>> jokeContent(@Query("page") String page,
-                           @Query("pagesize") String pagesize,
+    Observable<BaseResponse<JokeResponse>> jokeContent(@Query("page") int page,
+                           @Query("pagesize") int pagesize,
                            @Query("key") String key
     );
 }
