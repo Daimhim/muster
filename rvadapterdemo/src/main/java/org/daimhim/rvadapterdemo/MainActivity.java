@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapterManagement.addAdapter(mBanner2Adapter);
         mAdapterManagement.addAdapter(mStringAdapter);
         mAdapterManagement.addAdapter(mMixingAdapter);
-
+        mRvRecycler.addOnItemTouchListener(new ItemOnItemHelp());
         List<Integer> lIntegers = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             lIntegers.add(R.drawable.ic_launcher_background);
