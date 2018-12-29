@@ -44,33 +44,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "sdcard was NOT MOUNTED!", Toast.LENGTH_SHORT).show();
         }
         mPluginManager = PluginManager.getInstance(base);
-        File apk = new File(Environment.getExternalStorageDirectory(), "plugin1-release-unsigned.apk");
-        if (apk.exists()) {
-            try {
-                mPluginManager.loadPlugin(apk);
-                Log.i(TAG, "Loaded plugin from apk: " + apk);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                File file = new File(base.getFilesDir(), "plugin1-release-unsigned.apk");
-                InputStream inputStream = base.getAssets().open("plugin1-release-unsigned.apk", 2);
-                FileOutputStream outputStream = new FileOutputStream(file);
-                byte[] buf = new byte[1024];
-                int len;
+        try {
+            String lChild = "org.daimhim.plugin1_20181229103206.apk";
+            File file = new File(base.getFilesDir(), lChild);
+            InputStream inputStream = base.getAssets().open(lChild, 2);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
 
-                while ((len = inputStream.read(buf)) > 0) {
-                    outputStream.write(buf, 0, len);
-                }
-
-                outputStream.close();
-                inputStream.close();
-                mPluginManager.loadPlugin(file);
-                Log.i(TAG, "Loaded plugin from assets: " + file);
-            } catch (Exception e) {
-                e.printStackTrace();
+            while ((len = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, len);
             }
+
+            outputStream.close();
+            inputStream.close();
+            Log.i(TAG, "Loaded plugin from assets: " + file.getName());
+            mPluginManager.loadPlugin(file);
+            Log.i(TAG, "Loaded plugin from assets: " + file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -89,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tv_plugin1:
                 // 显式指定包名的方式
                 Intent intent = new Intent();
-                intent.setClassName("org.daimhim.plugin1", "org.daimhim.plugin1.DemoActivity2");
+                intent.setClassName("org.daimhim.plugin1", "org.daimhim.plugin1.myweixin.MainActivity");
                 startActivity(intent);
                 break;
             case R.id.tv_plugin2:

@@ -12,28 +12,55 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def buildType = "神奇的包"
+            if ("release" == variant.variantData.variantConfiguration.buildType.name) {
+                buildType = "正式包"
+            } else if ("debug" == variant.variantData.variantConfiguration.buildType.name) {
+                buildType = "开发包"
+            } else if ("preparation" == variant.variantData.variantConfiguration.buildType.name) {
+                buildType = "测试包"
+            } else if ("local" == variant.variantData.variantConfiguration.buildType.name) {
+                buildType = "本地包"
+            } else if ("preproduction" == variant.variantData.variantConfiguration.buildType.name) {
+                buildType = "预生产"
+            }
+            outputFileName = "天天有用-v" + android.defaultConfig.versionName + "-" + buildType + ".apk"
+        }
+    }
     signingConfigs {
         release {
-            storeFile file("../keystore/test.keystore")
+            storeFile file("../keystore/test.jks")
             storePassword "test123456"
             keyAlias "test"
             keyPassword "test123456"
         }
+
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {
         abortOnError false
     }
 }
-
+def testJks(){
+    File file = new File("../keystore/test.jks")
+    println("FileFileFileFileFileFile")
+    println(file.getName())
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.jaredrummler:android-processes:1.1.1'
+//    implementation 'com.jaredrummler:android-processes:1.1.1'
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'

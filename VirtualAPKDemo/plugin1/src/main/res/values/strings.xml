@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">plugin1</string>
+    <string name="action_settings">Settings</string>
+    <string name="radio1_text">微信</string>
+    <string name="radio2_text">通讯录</string>
+    <string name="radio3_text">朋友们</string>
+    <string name="radio4_text">设置</string>
 </resources>
