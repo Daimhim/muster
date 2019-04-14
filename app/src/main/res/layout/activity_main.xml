@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-   <android.support.v4.view.ViewPager
-       android:id="@+id/vp_ViewPager"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+   <Button
+       android:id="@+id/b_select_picture"
+       android:text="select_picture"
+       android:layout_gravity="center"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
 
 </FrameLayout>
